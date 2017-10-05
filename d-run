@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -eu
+
+NAME=$1
+IMG=$2
+
+#UID=$(id -u)
+USER=$(id -un)
+GID=$(id -g)
+GROUP=$(id -gn)
+
+docker run -td -v /tmp:/tmp -v "/home/$USER:/home/$USER" -h "$NAME" --name "$NAME" "$IMG" /bin/bash -c "groupadd -g $GID $GROUP && useradd -m -s /bin/bash -g $GROUP -u $UID $USER && tailf /dev/null"
+
