@@ -1,0 +1,12 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+my @alphanumeric = ('a'..'z', 'A'..'Z', 0..9, "!", "#", "\$", "%", "&", "(", ")", "*", "+", "-", ";", "<", "=", ">", "?", "@", "^", "_", "`", "{", "|", "}", "~");
+
+while (1) {
+  my $char = join('', map $alphanumeric[rand @alphanumeric], 0..1);
+  print("$char");
+}
+
