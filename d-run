@@ -10,5 +10,6 @@ USER=$(id -un)
 GID=$(id -g)
 GROUP=$(id -gn)
 
-docker run -td -v /tmp:/tmp -v "/home/$USER:/home/$USER" -h "$NAME" --name "$NAME" "$IMG" /bin/bash -c "groupadd -g $GID $GROUP && useradd -m -s /bin/bash -g $GROUP -u $UID $USER && tailf /dev/null"
+# --privileged needed for dmidecode
+docker run --privileged -td -v /tmp:/tmp -v "/home/$USER:/home/$USER" -h "$NAME" --name "$NAME" "$IMG" /bin/bash -c "groupadd -g $GID $GROUP && useradd -m -s /bin/bash -g $GROUP -u $UID $USER && tailf /dev/null"
 
