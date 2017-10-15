@@ -20,9 +20,10 @@ void printStr(const string& str) {
 }
 
 void cleanse(string& str) {
+  size_t strcap = str.capacity();
   str.clear();
   printStr(str);
-  OPENSSL_cleanse(&str[0], str.capacity());
+  OPENSSL_cleanse(&str[0], strcap);
   printStr(str);
 }
 
