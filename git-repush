@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -eu
+
+git commit -a --amend --no-edit
+git fetch
+git rebase origin/master
+git push -f
+
