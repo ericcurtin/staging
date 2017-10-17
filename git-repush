@@ -3,7 +3,13 @@
 set -eu
 
 git commit -a --amend --no-edit
+
 git fetch
-git rebase origin/master
-git push -f
+
+if [ "$(git rev-parse --abbrev-ref HEAD)" == "master" ]; then
+  git push
+else
+  git rebase origin/master
+  git push -f
+fi
 
