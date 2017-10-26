@@ -2,8 +2,7 @@
 
 set -eu
 
-git commit -a --amend --no-edit
-
+git commit -a --amend --no-edit &
 git fetch
 
 if [ "$(git rev-parse --abbrev-ref HEAD)" == "master" ]; then
