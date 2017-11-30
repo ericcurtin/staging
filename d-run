@@ -4,25 +4,13 @@ set -e
 
 NAME=$1
 IMG=$2
-EXPORT_PORTS=$3
 
-if [ "$NAME" == "mysql" ]; then
-  IMG="curtine/centos:6mysql"
-elif [ "$NAME" == "mariadb" ]; then
-  IMG="curtine/centos:6"
-fi
-
-#UID=$(id -u)
 USER=$(id -un)
 GID=$(id -g)
 GROUP=$(id -gn)
 
-if [ -z "$EXPOSE_PORTS" ]; then
-  PORTS="-p 22:22 -p 3000:3000 -p 3306:3306"
-fi
-
 # --privileged needed for dmidecode
-docker run --privileged -d $PORTS -v /tmp:/tmp -v "/home/$USER:/home/$USER" -h "$NAME" --name "$NAME" "$IMG" init
+docker run --privileged -d -v /tmp:/tmp -v "/home/$USER:/home/$USER" -h "$NAME" --name "$NAME" "$IMG" init
 
 docExe() {
   local cmd=$1
@@ -31,11 +19,5 @@ docExe() {
 }
 
 docExe "groupadd -g $GID $GROUP && useradd -M -s /bin/bash -g $GID -u $UID $USER" &
-docExe "service sshd start" &
-
-if [ "$NAME" == "mysql" ]; then
-  docExe "service mysqld start"
-elif [ "$NAME" == "mariadb" ]; then
-  docExe "service mysql start"
-fi
+docExe "printf '$USER ALL=(ALL) NOPASSWD: ALL\n' >> /etc/sudoers" &
 
