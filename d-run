@@ -15,7 +15,7 @@ docker run --privileged -d -v /tmp:/tmp -v "/home/$USER:/home/$USER" -h "$NAME" 
 docExe() {
   local cmd=$1
 
-  docker exec "$NAME" /bin/bash -c "$cmd"
+  docker exec -t "$NAME" /bin/bash -c "$cmd"
 }
 
 docExe "groupadd -g $GID $GROUP && useradd -M -s /bin/bash -g $GID -u $UID $USER" &
