@@ -8,7 +8,7 @@ if (@ARGV == 1) {
 }
 
 for(my $j = 1; $j < @ARGV; ++$j) {
-    my @lines = `grep -n "#inc\\|using" $ARGV[$j] | cut -d: -f1`;
+    my @lines = `grep -n "#inc\\|using\\|class" $ARGV[$j] | cut -d: -f1`;
     for my $i (@lines) {
         chomp($i);
         system("sed -i '${i}i///////includeCHECK' $ARGV[$j]");

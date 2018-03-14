@@ -1,0 +1,4 @@
+Package: openssh-client openssh-client:i386 openssh-server openssh-server:i386 git git:i386
+Pin: release *
+Pin-Priority: -1
+
