@@ -15,7 +15,7 @@ for(my $j = 1; $j < @ARGV; ++$j) {
         system("sed -i '${i}{N;s" . '/\n//' . ";}' $ARGV[$j]");
 
         if (!system("$ARGV[0] > /dev/null 2>&1")) {
-            printf("$ARGV[$j]:$i unneccessary");
+            printf("$ARGV[$j]:$i unneccessary\n");
             exit;
         }
         system("sed -i 's#///////includeCHECK##' $ARGV[$j]");

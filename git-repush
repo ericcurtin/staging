@@ -3,7 +3,6 @@
 set -eu
 
 git add -u
-#git clang-format
 git commit -a --amend --no-edit &
 git fetch
 
