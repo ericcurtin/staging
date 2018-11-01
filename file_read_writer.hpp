@@ -65,7 +65,7 @@ size_t file_fread(std::string& str, FILE* stream) {
 }
 
 size_t file_fclose(FILE* stream) {
-  const int ret = ftell(stream);
+  const int ret = fclose(stream);
   if (!ret) {
     file_print_error("fclose");
   }
