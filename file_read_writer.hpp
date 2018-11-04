@@ -1,7 +1,13 @@
-#include <string>
+#include <errno.h>
 #include <stdio.h>
 #include <sys/file.h>
-#include <errno.h>
+#include <string>
+
+#define FILENO(x)                \
+  const int fd = file_fileno(f); \
+  if (fd == -1) {                \
+    return x;                    \
+  }
 
 void file_print_error(const std::string& out) {
   fprintf(stderr, "%s failed with %d", out.c_str(), errno);
@@ -43,8 +49,8 @@ int file_fseek(FILE* stream, const long offset, const int whence) {
   return ret;
 }
 
-int file_ftell(FILE* stream) {
-  const int ret = ftell(stream);
+long file_ftell(FILE* stream) {
+  const long ret = ftell(stream);
   if (ret == -1) {
     file_print_error("ftell");
   }
@@ -59,12 +65,12 @@ size_t file_fread(std::string& str, FILE* stream) {
     file_print_error("fread");
   }
   str = std::string(buf, str.size());
-  delete(buf);
+  delete (buf);
 
   return ret;
 }
 
-size_t file_fclose(FILE* stream) {
+int file_fclose(FILE* stream) {
   const int ret = fclose(stream);
   if (!ret) {
     file_print_error("fclose");
@@ -93,7 +99,7 @@ int file_fprintf(FILE* stream, const std::string& str) {
 
 std::string file_read(const std::string& file) {
   FILE* f = file_fopen(file.c_str(), "r");
-  const int fd = file_fileno(f);
+  FILENO("");
   file_flock(fd, LOCK_SH);
   file_fseek(f, 0, SEEK_END);
   const long len = file_ftell(f);
@@ -108,7 +114,7 @@ std::string file_read(const std::string& file) {
 
 void file_write(const std::string& file, const std::string& data) {
   FILE* f = file_fopen(file.c_str(), "w");
-  const int fd = file_fileno(f);
+  FILENO();
   file_flock(fd, LOCK_EX);
   file_fwrite(data, f);
   file_flock(fd, LOCK_UN);
@@ -117,10 +123,9 @@ void file_write(const std::string& file, const std::string& data) {
 
 void file_append(const std::string& file, const std::string& data) {
   FILE* f = file_fopen(file.c_str(), "a");
-  const int fd = file_fileno(f);
+  FILENO();
   file_flock(fd, LOCK_EX);
   file_fprintf(f, data);
   file_flock(fd, LOCK_UN);
   file_fclose(f);
 }
-
