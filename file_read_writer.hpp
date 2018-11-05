@@ -3,11 +3,17 @@
 #include <sys/file.h>
 #include <string>
 
-#define FILENO(x)                \
-  const int fd = file_fileno(f); \
-  if (fd == -1) {                \
-    return x;                    \
-  }
+#define FOPEN_FILENO_FLOCK(mode, lock, ret) \
+  FILE* f = file_fopen(file.c_str(), mode); \
+  const int fd = file_fileno(f);            \
+  if (fd == -1) {                           \
+    return ret;                             \
+  }                                         \
+  file_flock(fd, lock);
+
+#define FUNLOCK_FCLOSE()   \
+  file_flock(fd, LOCK_UN); \
+  file_fclose(f);
 
 void file_print_error(const std::string& out) {
   fprintf(stderr, "%s failed with %d", out.c_str(), errno);
@@ -98,34 +104,25 @@ int file_fprintf(FILE* stream, const std::string& str) {
 }
 
 std::string file_read(const std::string& file) {
-  FILE* f = file_fopen(file.c_str(), "r");
-  FILENO("");
-  file_flock(fd, LOCK_SH);
+  FOPEN_FILENO_FLOCK("r", LOCK_SH, "");
   file_fseek(f, 0, SEEK_END);
   const long len = file_ftell(f);
   file_fseek(f, 0, SEEK_SET);
   std::string buf("", len);
   file_fread(buf, f);
-  file_flock(fd, LOCK_UN);
-  file_fclose(f);
+  FUNLOCK_FCLOSE();
 
   return buf;
 }
 
 void file_write(const std::string& file, const std::string& data) {
-  FILE* f = file_fopen(file.c_str(), "w");
-  FILENO();
-  file_flock(fd, LOCK_EX);
+  FOPEN_FILENO_FLOCK("w", LOCK_EX, );
   file_fwrite(data, f);
-  file_flock(fd, LOCK_UN);
-  file_fclose(f);
+  FUNLOCK_FCLOSE();
 }
 
 void file_append(const std::string& file, const std::string& data) {
-  FILE* f = file_fopen(file.c_str(), "a");
-  FILENO();
-  file_flock(fd, LOCK_EX);
+  FOPEN_FILENO_FLOCK("a", LOCK_EX, );
   file_fprintf(f, data);
-  file_flock(fd, LOCK_UN);
-  file_fclose(f);
+  FUNLOCK_FCLOSE();
 }
