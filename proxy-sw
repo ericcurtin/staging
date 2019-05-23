@@ -1,0 +1,15 @@
+#!/bin/bash
+
+pid=pgrep xfce4-panel
+
+if [ -f ~/.proxy_off ]; then
+  rm ~/.proxy_off
+  echo "proxy switched on"
+  
+else
+  touch ~/.proxy_off
+  echo "proxy switched off"
+fi
+
+
+

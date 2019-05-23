@@ -1,0 +1,4 @@
+#!/bin/bash
+
+clang-format --style=file $@
+
