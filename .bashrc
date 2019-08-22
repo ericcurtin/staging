@@ -59,7 +59,7 @@ fi
 . ~/git/pub/staging/git-status-prompt
 
 if [ "$color_prompt" = yes ]; then
-    PS1='\[\033[32m\]\u@\h\[\033[00m\]$(GitStatusPrompt)\n\[\033[01;93m\]\w\[\033[00m\]\$ '
+    PS1='\[\033[32m\]\u@\h\[\033[00m\] $(GitStatusPrompt)\n\[\033[01;93m\]\w\[\033[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
