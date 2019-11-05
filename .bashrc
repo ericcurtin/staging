@@ -59,23 +59,6 @@ fi
 
 . ~/git/pub/staging/git-status-prompt
 
-if [ "$color_prompt" = yes ]; then
-    HOSTNAME_FQDN="$(hostname -f)"
-    PS1='\[\033[32m\]\u@$HOSTNAME_FQDN\[\033[00m\] $(GitStatusPrompt)\n\[\033[01;93m\]\w\[\033[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
-
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -119,6 +102,8 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+WIN_HOME="/media/sf_c/Users/$USER/"
 
 . ~/git/staging/.bashrc
 
