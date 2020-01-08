@@ -1,4 +1,5 @@
 set mouse=a
+"set background=light
 set background=dark
 set hlsearch
 set noswapfile
