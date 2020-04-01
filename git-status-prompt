@@ -98,11 +98,11 @@ GitStatus() {
    fi
 
     # set branch color based on dirty status
-    if [ -z "$(HasAnyChanges)" ]; then
-      branch_color=$CLEAN_COLOR
-    else
+#    if [ -z "$(HasAnyChanges)" ]; then
+#      branch_color=$CLEAN_COLOR
+#    else
       branch_color=$DIRTY_COLOR
-    fi
+#    fi
 
     # get sync status
     if [ $remote_branch ]; then
@@ -125,16 +125,16 @@ GitStatus() {
     fi
 
     # get tracked status
-    tracked=$(HasTrackedChanges)
+    #tracked=$(HasTrackedChanges)
 
     # get untracked status
-    untracked=$(HasUntrackedChanges)
+    #untracked=$(HasUntrackedChanges)
 
     # get staged status
-    staged=$(HasStagedChanges)
+    #staged=$(HasStagedChanges)
 
     # get stashed status
-    stashed=$(HasStashedChanges)
+    #stashed=$(HasStashedChanges)
 
     # build output
     open_paren="$branch_color($NO_COLOR"
@@ -161,7 +161,7 @@ GitStatus() {
       upstream_msg=$open_bracket$behind_msg$ahead_msg$close_bracket
     fi
 
-    branch_status_msg="$NO_COLOR$branch_msg $status_msg $upstream_msg$NO_COLOR"
+    branch_status_msg="$NO_COLOR$branch_msg $upstream_msg$NO_COLOR"
 
     echo "$branch_status_msg"
 
