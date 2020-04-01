@@ -31,5 +31,7 @@ command! -nargs=0 OUTLINE call s:OutlineToggle()
 
 map <silent> <F12> :OUTLINE<CR>
 
-cscope add cscope.out
+if (!empty(glob("cscope.out")))
+  cs add cscope.out
+endif
 
