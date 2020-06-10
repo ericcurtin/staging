@@ -8,14 +8,16 @@ if [ -n "$1" ]; then
   this_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 fi
 
-bold=$(tput bold)
-norm=$(tput sgr0)
+if [ -t 1 ]; then
+  bold=$(tput bold)
+  norm=$(tput sgr0)
+fi
 
 out=/tmp/git-blame-conflict-$$.lock
 
 blame_res_cnt_func() {
   if [ -n "$blame_res" ]; then
-    echo "$blame_res" | sort | uniq -c | sort -nr | head -n2
+    echo "$blame_res" | sort | uniq -c | sort -nr | head -n4
   else
     echo "        File doesn't exist on one side of branch"
   fi
@@ -27,8 +29,8 @@ task() {
   blame_res_cnt=$(blame_res_cnt_func)
 
   if [ -n "$this_branch" ]; then
-    blame_list_of_commits=$(echo "$blame" | awk '{printf $1"\n"}' | sort | uniq | grep -v "000000000000")
-    git_fmt="%<(8,trunc)%h %<(16,trunc)%an %<(8,trunc)%ar %<(45,trunc)%s"
+    blame_list_of_commits=$(echo "$blame" | cut -c-8 | sort | uniq | grep -v "00000000")
+    git_fmt="%<(11,trunc)%h %<(16,trunc)%an %<(8,trunc)%ar %<(42,trunc)%s"
     for j in $blame_list_of_commits; do
       if [ -n "$(git branch $this_branch --contains $j)" ]; then
         this_list="$this_list $j"
@@ -41,8 +43,13 @@ task() {
       fi
     done
 
-    this_log=$(git log --topo-order --pretty=format:"$git_fmt" -$(echo $this_list | wc -w) $this_list)
-    that_log=$(git log --topo-order --pretty=format:"$git_fmt" -$(echo $that_list | wc -w) $that_list)
+    if [ -n "$this_list" ]; then
+      this_log=$(git log --topo-order --pretty=format:"$git_fmt" $this_list | grep "$(echo $this_list | sed 's/ /\\|/g')")
+    fi
+
+    if [ -n "$that_list" ]; then
+      that_log=$(git log --topo-order --branches --pretty=format:"$git_fmt" $that_list | grep "$(echo $that_list | sed 's/ /\\|/g')")
+    fi
   fi
 
   {
@@ -70,6 +77,6 @@ done
 wait
 
 echo "${bold}Total amount of lines changed per person: $norm"
-cat $out | sort | uniq -c | sort -nr | head -n4
+cat $out | sort | uniq -c | sort -nr | head -n8
 rm $out
 
