@@ -4,6 +4,11 @@ git fetch > /dev/null 2>&1 &
 
 ls_files=$(git diff --name-only --diff-filter=U)
 
+if [ -z "$ls_files" ]; then
+  echo "No conflicts here!"
+  exit 0
+fi
+
 if [ -n "$1" ]; then
   this_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 fi
