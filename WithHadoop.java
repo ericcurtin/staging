@@ -23,7 +23,6 @@ public class WithHadoop {
     public void map(Object key, Text value, Context context)
         throws IOException, InterruptedException {
       fileName.set(((FileSplit) context.getInputSplit()).getPath().getName().toString());
-
       StringTokenizer st = new StringTokenizer(value.toString());
       while (st.hasMoreTokens()) {
         word.set(st.nextToken());
@@ -39,9 +38,7 @@ public class WithHadoop {
     public void reduce(Text word, Iterable<Text> fileNames, Context context)
         throws IOException, InterruptedException {
       HashMap<String, Integer> map = new HashMap<String, Integer>();
-
       Iterator<Text> iterator = fileNames.iterator();
-
       while (iterator.hasNext()) {
         String fileName = iterator.next().toString();
         if (map.containsKey(fileName)) {
@@ -68,20 +65,17 @@ public class WithHadoop {
       throws IOException, ClassNotFoundException, InterruptedException {
     Configuration configuration = new Configuration();
     String[] otherArgs = new GenericOptionsParser(configuration, args).getRemainingArgs();
-
     if (otherArgs.length != 2) {
       System.err.println("Invalid args detected. Args must be <inputDir> <outputDir>.");
       System.exit(1);
     }
 
     Job job = Job.getInstance(configuration, "WithHadoop");
-    job.setJarByClass(WordHadoop.class);
+    job.setJarByClass(WithHadoop.class);
     job.setMapperClass(WordMapper.class);
     job.setReducerClass(WordReducer.class);
-
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(Text.class);
-
     FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
     FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
     System.exit(job.waitForCompletion(true) ? 0 : 2);
