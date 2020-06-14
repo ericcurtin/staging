@@ -14,7 +14,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
-public class WordCount {
+public class WithHadoop {
   public static class WordMapper extends Mapper<Object, Text, Text, Text> {
     Text word = new Text();
     Text fileName = new Text();
@@ -75,7 +75,7 @@ public class WordCount {
     }
 
     Job job = Job.getInstance(configuration, "WithHadoop");
-    job.setJarByClass(WordCount.class);
+    job.setJarByClass(WordHadoop.class);
     job.setMapperClass(WordMapper.class);
     job.setReducerClass(WordReducer.class);
 
