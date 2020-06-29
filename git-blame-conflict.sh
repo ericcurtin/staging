@@ -72,7 +72,7 @@ touch $out
 
 for i in $(echo $ls_files); do
   # Max 16 processes at any given time
-  while [[ $(jobs -r -p | wc -l) -gt 16 ]]; do
+  while [ $(jobs -r -p | wc -l) -gt 4 ]; do
     sleep 1
   done
 

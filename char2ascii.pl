@@ -11,6 +11,7 @@ for(my $j = 0; $j < @ARGV; ++$j) {
     my $ascii = ord($c);
     print("'$c' '$ascii'\n");
   }
+
   print("\n");
 }
 
