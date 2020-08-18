@@ -30,11 +30,11 @@ blame_res_cnt_func() {
 
 task() {
   blame=$(git blame $i | awk '/<<<</,/>>>>/')
-  blame_res=$(echo "$blame" | cut -c-32 | grep -o '..................$' | grep -v "Not Committed Yet")
+  blame_res=$(echo "$blame" | cut -d"(" -f2 | cut -d"2" -f1 | awk '{$1=$1};1' | grep -v "Not Committed Yet")
   blame_res_cnt=$(blame_res_cnt_func)
 
   if [ -n "$this_branch" ]; then
-    blame_list_of_commits=$(echo "$blame" | cut -c-8 | sort | uniq | grep -v "00000000")
+    blame_list_of_commits=$(echo "$blame" | awk '{print $1}' | sort | uniq | grep -v 00000000)
     git_fmt="%<(11,trunc)%h %<(16,trunc)%an %<(8,trunc)%ar %<(42,trunc)%s"
     for j in $blame_list_of_commits; do
       if [ -n "$(git branch $this_branch --contains $j)" ]; then

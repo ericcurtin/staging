@@ -7,7 +7,7 @@ use Fcntl ':flock';
 use Linux::Prctl qw(set_pdeathsig);
 use POSIX qw(WNOHANG);
 
-open my $self, '<', "/home/curtie2/git/staging/ww.pl" or die "Couldn't open self: $!";
+open my $self, '<', "/home/curtie2/git/pub/staging/ww.pl" or die "Couldn't open self: $!";
 flock $self, LOCK_EX | LOCK_NB or die "This script is already running";
 
 my $file = "/var/log/workspacewatcher.log";
@@ -40,7 +40,7 @@ fork_exec();
 open my $info, $file or die "Could not open $file: $!";
 
 while (1) {
-  qx(~/git/staging/build_index.pl; inotifywait -q $file);
+  qx(/home/curtie2/git/pub/staging/build_index.pl; inotifywait -q $file);
 }
 
 close($info);
