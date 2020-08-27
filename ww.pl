@@ -7,7 +7,9 @@ use Fcntl ':flock';
 use Linux::Prctl qw(set_pdeathsig);
 use POSIX qw(WNOHANG);
 
-open my $self, '<', "/home/curtie2/git/pub/staging/ww.pl" or die "Couldn't open self: $!";
+my $usr = qx(id -un);
+chomp($usr);
+open my $self, '<', "/home/$usr/git/staging/ww.pl" or die "Couldn't open self: $!";
 flock $self, LOCK_EX | LOCK_NB or die "This script is already running";
 
 my $file = "/var/log/workspacewatcher.log";

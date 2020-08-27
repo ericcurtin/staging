@@ -10,7 +10,7 @@ GID=$(id -g)
 GROUP=$(id -gn)
 
 # --privileged needed for dmidecode
-docker run --privileged -d -v /tmp:/tmp -v "/home/$USER:/home/$USER" -h "$NAME" --name "$NAME" "$IMG" init
+docker run --privileged -t -d -v /tmp:/tmp -v "/home/$USER:/home/$USER" -h "$NAME" --name "$NAME" "$IMG" /bin/bash
 
 docExe() {
   local cmd=$1
