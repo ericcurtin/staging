@@ -19,13 +19,13 @@ nproc=$(nproc)
 
 cd ..
 if [ ! -d "$somewhere1" ]; then
-  git clone -b OpenSSL_1_1_1d-quic-draft-27 https://github.com/tatsuhiro-t/openssl $somewhere1
+  git clone -b OpenSSL_1_1_1g-quic-draft-29 https://github.com/tatsuhiro-t/openssl $somewhere1
 fi
 
 cd openssl-quic
 git clean -fdx
 git fetch
-git reset --hard origin/OpenSSL_1_1_1d-quic-draft-27
+git reset --hard origin/OpenSSL_1_1_1g-quic-draft-29
 ./config enable-tls1_3 --prefix=$somewhere1
 make -j$nproc
 make install_sw
@@ -75,6 +75,6 @@ git clean -fdx
 git fetch
 git reset --hard origin/master
 ./buildconf
-LDFLAGS="-Wl,-rpath,$somewhere1/lib" ./configure QUICHE=no --with-ssl=$somewhere1 --with-nghttp3=$somewhere2 --with-ngtcp2=$somewhere3 --enable-alt-svc
+LDFLAGS="-Wl,-rpath,$somewhere1/lib" ./configure --with-ssl=$somewhere1 --with-nghttp3=$somewhere2 --with-ngtcp2=$somewhere3 --enable-alt-svc
 make -j$nproc
 
