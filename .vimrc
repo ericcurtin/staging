@@ -4,7 +4,7 @@ set background=dark
 set hlsearch
 set noswapfile
 map <F4> :qa!<CR>
-"map <F5> :%!xxd<CR>
+map <F3> /^-\\|^+<CR>
 map <F5> :call CurtineIncSw()<CR>
 map <2-LeftMouse> *
 
