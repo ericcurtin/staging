@@ -57,7 +57,69 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
-. ~/git/pub/staging/git-status-prompt
+export PATH="~/git/staging:$PATH"
+. git-status-prompt
+
+green="\\[\\033[00;32m\\]"
+red="\\[\\033[00;31m\\]"
+cyan="\\[\\033[01;36m\\]"
+yellow="\\[\\033[01;93m\\]"
+nc="\\[\\033[00;00m\\]"
+lgreen='\[\033[01;32m\]'
+blue='\[\033[01;34m\]'
+
+HOSTNAME_FQDN=$(hostname -f | head -c4)
+PS1="$lgreen\u@$HOSTNAME_FQDN \t$nc"
+if type GitStatusPrompt > /dev/null 2>&1; then
+  PS1="$PS1 \$(es) \$(GitStatusPrompt)"
+fi
+
+PS1="$PS1\n$blue\w$nc$ "
+
+alias rb="po v"
+
+update() {
+  set -e
+
+  cd /tmp
+  sudo apt update
+  sudo apt -y upgrade
+  zoom_url="https://zoom.us/client/latest/zoom_amd64.deb"
+  last_modified=$(curl -I -L "$zoom_url" 2>&1 | grep "^Last-Modified:")
+  if [ "$(cat /etc/zoom-last.txt)" != "$last_modified" ]; then
+    curl -LO https://zoom.us/client/latest/zoom_amd64.deb
+    sudo apt -y install /tmp/zoom_amd64.deb
+    echo "$last_modified" > /etc/zoom-last.txt
+  fi
+
+  sudo apt -y autoremove
+}
+
+po() {
+  update
+
+  if [ -n "$1" ]; then
+    sudo reboot
+  else
+    sudo init 0
+  fi
+}
+
+es() {
+  local errno="$?"
+
+  local nc='\033[0m'
+
+  local r='\033[0;31m'
+  local g='\033[0;32m'
+
+  if [ $errno != 0 ]; then
+    echo -e "$r$errno$nc"
+  else
+    echo -e "$g$errno$nc"
+  fi
+}
+
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
@@ -109,5 +171,5 @@ fi
 
 WIN_HOME="/media/sf_c/Users/$USER/"
 
-. ~/git/staging/.bashrc
+#. ~/git/staging/.bashrc
 
