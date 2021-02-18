@@ -22,14 +22,14 @@ out=/tmp/git-blame-conflict-$$.lock
 
 blame_res_cnt_func() {
   if [ -n "$blame_res" ]; then
-    echo "$blame_res" | sort | uniq -c | sort -nr | head -n4
+    echo "$blame_res" | sort | uniq -c | sort -nr | head -n8
   else
     echo "        File doesn't exist on one side of branch"
   fi
 }
 
 task() {
-  blame=$(git blame $i | awk '/<<<</,/>>>>/')
+  blame=$(git blame $i | awk '/<<<</,/>>>>/' | tr -d '\0')
   blame_res=$(echo "$blame" | cut -d"(" -f2 | cut -d"2" -f1 | awk '{$1=$1};1' | grep -v "Not Committed Yet")
   blame_res_cnt=$(blame_res_cnt_func)
 

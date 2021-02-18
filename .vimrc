@@ -7,6 +7,7 @@ map <F4> :qa!<CR>
 map <F3> /^-\\|^+<CR>
 map <F5> :call CurtineIncSw()<CR>
 map <2-LeftMouse> *
+"map <F6> :<C-u>call gitblame#echo()<CR>
 
 "ERIC - map F12 to fold code
 function! <SID>OutlineToggle()
@@ -34,4 +35,6 @@ map <silent> <F12> :OUTLINE<CR>
 if (!empty(glob("cscope.out")))
   cs add cscope.out
 endif
+
+"autocmd BufReadPost,FileReadPost,BufNewFile * call system("tmux rename-window " . expand("%"))
 
