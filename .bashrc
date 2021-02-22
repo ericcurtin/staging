@@ -76,35 +76,6 @@ fi
 
 PS1="$PS1\n$blue\w$nc$ "
 
-alias rb="po v"
-
-update() {
-  set -e
-
-  cd /tmp
-  sudo apt update
-  sudo apt -y upgrade
-  zoom_url="https://zoom.us/client/latest/zoom_amd64.deb"
-  last_modified=$(curl -I -L "$zoom_url" 2>&1 | grep "^Last-Modified:")
-  if [ "$(cat /etc/zoom-last.txt)" != "$last_modified" ]; then
-    curl -LO https://zoom.us/client/latest/zoom_amd64.deb
-    sudo apt -y install /tmp/zoom_amd64.deb
-    echo "$last_modified" > /etc/zoom-last.txt
-  fi
-
-  sudo apt -y autoremove
-}
-
-po() {
-  update
-
-  if [ -n "$1" ]; then
-    sudo reboot
-  else
-    sudo init 0
-  fi
-}
-
 es() {
   local errno="$?"
 
@@ -172,4 +143,49 @@ fi
 WIN_HOME="/media/sf_c/Users/$USER/"
 
 #. ~/git/staging/.bashrc
+
+update() {
+  set -e
+
+  cd /tmp
+  sudo apt update
+  sudo dpkg --configure -a
+  sudo apt -y upgrade
+  zoom_url="https://zoom.us/client/latest/zoom_amd64.deb"
+  last_modified=$(curl -I -L "$zoom_url" 2>&1 | grep "^Last-Modified:")
+  if [ "$(cat /etc/zoom-last.txt)" != "$last_modified" ]; then
+    curl -LO https://zoom.us/client/latest/zoom_amd64.deb
+    sudo apt -y install /tmp/zoom_amd64.deb
+    echo "$last_modified" > /etc/zoom-last.txt
+  fi
+
+  sudo apt -y autoremove
+
+  set +e
+  sudo fwupdmgr refresh --force
+  local ret=$?
+  if [ "$ret" -ne 0 ]; then
+    echo "'sudo fwupdmgr refresh --force' failed with $ret"
+    exit $ret
+  fi
+
+  sudo fwupdmgr update
+  local ret=$?
+  if [ "$ret" -ne 0 ] && [ "$ret" -ne 2 ]; then
+    echo "'sudo fwupdmgr update' failed with $ret"
+    exit $ret
+  fi
+}
+
+po() {
+  update
+  sudo init 0
+}
+
+rb() {
+  update
+  sudo reboot
+}
+
+export PATH="$PATH:~/git/staging"
 

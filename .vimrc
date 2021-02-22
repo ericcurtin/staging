@@ -6,6 +6,7 @@ set noswapfile
 map <F4> :qa!<CR>
 map <F3> /^-\\|^+<CR>
 map <F5> :call CurtineIncSw()<CR>
+map <F6> :call VimBlame()<CR>
 map <2-LeftMouse> *
 "map <F6> :<C-u>call gitblame#echo()<CR>
 
