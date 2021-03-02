@@ -57,7 +57,7 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
-export PATH="~/git/staging:$PATH"
+export PATH="$HOME/git/staging:$HOME/git/pub/staging:$PATH"
 . git-status-prompt
 
 green="\\[\\033[00;32m\\]"
@@ -186,6 +186,4 @@ rb() {
   update
   sudo reboot
 }
-
-export PATH="$PATH:~/git/staging"
 
