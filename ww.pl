@@ -58,7 +58,7 @@ fork_exec();
 open my $info, $file or die "Could not open $file: $!";
 
 while (1) {
-  qx(/home/$usr/git/pub/staging/build_index.pl; inotifywait -q $file);
+  qx(build_index.pl; inotifywait -q $file);
 }
 
 close($info);
