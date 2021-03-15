@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =2
+let g:netrw_dirhist_2='/home/curtie2/git/symm1/3rdParty/openssl/include'
+let g:netrw_dirhist_1='/home/curtie2/git/symm1/3rdParty/openssl/openssl'
+let g:netrw_dirhist_0='/home/curtie2/git/pub/staging'
+let g:netrw_dirhist_9='/home/curtie2/git/NVMe-QUIC/usr'
+let g:netrw_dirhist_8='/home/curtie2/git/NVMe-QUIC'
+let g:netrw_dirhist_7='/media/sf_c/Users/curtie2/OneDrive - National University of Ireland, Galway/2021-CT5155_Introduction_to_Relational_Databases/week8'
+let g:netrw_dirhist_6='/home/curtie2'
+let g:netrw_dirhist_5='/boot'
+let g:netrw_dirhist_4='/'
+let g:netrw_dirhist_3='/home'
