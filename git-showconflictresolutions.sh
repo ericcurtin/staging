@@ -1,4 +1,4 @@
 #!/bin/bash
 
-git show -p --cc $1
+git show --cc $1
 
