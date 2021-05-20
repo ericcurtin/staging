@@ -10,7 +10,9 @@ use POSIX qw(WNOHANG);
 my $usr = qx(id -un);
 chomp($usr);
 
-my $file = ".ww.log";
+my $bn = qx(basename \$PWD);
+chomp($bn);
+my $file = "../$bn.ww.log";
 qx(> $file);
 open my $self, '<', "$file" or die "Couldn't open self: $!";
 flock $self, LOCK_EX | LOCK_NB or die "This script is already running";
@@ -31,7 +33,7 @@ sub fork_exec {
     set_pdeathsig($SIGTERM);
 
     my $events = "close_write,moved_to";
-    exec("inotifywait -m -e $events --include \".c\$|.h\$\" -r . > $file");
+    exec("inotifywait -m -e $events --include \".c|.h\" -r . > $file");
   }
   elsif ($pid < 0) {
     die("fork failed\n");
@@ -40,7 +42,7 @@ sub fork_exec {
 
 my $max_user_watches = qx(sysctl -n fs.inotify.max_user_watches);
 my $cur_user_watches = qx(cat /proc/*/fdinfo/* 2> /dev/null | grep -c "^inotify");
-my $needed_user_watches = qx(find . -name "*.[c|h]" | wc -l);
+my $needed_user_watches = qx(find . -name "*.[c|h]*" | wc -l);
 my $available_user_watches = $max_user_watches - $cur_user_watches;
 
 #print("max_user_watches: $max_user_watches" .
@@ -50,7 +52,7 @@ my $available_user_watches = $max_user_watches - $cur_user_watches;
 
 if ($needed_user_watches > $available_user_watches) {
   qx(echo "We need more watches ($needed_user_watches) than available ($available_user_watches)\n" > $file);
-  return 1;
+  exit 1;
 }
 
 fork_exec();

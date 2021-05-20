@@ -28,7 +28,7 @@ create_and_lock($fn2);
 open my $fh2, "<", $fn2 or die "Couldn't open '$fn2' - $!";
 flock $fh2, LOCK_EX | LOCK_NB or die "Couldn't flock '$fn2' - $!";
 
-my $find_cmd = "find . -name '*.[ch]'";
+my $find_cmd = "find . -name '*.[ch]*'";
 my $ctags_args = "-o newtags .";
 if (!fork()) {
   exec("ctags $ctags_args \$($find_cmd); mv newtags tags");
