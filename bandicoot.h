@@ -55,6 +55,7 @@ static char* qx(char** cmd, int inc_stderr) {
       out_size *= 2;
       out = realloc(out, out_size);
     }
+    printf("errno %d\n", errno);
   } while (errno == EAGAIN || errno == EINTR);
 
   close(stdout_fds[0]);
@@ -62,6 +63,7 @@ static char* qx(char** cmd, int inc_stderr) {
   if (!inc_stderr) {
     close(stderr_fds[1]);
     do {
+      printf("read2\n");
       const ssize_t r = read(stderr_fds[0], &out[i], buf_size);
 
       if (r > 0) {
@@ -106,6 +108,7 @@ static char* bt(void) {
       int j = 0;
       char str_cpy[2048];  // string length limitation here
       strcpy(str_cpy, strings[i]);
+#ifdef ERICDEMANGLE
       //      printf("ERICDEBUG(before addr2line): %s\n", str_cpy);
 
       argv[4] = strings[i] + j;
@@ -125,6 +128,12 @@ static char* bt(void) {
       argv[6] = 0;
 
       char* to_cat = qx(argv, 1);
+#else
+      char* to_cat = "??";
+      out = malloc(8192);
+      out = "";
+#endif
+      
       //      printf("ERICDEBUG(after addr2line): %s\n", to_cat);
       if (out) {
         if (strstr(to_cat, "??")) {
@@ -134,7 +143,9 @@ static char* bt(void) {
           strcat(out, to_cat);
         }
 
+#ifdef ERICDEMANGLE
         free(to_cat);
+#endif
       } else {
         out = to_cat;  // assumes this first allocated piece of memory from qx
                        // is big enough
