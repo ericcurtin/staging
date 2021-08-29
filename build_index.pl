@@ -38,10 +38,6 @@ qx(cscope -kbcq \$($find_cmd); rm -f $fn2);
 
 wait();
 
-my $fn1_rem = $fn1 =~ s/\/home/\/emc/g;
-$fn1_rem = basename($fn1_rem);
-#qx(rsync $fn1 $fn2 emsdggprd03.isus.emc.com:$fn1_rem);
-
 close($fh1) or die "Couldn't close '$fn1' - $!";
 close($fh2) or die "Couldn't close '$fn2' - $!";
 

@@ -6,7 +6,7 @@ set -e
 
 echo
 echo "$1" | while read line ; do
-  bin=$(echo "$line" | awk -F'(' '{printf $1}')
+  bin=$(echo "$line" | awk -F'(' '{print $1}' | awk '{print $NF}')
   addr=$(echo "$line" | grep -o -P '(?<=\+).*(?=\))')
 
 #  echo "bin: $bin"
