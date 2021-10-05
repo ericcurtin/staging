@@ -33,9 +33,10 @@ command! -nargs=0 OUTLINE call s:OutlineToggle()
 
 map <silent> <F12> :OUTLINE<CR>
 
-if (!empty(glob("cscope.out")))
-  cs add cscope.out
-endif
+set nocscopeverbose
+"if (!empty(glob("cscope.out")))
+"  cs add cscope.out
+"endif
 
 "autocmd BufReadPost,FileReadPost,BufNewFile * call system("tmux rename-window " . expand("%"))
 

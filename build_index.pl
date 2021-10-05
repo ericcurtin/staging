@@ -28,13 +28,14 @@ create_and_lock($fn2);
 open my $fh2, "<", $fn2 or die "Couldn't open '$fn2' - $!";
 flock $fh2, LOCK_EX | LOCK_NB or die "Couldn't flock '$fn2' - $!";
 
-my $find_cmd = "find . -name '*.[ch]*'";
+my $fn_lst = "/tmp/build_index_$$.lst";
+qx(find . -name '*.[ch]' \! -type l > $fn_lst);
 my $ctags_args = "-o newtags .";
 if (!fork()) {
-  exec("ctags $ctags_args \$($find_cmd); mv newtags tags");
+  exec("ctags $ctags_args -L $fn_lst; mv newtags tags");
 }
 
-qx(cscope -kbcq \$($find_cmd); rm -f $fn2);
+qx(cscope -kbcq -i $fn_lst; rm -f $fn2);
 
 wait();
 
