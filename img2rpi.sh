@@ -27,7 +27,7 @@ if [[ $1 == *.raw.xz ]]; then
     read -p "efi to flash: " efi
   fi
 
-  echo "yes" | sudo fedora-arm-image-installer --image=$1 --media=$disk --addkey=$HOME/.ssh/id_rsa.pub --resizefs --showboot --target=rpi4 -y
+  echo "yes" | sudo fedora-arm-image-installer --image=$1 --media=$disk --addkey=$HOME/.ssh/id_rsa.pub --resizefs --showboot --target=rpi4 --addconsole -y
   echo "Completed write to $disk"
   if [ -n "$efi" ]; then
     fw_file=$(realpath $efi)
