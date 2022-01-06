@@ -8,6 +8,10 @@ set -e
 dir="/var/run/fedora"
 fw_opts="if=pflash,format=raw"
 
+if ! command -v qemu-system-aarch64; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 qemu-system-aarch64 \
          -machine virt,accel=hvf,highmem=off \
          -cpu cortex-a72 -smp 8 -m 6G \
