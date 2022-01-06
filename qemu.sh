@@ -5,7 +5,7 @@ set -e
 # -device virtio-net-pci,netdev=net \
 # -netdev user,id=net,ipv6=off \
 
-dir="/var/run/fedora"
+dir="/var/root/fedora"
 fw_opts="if=pflash,format=raw"
 
 if ! command -v qemu-system-aarch64; then
@@ -27,4 +27,6 @@ qemu-system-aarch64 \
          -drive "$fw_opts,file=$dir/edk2-arm-vars.fd,discard=on" \
          -drive "if=virtio,format=raw,file=$dir/hdd.raw,discard=on" \
          -boot d
+
+# -cdrom $dir/Fedora-Workstation-Live-aarch64-35-1.2.iso
 
