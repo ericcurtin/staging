@@ -89,27 +89,27 @@ run() {
   $@ & disown; exit
 }
 
-green='\033[0;32m'
-red='\033[0;31m'
-cyan='\033[1;36m'
-yellow='\033[0;93m'
-nc='\033[0m'
-lgreen='\033[1;32m'
-blue='\033[1;34m'
+green='\[\033[0;32m\]'
+red='\[\033[0;31m\]'
+cyan='\[\033[1;36m\]'
+yellow='\[\033[0;93m\]'
+nc='\[\033[0;0m\]'
+lgreen='\[\033[1;32m\]'
+blue='\[\033[1;34m\]'
 
 es() {
   local errno="$?"
 
-  if [ $errno != 0 ]; then
-    echo -e "$red$errno$nc"
+  if [ $errno = 0 ]; then
+    echo -en "\E[\033[0;32m$errno"
   else
-    echo -e "$green$errno$nc"
+    echo -en "\E[\033[0;31m$errno"
   fi
 }
 
 . git-status-prompt
 HOSTNAME_FQDN=$(hostname -f | head -c4)
-PS1="$lgreen\u@$HOSTNAME_FQDN \t$nc \$(es)"
+PS1="$lgreen\u@$HOSTNAME_FQDN \t \$(es)$nc"
 if type GitStatusPrompt > /dev/null 2>&1; then
   PS1="$PS1 \$(GitStatusPrompt)"
 fi
