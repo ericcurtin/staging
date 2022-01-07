@@ -18,5 +18,5 @@ run() {
 run 8
 run 16
 
-tail -n40 *.bench
+tail *.bench
 
