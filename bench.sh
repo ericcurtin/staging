@@ -6,7 +6,7 @@ mem="printf 'mem: '; awk '/MemTotal/ {printf int(\\\$2/1024)}' /proc/meminfo; ec
 
 run() {
   j=$1
-  cmd="cd ~/git/libcamera; rm -rf build; git reset --hard 44d59841e1ce59042b8069b8078bc9f7b1bfa73b; meson build -Dqcam=disabled; time ninja -C build -j$j; echo; grep -m1 'model name|Hardware' /proc/cpuinfo; $mem; grep -m1 'cores' /proc/cpuinfo; printf 'jobs : $j\\n'"
+  cmd="cd ~/git/libcamera; rm -rf build; git reset --hard 44d59841e1ce59042b8069b8078bc9f7b1bfa73b; meson build -Dqcam=disabled; time ninja -C build -j$j; echo; grep -m1 'model name\|Hardware' /proc/cpuinfo; $mem; grep -m1 'cores' /proc/cpuinfo; printf 'jobs : $j\\n'"
 #  ssh ecurtin@ecurtins-Mini.Home "ssh 192.168.64.2 \"$cmd\"" > m1.$j.bench 2>&1 &
   ssh ecurtin@ecurtins-Mini.Home "ssh -p 8022 127.0.0.1 \"$cmd\"" > m1.$j.bench 2>&1 &
   ssh root@192.168.1.102 "/bin/bash -c \"$cmd\"" > android.$j.bench 2>&1 &
