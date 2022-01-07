@@ -14,7 +14,8 @@ fi
 
 if false; then # graphics version
 /opt/homebrew/Cellar/qemu-virgl/20211212.1/bin/qemu-system-aarch64 \
-         -machine virt,accel=hvf,highmem=off \
+         -machine virt,highmem=off \
+         -accel hvf -accel tcg \
          -cpu cortex-a72 -smp 8 -m 6G \
          -device intel-hda -device hda-output \
          -device qemu-xhci \
@@ -26,8 +27,7 @@ if false; then # graphics version
          -device virtio-net,netdev=n1 \
          -drive "$fw_opts,file=$dir/edk2-aarch64-code.fd,readonly=on" \
          -drive "$fw_opts,file=$dir/edk2-arm-vars.fd,discard=on" \
-         -drive "if=virtio,format=raw,file=$dir/hdd.raw,discard=on" \
-         -boot d
+         -drive "if=virtio,format=raw,file=$dir/hdd.raw,discard=on"
 else
 /opt/homebrew/bin/qemu-system-aarch64 \
          -m 6G -smp 8 \
@@ -40,6 +40,6 @@ else
          -M virt,highmem=off \
          -drive file=$dir/edk2-aarch64-code.fd,$fw_opts,readonly=on \
          -drive file=$dir/edk2-arm-vars.fd,$fw_opts \
-         -drive if=virtio,file=$dir/hdd.raw,format=raw -display none
+         -drive if=virtio,file=$dir/hdd.raw,format=raw -display cocoa
 fi
 
