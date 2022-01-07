@@ -12,7 +12,8 @@ if ! command -v qemu-system-aarch64; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-qemu-system-aarch64 \
+if false; then # graphics version
+/opt/homebrew/Cellar/qemu-virgl/20211212.1/bin/qemu-system-aarch64 \
          -machine virt,accel=hvf,highmem=off \
          -cpu cortex-a72 -smp 8 -m 6G \
          -device intel-hda -device hda-output \
@@ -27,6 +28,18 @@ qemu-system-aarch64 \
          -drive "$fw_opts,file=$dir/edk2-arm-vars.fd,discard=on" \
          -drive "if=virtio,format=raw,file=$dir/hdd.raw,discard=on" \
          -boot d
-
-# -cdrom $dir/Fedora-Workstation-Live-aarch64-35-1.2.iso
+else
+/opt/homebrew/bin/qemu-system-aarch64 \
+         -m 6G -smp 8 \
+         -chardev socket,path=/tmp/port1,server=on,wait=off,id=port1-char \
+         -device virtio-serial \
+         -device virtserialport,id=port1,chardev=port1-char,name=org.fedoraproject.port.0 \
+         -net user,hostfwd=tcp::8022-:22 \
+         -net nic \
+         -accel hvf -accel tcg -cpu cortex-a57 \
+         -M virt,highmem=off \
+         -drive file=$dir/edk2-aarch64-code.fd,$fw_opts,readonly=on \
+         -drive file=$dir/edk2-arm-vars.fd,$fw_opts \
+         -drive if=virtio,file=$dir/hdd.raw,format=raw -display none
+fi
 
