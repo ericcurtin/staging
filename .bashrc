@@ -109,7 +109,8 @@ es() {
 
 . git-status-prompt
 HOSTNAME_FQDN=$(hostname -f | head -c4)
-PS1="$lgreen\u@$HOSTNAME_FQDN \t \$(es)$nc"
+UNAME_M=$(uname -m)
+PS1="$lgreen\u@$HOSTNAME_FQDN $cyan$UNAME_M $lgreen\t \$(es)$nc"
 if type GitStatusPrompt > /dev/null 2>&1; then
   PS1="$PS1 \$(GitStatusPrompt)"
 fi
