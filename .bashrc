@@ -101,9 +101,9 @@ es() {
   local errno="$?"
 
   if [ $errno = 0 ]; then
-    echo -en "\E[\033[0;32m$errno"
+    echo -en "\033[0;32m$errno"
   else
-    echo -en "\E[\033[0;31m$errno"
+    echo -en "\033[0;31m$errno"
   fi
 }
 
