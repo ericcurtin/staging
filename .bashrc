@@ -89,6 +89,14 @@ run() {
   $@ & disown; exit
 }
 
+stopwatch(){
+  date1=$(date +%s%3N)
+  while true; do 
+    bc ($date1-$(date +%s%3N))/1000
+    sleep 0.01
+  done
+}
+
 green='\[\033[0;32m\]'
 red='\[\033[0;31m\]'
 cyan='\[\033[1;36m\]'
