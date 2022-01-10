@@ -1,8 +1,14 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/time.h>
+#include <signal.h>
+
+void HUPHandler(int dummy) {
+    printf(" split\n");
+}
 
 int main() {
+  signal(SIGHUP, HUPHandler);
   struct timeval tv;
   gettimeofday(&tv, NULL);
   unsigned long long msSinceEpoch =

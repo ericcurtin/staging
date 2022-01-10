@@ -12,23 +12,31 @@ if ! command -v qemu-system-aarch64; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-if false; then # graphics version
+uname_m=$(uname -m)
+if [ $(echo $uname_m) = "arm64" ]; then
+  # accel tcg
   /opt/homebrew/Cellar/qemu-virgl/20211212.1/bin/qemu-system-aarch64 \
-    -machine virt,highmem=off \
-    -accel hvf -accel tcg \
+    -machine virt,highmem=off -accel hvf \
     -cpu cortex-a72 -smp 8 -m 6G \
     -device intel-hda -device hda-output \
     -device qemu-xhci \
     -device virtio-gpu-gl-pci \
+    -serial stdio \
     -device usb-kbd \
+    -chardev socket,path=/tmp/port1,server=on,wait=off,id=port1-char \
+    -device virtio-serial \
+    -device virtserialport,id=port1,chardev=port1-char,name=org.fedoraproject.port.0 \
+    -net user,hostfwd=tcp::8022-:22 -net nic \
     -device virtio-mouse-pci \
     -display cocoa,gl=es \
-    -netdev vmnet-shared,id=n1 \
-    -device virtio-net,netdev=n1 \
-    -drive "$fw_opts,file=$dir/edk2-aarch64-code.fd,readonly=on" \
-    -drive "$fw_opts,file=$dir/edk2-arm-vars.fd,discard=on" \
+    -usb -device usb-ehci,id=ehci \
+    -device usb-host,vendorid=0x046d,productid=0x0843 \
+    -device qemu-xhci \
+    -device usb-host,vendorid=0x0c76,productid=0x120c \
+    -drive "if=pflash,format=raw,file=$dir/edk2-aarch64-code.fd,readonly=on" \
+    -drive "if=pflash,format=raw,file=$dir/edk2-arm-vars.fd,discard=on" \
     -drive "if=virtio,format=raw,file=$dir/hdd.raw,discard=on"
-elif [ $(uname -m) = "x86_64" ]; then
+elif [ $(echo $uname_m) = "x86_64" ]; then
   /usr/bin/qemu-system-x86_64 \
     -machine pc-q35-6.1,accel=kvm -cpu host -m 6G -smp 12 \
     -chardev socket,path=/tmp/port1,server=on,wait=off,id=port1-char \
