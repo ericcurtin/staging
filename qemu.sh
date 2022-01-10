@@ -30,12 +30,37 @@ if [ $(echo $uname_m) = "arm64" ]; then
     -device virtio-mouse-pci \
     -display cocoa,gl=es \
     -usb -device usb-ehci,id=ehci \
-    -device usb-host,vendorid=0x046d,productid=0x0843 \
-    -device qemu-xhci \
-    -device usb-host,vendorid=0x0c76,productid=0x120c \
+    -device usb-host,vendorid=0xe807,productid=0x03f0 \
     -drive "if=pflash,format=raw,file=$dir/edk2-aarch64-code.fd,readonly=on" \
     -drive "if=pflash,format=raw,file=$dir/edk2-arm-vars.fd,discard=on" \
     -drive "if=virtio,format=raw,file=$dir/hdd.raw,discard=on"
+
+#     -device qemu-xhci \
+#    -device usb-host,vendorid=0x0c76,productid=0x120c \
+
+#        HP Webcam HD 4310:
+#
+#          Product ID: 0xe807
+#          Vendor ID: 0x03f0  (Hewlett Packard)
+#          Version: 11.16
+#          Speed: Up to 480 Mb/s
+#          Manufacturer: Hewlett Packard
+#          Location ID: 0x02200000 / 24
+#          Current Available (mA): 500
+#          Current Required (mA): 500
+#          Extra Operating Current (mA): 0
+#
+#        Logitech Webcam C930e:
+#
+#          Product ID: 0x0843
+#          Vendor ID: 0x046d  (Logitech Inc.)
+#          Version: 0.13
+#          Serial Number: 7EFAD17E
+#          Speed: Up to 480 Mb/s
+#          Location ID: 0x02100000 / 22
+#          Current Available (mA): 500
+#          Current Required (mA): 500
+#          Extra Operating Current (mA): 0
 elif [ $(echo $uname_m) = "x86_64" ]; then
   /usr/bin/qemu-system-x86_64 \
     -machine pc-q35-6.1,accel=kvm -cpu host -m 6G -smp 12 \

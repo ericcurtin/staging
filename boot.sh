@@ -1,5 +1,12 @@
 #!/bin/bash
 
+handler()
+{
+  kill $stopwatch_pid
+}
+
+trap handler SIGINT
+
 set -e
 
 ssh -p 8022 127.0.0.1 "sudo init 0" || true
@@ -15,5 +22,8 @@ tail -f qemu.out | grep -q -m1 'grub'
 kill -HUP $stopwatch_pid
 tail -f qemu.out | grep -q -m1 ^Kernel
 kill $stopwatch_pid
-echo
+#echo
+printf "\nsplash displays "
+ssh -p 8022 127.0.0.1 "sudo grep -m1 'update_status' /var/log/plymouth-debug.log" | awk -F':| ' '{print $3}'
+printf " after split"
 
