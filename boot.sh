@@ -10,7 +10,7 @@ done
 
 sudo detach -e qemu.out -o qemu.out /Users/ecurtin/git/staging/qemu.sh
 stopwatch &
-stopwatch_pid=$(pgrep stopwatch)
+stopwatch_pid=$!
 tail -f qemu.out | grep -q -m1 'grub'
 kill -HUP $stopwatch_pid
 tail -f qemu.out | grep -q -m1 ^Kernel
