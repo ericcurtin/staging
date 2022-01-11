@@ -23,13 +23,11 @@ if [ $(echo $uname_m) = "arm64" ]; then
     -device virtio-gpu-gl-pci \
     -serial stdio \
     -device usb-kbd \
-    -chardev socket,path=/tmp/port1,server=on,wait=off,id=port1-char \
-    -device virtio-serial \
-    -device virtserialport,id=port1,chardev=port1-char,name=org.fedoraproject.port.0 \
-    -net user,hostfwd=tcp::8022-:22 -net nic \
     -device virtio-mouse-pci \
     -display cocoa,gl=es \
     -usb -device usb-ehci,id=ehci \
+    -netdev vmnet-shared,id=net0 \
+    -device virtio-net,netdev=net0 \
     -device usb-host,vendorid=0xe807,productid=0x03f0 \
     -drive "if=pflash,format=raw,file=$dir/edk2-aarch64-code.fd,readonly=on" \
     -drive "if=pflash,format=raw,file=$dir/edk2-arm-vars.fd,discard=on" \
