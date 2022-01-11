@@ -15,6 +15,7 @@ else
   if [ -z "$2" ]; then
     unset clean
   fi
+
   ssh $host "cd $path $clean && $cmd"
 fi
 
