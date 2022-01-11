@@ -8,7 +8,7 @@ set -e
 dir="/var/root/fedora"
 fw_opts="if=pflash,format=raw"
 
-if ! command -v qemu-system-aarch64; then
+if ! command -v qemu-system-aarch64 > /dev/null; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
@@ -19,23 +19,26 @@ if [ $(echo $uname_m) = "arm64" ]; then
     -machine virt,highmem=off -accel hvf \
     -cpu cortex-a72 -smp 8 -m 6G \
     -device intel-hda -device hda-output \
-    -device qemu-xhci \
     -device virtio-gpu-gl-pci \
     -serial stdio \
-    -device usb-kbd \
+    -device qemu-xhci -device usb-kbd \
     -device virtio-mouse-pci \
     -display cocoa,gl=es \
-    -usb -device usb-ehci,id=ehci \
     -netdev vmnet-shared,id=net0 \
     -device virtio-net,netdev=net0 \
-    -device usb-host,vendorid=0xe807,productid=0x03f0 \
+    -device usb-host,productid=0x0843,vendorid=0x046d \
     -drive "if=pflash,format=raw,file=$dir/edk2-aarch64-code.fd,readonly=on" \
     -drive "if=pflash,format=raw,file=$dir/edk2-arm-vars.fd,discard=on" \
     -drive "if=virtio,format=raw,file=$dir/hdd.raw,discard=on"
 
+# -usb -device usb-ehci,id=ehci -device usb-host,vendorid=0x0843,productid=0x046d \
+
+#    -netdev vmnet-shared,id=net0 \
+#    -device virtio-net,netdev=net0 \
+
 #     -device qemu-xhci \
 #    -device usb-host,vendorid=0x0c76,productid=0x120c \
-
+# system_profiler SPUSBDataType
 #        HP Webcam HD 4310:
 #
 #          Product ID: 0xe807
