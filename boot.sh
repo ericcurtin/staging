@@ -9,7 +9,7 @@ trap handler SIGINT
 
 set -e
 
-ssh -o ConnectTimeout=1 mac-qemu "sudo init 0" || true
+ssh -o ConnectTimeout=2 mac-qemu "sudo init 0" || true
 sleep 1
 while pgrep -q qemu-system-aarch64; do
   sleep 1
