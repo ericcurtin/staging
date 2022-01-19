@@ -64,14 +64,12 @@ if [ $(echo $uname_m) = "arm64" ]; then
 #          Extra Operating Current (mA): 0
 elif [ $(echo $uname_m) = "x86_64" ]; then
   /usr/bin/qemu-system-x86_64 \
-    -machine pc-q35-6.1,accel=kvm -cpu host -m 6G -smp 12 \
-    -chardev socket,path=/tmp/port1,server=on,wait=off,id=port1-char \
-    -device virtio-serial \
-    -device virtserialport,id=port1,chardev=port1-char,name=org.fedoraproject.port.0 \
-    -net user,hostfwd=tcp::8022-:22 \
+    -machine pc-q35-6.1,accel=kvm -cpu host -m 14G -smp 12 \
+    -netdev tap,id=hostnet0 \
+    -device virtio-net-pci,netdev=hostnet0,mac=52:54:00:9c:a0:63 \
     -drive if=virtio,file=/var/lib/libvirt/images/fedora35.qcow2,format=qcow2 \
     -usb -device usb-ehci,id=ehci -device usb-host,hostbus=1,hostaddr=2 \
-    -net nic -display gtk
+    -display gtk
 
     # -usb -device usb-ehci,id=ehci -device usb-host,hostbus=1,hostaddr=2 for cam
 else
