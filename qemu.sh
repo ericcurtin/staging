@@ -65,12 +65,9 @@ if [ $(echo $uname_m) = "arm64" ]; then
 elif [ $(echo $uname_m) = "x86_64" ]; then
   /usr/bin/qemu-system-x86_64 \
     -machine pc-q35-6.1,accel=kvm -cpu host -m 14G -smp 12 \
-    -netdev tap,id=hostnet0 \
-    -device virtio-net-pci,netdev=hostnet0,mac=52:54:00:9c:a0:63 \
     -drive if=virtio,file=/var/lib/libvirt/images/fedora35.qcow2,format=qcow2 \
-    -usb -device usb-ehci,id=ehci -device usb-host,hostbus=1,hostaddr=2 \
-    -display gtk
-
+    -vga virtio -display sdl,gl=es
+#-vga [std|cirrus|vmware|qxl|xenfb|tcx|cg3|virtio|none]
     # -usb -device usb-ehci,id=ehci -device usb-host,hostbus=1,hostaddr=2 for cam
 else
   /opt/homebrew/bin/qemu-system-aarch64 \
