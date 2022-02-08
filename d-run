@@ -10,14 +10,14 @@ GID=$(id -g)
 GROUP=$(id -gn)
 
 # --privileged needed for dmidecode
-docker run --privileged -t -d -v /tmp:/tmp -v "/home/$USER:/home/$USER" -h "$NAME" --name "$NAME" "$IMG" /bin/bash
+sudo podman run --privileged -t -d -v /tmp:/tmp -v "/home/$USER:/home/$USER" -h "$NAME" --name "$NAME" "$IMG" /bin/bash
 
-docExe() {
+podExe() {
   local cmd=$1
 
-  docker exec -t "$NAME" /bin/bash -c "$cmd"
+  sudo podman exec -t "$NAME" /bin/bash -c "$cmd"
 }
 
-docExe "groupadd -g $GID $GROUP && useradd -M -s /bin/bash -g $GID -u $UID $USER" &
-docExe "printf '$USER ALL=(ALL) NOPASSWD: ALL\n' >> /etc/sudoers" &
+podExe "groupadd -g $GID $GROUP && useradd -M -s /bin/bash -g $GID -u $UID $USER" &
+podExe "printf '$USER ALL=(ALL) NOPASSWD: ALL\n' >> /etc/sudoers" &
 
