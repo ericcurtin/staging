@@ -3,17 +3,17 @@
 set -e
 
 prompt_and_read() {
-  if [ -z "$2" ]; then
+  if [ -z "$dev" ]; then
     sudo fdisk -l | grep -A2 "/dev/m\|/dev/s\|/dev/l" | sed "s/://g"
     echo
-    read -p "Disk to write to: " disk
+    read -p "Disk to write to: " dev
     echo
-    echo "Writing $1 to $disk"
+    echo "Writing $1 to $dev"
     echo
   fi
 }
 
-disk=$2
+dev=$2
 efi=$3
 
 read -p "Do you want to add ssh key? (y/n) " ssh_key
@@ -38,21 +38,22 @@ if [[ $1 == *.raw.xz ]]; then
   if [[ $fake =~ ^[Yy]$ ]]; then
     out="16G.raw"
     dd if=/dev/zero of=~/$out bs=1G count=16
-    disk=$(sudo losetup -f)
+    dev=$(sudo losetup -f)
     sudo losetup -fP ~/$out
   fi
 
-  prompt_and_read $1 $disk
-  echo "yes" | sudo fedora-arm-image-installer --image=$1 --media=$disk $ssh_key --resizefs --showboot --target=rpi4 --addconsole -y
-  echo "Completed write to $disk"
+  prompt_and_read $1 $dev
+  echo "yes" | sudo fedora-arm-image-installer --image=$1 --media=$dev $ssh_key --resizefs --showboot --target=rpi4 --addconsole -y
+  echo "Completed write to $dev"
   if [ -n "$efi" ]; then
     fw_file=$(realpath $efi)
     if [[ $efi == *.zip ]]; then
-      dev="$(sudo fdisk -l | grep "$disk" | grep FAT | awk '{print $1}')"
+      dev="$(sudo fdisk -l | grep "$dev" | grep FAT | awk '{print $1}')"
       sudo mkdir -p /tmp$dev
       sudo mount $dev /tmp$dev
       cd /tmp$dev
       sudo unzip -o $fw_file
+      sudo /bin/bash -c "echo 'dtoverlay=vc4-kms-v3d-pi4' >> config.txt"
       cd -
       sudo umount /tmp$dev
       sudo rm -rf /tmp$dev
@@ -61,14 +62,14 @@ if [[ $1 == *.raw.xz ]]; then
     fi
   fi
 elif [[ $1 == *.iso ]] || [[ $1 == *.img ]] || [[ $1 == *.raw ]]; then
-  prompt_and_read $1 $disk
-  sudo dd of=$disk if=$1 bs=4M conv=fdatasync status=progress
-  echo "Completed write to $disk"
+  prompt_and_read $1 $dev
+  sudo dd of=$dev if=$1 bs=4M conv=fdatasync status=progress
+  echo "Completed write to $dev"
 else
   echo "Unrecognized extension in filename $1"
 fi
 
-dev="$(sudo fdisk -l | grep "$disk" | grep -v FAT | tail -n1 | awk '{print $1}')"
+dev="$(sudo fdev -l | grep "$dev" | grep -v FAT | tail -n1 | awk '{print $1}')"
 sudo mkdir -p /tmp$dev
 sudo mount $dev /tmp$dev
 root="/tmp$dev/root"
@@ -76,17 +77,17 @@ sudo cp $(which qemu-aarch64-static) $root/usr/bin
 resolv="$root/etc/resolv.conf"
 sudo /bin/bash -c "echo -e 'nameserver 8.8.8.8\nnameserver 8.8.4.4' > $resolv"
 sudo /bin/bash -c "echo -e '127.0.0.1 localhost' > $root/etc/hosts"
-sudo systemd-nspawn -D $root qemu-aarch64-static /bin/env -i TERM="$TERM" PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /bin/bash --login -c "dnf install -y git gcc g++ libevent libevent-devel openssl openssl-devel gnutls \
-  gnutls-devel meson boost boost-devel python3-jinja2 python3-ply python3-yaml libdrm \
-  libdrm-devel systemd-udev doxygen cmake graphviz"
+sudo systemd-nspawn -D $root qemu-aarch64-static /bin/env -i TERM="$TERM" \
+  PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /bin/bash --login -c "dnf install -y \
+    git gcc g++ libevent libevent-devel openssl openssl-devel gnutls \
+    gnutls-devel meson boost boost-devel python3-jinja2 python3-ply \
+    python3-yaml libdrm libdrm-devel systemd-udev doxygen cmake graphviz"
 sudo killall -9 /usr/bin/qemu-aarch64-static || true
 sudo rm -f $root/usr/bin/qemu-aarch64-static
-
 sudo umount /tmp$dev
 sudo rm -rf /tmp$dev
 
 if [[ $fake =~ ^[Yy]$ ]]; then
-  sudo sync
   sudo losetup -D
   img_name=$(echo $1 | sed "s/.xz//g")
   sudo mv ~/$out ~/$img_name
