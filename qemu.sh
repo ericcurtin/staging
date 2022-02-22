@@ -24,7 +24,7 @@ if [ $(echo $uname_m) = "arm64" ]; then
     -device qemu-xhci -device usb-kbd \
     -device virtio-mouse-pci \
     -display cocoa,gl=es \
-    -netdev vmnet-shared,id=net0 \
+    -netdev vmnet-bridged,id=net0,ifname=en1 \
     -device virtio-net,netdev=net0 \
     -device usb-host,productid=0x0843,vendorid=0x046d \
     -drive "if=pflash,format=raw,file=$dir/edk2-aarch64-code.fd,readonly=on" \
