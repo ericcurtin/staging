@@ -4,30 +4,46 @@ set -e
 
 prompt_and_read() {
   if [ -z "$2" ]; then
-    sudo fdisk -l | grep -A2 "/dev/m\|/dev/s" | sed "s/://g"
+    sudo fdisk -l | grep -A2 "/dev/m\|/dev/s\|/dev/l" | sed "s/://g"
     echo
     read -p "Disk to write to: " disk
     echo
     echo "Writing $1 to $disk"
     echo
-  else
-    disk=$2
   fi
 }
 
-if [[ $1 == *.raw.xz ]]; then
-#  xzcat $1 | sudo dd bs=4M iflag=fullblock oflag=direct status=progress of=/dev/mmcblk0
-  prompt_and_read $1 $2
-  efi=$3
-  if [ -z "$efi" ]; then
+disk=$2
+efi=$3
+
+read -p "Do you want to add ssh key? (y/n) " ssh_key
+if [[ $ssh_key =~ ^[Yy]$ ]]; then
+  ssh_key="--addkey=$HOME/.ssh/id_rsa.pub"
+fi
+
+read -p "Do you want to setup fake device? (y/n) " fake
+if [ -z "$efi" ]; then
+  read -p "Do you want to flash EFI? (y/n) " flash
+  if [[ $flash =~ ^[Yy]$ ]]; then
     echo ".zip files in current directory: "
     echo
-    ls *.zip
+    ls *EFI*.zip
     echo
     read -p "efi to flash: " efi
   fi
+fi
 
-  echo "yes" | sudo fedora-arm-image-installer --image=$1 --media=$disk --addkey=$HOME/.ssh/id_rsa.pub --resizefs --showboot --target=rpi4 --addconsole -y
+if [[ $1 == *.raw.xz ]]; then
+#  xzcat $1 | sudo dd bs=4M iflag=fullblock oflag=direct status=progress of=/dev/mmcblk0
+  if [[ $fake =~ ^[Yy]$ ]]; then
+    out="16G.raw"
+    dd if=/dev/zero of=~/$out bs=1G count=16
+    disk=$(sudo losetup -f)
+    sudo losetup -fP ~/$out
+  fi
+
+  prompt_and_read $1 $disk
+  echo "yes" | sudo fedora-arm-image-installer --image=$1 --media=$disk $ssh_key --resizefs --showboot --target=rpi4 --addconsole -y
   echo "Completed write to $disk"
   if [ -n "$efi" ]; then
     fw_file=$(realpath $efi)
@@ -44,12 +60,38 @@ if [[ $1 == *.raw.xz ]]; then
       echo "Unrecognized extension in filename $efi"
     fi
   fi
-elif [[ $1 == *.iso ]]; then
-  prompt_and_read $1 $2
+elif [[ $1 == *.iso ]] || [[ $1 == *.img ]] || [[ $1 == *.raw ]]; then
+  prompt_and_read $1 $disk
   sudo dd of=$disk if=$1 bs=4M conv=fdatasync status=progress
   echo "Completed write to $disk"
 else
   echo "Unrecognized extension in filename $1"
+fi
+
+dev="$(sudo fdisk -l | grep "$disk" | grep -v FAT | tail -n1 | awk '{print $1}')"
+sudo mkdir -p /tmp$dev
+sudo mount $dev /tmp$dev
+root="/tmp$dev/root"
+sudo cp $(which qemu-aarch64-static) $root/usr/bin
+resolv="$root/etc/resolv.conf"
+sudo /bin/bash -c "echo -e 'nameserver 8.8.8.8\nnameserver 8.8.4.4' > $resolv"
+sudo /bin/bash -c "echo -e '127.0.0.1 localhost' > $root/etc/hosts"
+sudo systemd-nspawn -D $root qemu-aarch64-static /bin/env -i TERM="$TERM" PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /bin/bash --login -c "dnf install -y git gcc g++ libevent libevent-devel openssl openssl-devel gnutls \
+  gnutls-devel meson boost boost-devel python3-jinja2 python3-ply python3-yaml libdrm \
+  libdrm-devel systemd-udev doxygen cmake graphviz"
+sudo killall -9 /usr/bin/qemu-aarch64-static || true
+sudo rm -f $root/usr/bin/qemu-aarch64-static
+
+sudo umount /tmp$dev
+sudo rm -rf /tmp$dev
+
+if [[ $fake =~ ^[Yy]$ ]]; then
+  sudo sync
+  sudo losetup -D
+  img_name=$(echo $1 | sed "s/.xz//g")
+  sudo mv ~/$out ~/$img_name
+  printf "Compressing...\n"
+  xz -9 ~/$img_name
 fi
 
 sudo sync

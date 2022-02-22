@@ -5,7 +5,7 @@ set -e
 host="$1"
 
 base="$(basename $PWD)"
-path="/home/ecurtin/git/$base/"
+path="~/git/$base/"
 cmd="meson build --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install"
 
 if [ -z "$host" ]; then
