@@ -2,5 +2,9 @@
 
 set -e
 
-sudo nmap --host-timeout 1s -sS -p 22 192.168.1.0/24 | grep report
+for i in 192.168.1.0 10.42.0.220 10.42.0.220; do
+  sudo nmap --host-timeout 1s -sS -p 22 $i/24 &
+done | grep report
+
+wait
 

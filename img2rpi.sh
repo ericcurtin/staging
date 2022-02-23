@@ -33,7 +33,7 @@ if [ -z "$efi" ]; then
   fi
 fi
 
-if [[ $1 == *.raw.xz ]]; then
+if [[ $1 == *.raw.xz ]] || [[ $1 == *.img.xz ]]; then
 #  xzcat $1 | sudo dd bs=4M iflag=fullblock oflag=direct status=progress of=/dev/mmcblk0
   if [[ $fake =~ ^[Yy]$ ]]; then
     out="16G.raw"
@@ -69,25 +69,25 @@ else
   echo "Unrecognized extension in filename $1"
 fi
 
-dev="$(sudo fdev -l | grep "$dev" | grep -v FAT | tail -n1 | awk '{print $1}')"
-sudo mkdir -p /tmp$dev
-sudo mount $dev /tmp$dev
-root="/tmp$dev/root"
-sudo cp $(which qemu-aarch64-static) $root/usr/bin
-resolv="$root/etc/resolv.conf"
-sudo /bin/bash -c "echo -e 'nameserver 8.8.8.8\nnameserver 8.8.4.4' > $resolv"
-sudo /bin/bash -c "echo -e '127.0.0.1 localhost' > $root/etc/hosts"
-sudo systemd-nspawn -D $root qemu-aarch64-static /bin/env -i TERM="$TERM" \
-  PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /bin/bash --login -c "dnf install -y \
-    git gcc g++ libevent libevent-devel openssl openssl-devel gnutls \
-    gnutls-devel meson boost boost-devel python3-jinja2 python3-ply \
-    python3-yaml libdrm libdrm-devel systemd-udev doxygen cmake graphviz"
-sudo killall -9 /usr/bin/qemu-aarch64-static || true
-sudo rm -f $root/usr/bin/qemu-aarch64-static
-sudo umount /tmp$dev
-sudo rm -rf /tmp$dev
-
 if [[ $fake =~ ^[Yy]$ ]]; then
+  dev="$(sudo fdisk -l | grep "$dev" | grep -v FAT | tail -n1 | awk '{print $1}')"
+  sudo mkdir -p /tmp$dev
+  sudo mount $dev /tmp$dev
+  root="/tmp$dev/root"
+  sudo cp $(which qemu-aarch64-static) $root/usr/bin
+  resolv="$root/etc/resolv.conf"
+  sudo /bin/bash -c "echo -e 'nameserver 8.8.8.8\nnameserver 8.8.4.4' > $resolv"
+  sudo /bin/bash -c "echo -e '127.0.0.1 localhost' > $root/etc/hosts"
+  sudo systemd-nspawn -D $root qemu-aarch64-static /bin/env -i TERM="$TERM" \
+    PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /bin/bash -c "dnf install -y \
+      git gcc g++ libevent libevent-devel openssl openssl-devel gnutls \
+      gnutls-devel meson boost boost-devel python3-jinja2 python3-ply \
+      python3-yaml libdrm libdrm-devel systemd-udev doxygen cmake graphviz"
+  sudo killall -9 /usr/bin/qemu-aarch64-static || true
+  sudo rm -f $root/usr/bin/qemu-aarch64-static
+  sudo umount /tmp$dev
+  sudo rm -rf /tmp$dev
+
   sudo losetup -D
   img_name=$(echo $1 | sed "s/.xz//g")
   sudo mv ~/$out ~/$img_name
