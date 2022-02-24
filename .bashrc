@@ -27,7 +27,7 @@ update() {
   cd /tmp
 
   local this_update=$(cat /etc/update-counter.txt)
-  local this_update_rem=$((this_update % 7))
+  local this_update_rem=$((this_update % 6))
   if [ "$this_update_rem" -eq "0" ]; then
     sudo dnf upgrade-minimal -y
   elif [ "$this_update_rem" -eq "1" ]; then
@@ -49,9 +49,9 @@ update() {
 #    sudo apt-get download zotero
 #    echo "$last_modified" > /etc/zotero-last.txt
 #  fi
+#  elif [ "$this_update_rem" -eq "3" ]; then
+#    sudo snap refresh
   elif [ "$this_update_rem" -eq "3" ]; then
-    sudo snap refresh
-  elif [ "$this_update_rem" -eq "4" ]; then
     set +e
     sudo fwupdmgr refresh --force
     local ret=$?
@@ -66,9 +66,9 @@ update() {
       echo "'sudo fwupdmgr update' failed with $ret"
       exit $ret
     fi
-  elif [ "$this_update_rem" -eq "5" ]; then
+  elif [ "$this_update_rem" -eq "4" ]; then
     sudo cpan-outdated -p | sudo cpanm
-  elif [ "$this_update_rem" -eq "6" ]; then
+  elif [ "$this_update_rem" -eq "5" ]; then
     sudo flatpak update -y --noninteractive
   fi
 
