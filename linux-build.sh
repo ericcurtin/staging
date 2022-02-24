@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # dnf -y install gcc flex make bison openssl openssl-devel elfutils-libelf-devel ncurses-devel bc git tar dwarves
-cp /boot/config-<kernel-version>.aarch64 .config
+# cp /boot/config-<kernel-version>.aarch64 .config
+j="$(nproc)"
 make olddefconfig
-make -j$(nproc)
-# make modules_install -j4
+make -j$j
+make modules_install -j$j
 make dtbs_install
-make install 
+make install
 # mv /boot/dtbs/<new-version> /boot/dtb-<new-version>
 # grubby --set-default /boot/<vmlinuz-new-version>
 # sudo reboot
