@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # dnf -y install gcc flex make bison openssl openssl-devel elfutils-libelf-devel ncurses-devel bc git tar dwarves
 # cp /boot/config-<kernel-version>.aarch64 .config
 j="$(nproc)"
