@@ -10,6 +10,11 @@ make -j$j
 make modules_install -j$j
 make dtbs_install
 make install
+for old in /boot/dtbs/*; do
+  new="$(echo $old | sed 's#dtbs/#dtb-#g')"
+  mv $old $new
+done
+
 # mv /boot/dtbs/<new-version> /boot/dtb-<new-version>
 # grubby --set-default /boot/<vmlinuz-new-version>
 # sudo reboot

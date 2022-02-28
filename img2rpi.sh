@@ -21,6 +21,7 @@ if [[ $ssh_key =~ ^[Yy]$ ]]; then
   ssh_key="--addkey=$HOME/.ssh/id_rsa.pub"
 fi
 
+read -p "Do you want to add extra packages? (y/n) " dnf
 read -p "Do you want to setup fake device? (y/n) " fake
 if [ -z "$efi" ]; then
   read -p "Do you want to flash EFI? (y/n) " flash
@@ -53,7 +54,6 @@ if [[ $1 == *.raw.xz ]] || [[ $1 == *.img.xz ]]; then
       sudo mount $dev /tmp$dev
       cd /tmp$dev
       sudo unzip -o $fw_file
-      sudo /bin/bash -c "echo 'dtoverlay=vc4-kms-v3d-pi4' >> config.txt"
       cd -
       sudo umount /tmp$dev
       sudo rm -rf /tmp$dev
@@ -69,7 +69,7 @@ else
   echo "Unrecognized extension in filename $1"
 fi
 
-if [[ $fake =~ ^[Yy]$ ]]; then
+if [[ $dnf =~ ^[Yy]$ ]]; then
   dev="$(sudo fdisk -l | grep "$dev" | grep -v FAT | tail -n1 | awk '{print $1}')"
   sudo mkdir -p /tmp$dev
   sudo mount $dev /tmp$dev
@@ -82,12 +82,16 @@ if [[ $fake =~ ^[Yy]$ ]]; then
     PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /bin/bash -c "dnf install -y \
       git gcc g++ libevent libevent-devel openssl openssl-devel gnutls \
       gnutls-devel meson boost boost-devel python3-jinja2 python3-ply \
-      python3-yaml libdrm libdrm-devel systemd-udev doxygen cmake graphviz"
+      python3-yaml libdrm libdrm-devel systemd-udev doxygen cmake graphviz \
+      flex make bison elfutils-libelf-devel ncurses-devel bc tar dwarves
+      rpm-build"
   sudo killall -9 /usr/bin/qemu-aarch64-static || true
   sudo rm -f $root/usr/bin/qemu-aarch64-static
   sudo umount /tmp$dev
   sudo rm -rf /tmp$dev
+fi
 
+if [[ $fake =~ ^[Yy]$ ]]; then
   sudo losetup -D
   img_name=$(echo $1 | sed "s/.xz//g")
   sudo mv ~/$out ~/$img_name
