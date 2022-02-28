@@ -84,7 +84,7 @@ if [[ $dnf =~ ^[Yy]$ ]]; then
     PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /bin/bash -c "dnf install -y \
       git gcc g++ libevent libevent-devel openssl openssl-devel gnutls \
       gnutls-devel meson boost boost-devel python3-jinja2 python3-ply \
-      python3-yaml libdrm libdrm-devel doxygen cmake graphviz \
+      python3-yaml libdrm libdrm-devel doxygen cmake graphviz drm-utils \
       flex make bison elfutils-libelf-devel ncurses-devel bc tar dwarves \
       rpm-build"
   sudo mv /tmp/resolv.conf $resolv
