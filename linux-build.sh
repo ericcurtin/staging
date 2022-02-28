@@ -6,7 +6,13 @@ set -e
 # cp /boot/config-<kernel-version>.aarch64 .config
 j="$(nproc)"
 make olddefconfig
-make -j$j
+
+if command -v ccache; then
+  KBUILD_BUILD_TIMESTAMP='' make CC="ccache gcc" -j$j
+else
+  make -j$j
+fi
+
 make modules_install -j$j
 make dtbs_install
 make install
