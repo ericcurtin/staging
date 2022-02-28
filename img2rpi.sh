@@ -75,17 +75,20 @@ if [[ $dnf =~ ^[Yy]$ ]]; then
   root="$HOME/$dev_root/root"
   sudo cp $(which qemu-aarch64-static) $root/usr/bin
   resolv="$root/etc/resolv.conf"
-  sudo cat $resolv
+  hosts="$root/etc/hosts"
+  sudo cp $resolv /tmp/resolv.conf
+  sudo cp $hosts /tmp/hosts
   sudo /bin/bash -c "echo -e 'nameserver 8.8.8.8\nnameserver 8.8.4.4' > $resolv"
-  sudo cat $root/etc/hosts
-  sudo /bin/bash -c "echo -e '127.0.0.1 localhost' > $root/etc/hosts"
+  sudo /bin/bash -c "echo -e '127.0.0.1 localhost' > $hosts"
   sudo systemd-nspawn -D $root qemu-aarch64-static /bin/env -i TERM="$TERM" \
     PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /bin/bash -c "dnf install -y \
       git gcc g++ libevent libevent-devel openssl openssl-devel gnutls \
       gnutls-devel meson boost boost-devel python3-jinja2 python3-ply \
-      python3-yaml libdrm libdrm-devel systemd-udev doxygen cmake graphviz \
+      python3-yaml libdrm libdrm-devel doxygen cmake graphviz \
       flex make bison elfutils-libelf-devel ncurses-devel bc tar dwarves \
       rpm-build"
+  sudo mv /tmp/resolv.conf $resolv
+  sudo mv /tmp/hosts $hosts
   sudo killall -9 /usr/bin/qemu-aarch64-static || true
   sudo rm -f $root/usr/bin/qemu-aarch64-static
   sudo umount $HOME/$dev_root
