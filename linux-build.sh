@@ -4,6 +4,11 @@ set -e
 
 # dnf -y install gcc flex make bison openssl openssl-devel elfutils-libelf-devel ncurses-devel bc git tar dwarves rpm-build
 # cp /boot/config-<kernel-version>.aarch64 .config
+
+if [ "$1" = "clean" ]; then
+  make clean
+fi
+
 j="$(nproc)"
 make olddefconfig
 
