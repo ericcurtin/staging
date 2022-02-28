@@ -39,24 +39,23 @@ if [[ $1 == *.raw.xz ]] || [[ $1 == *.img.xz ]]; then
   if [[ $fake =~ ^[Yy]$ ]]; then
     out="16G.raw"
     dd if=/dev/zero of=~/$out bs=1G count=16
-    dev=$(sudo losetup -f)
-    sudo losetup -fP ~/$out
+    dev=$(sudo losetup --show -fP ~/$out)
   fi
 
   prompt_and_read $1 $dev
-#  echo "yes" | sudo fedora-arm-image-installer --image=$1 --media=$dev $ssh_key --resizefs --showboot --target=rpi4 --addconsole -y
+  echo "yes" | sudo fedora-arm-image-installer --image=$1 --media=$dev $ssh_key --resizefs --showboot --target=rpi4 --addconsole -y
   echo "Completed write to $dev"
   if [ -n "$efi" ]; then
     fw_file=$(realpath $efi)
     if [[ $efi == *.zip ]]; then
       dev_fat="$(sudo fdisk -l | grep "$dev" | grep FAT | awk '{print $1}')"
-      sudo mkdir -p /tmp$dev_fat
-      sudo mount $dev_fat /tmp$dev_fat
-      cd /tmp$dev_fat
+      sudo mkdir -p $HOME/$dev_fat
+      sudo mount $dev_fat $HOME/$dev_fat
+      cd $HOME/$dev_fat
       sudo unzip -o $fw_file
       cd -
-      sudo umount /tmp$dev_fat
-      sudo rm -rf /tmp$dev_fat
+      sudo umount $HOME/$dev_fat
+      sudo rm -rf $HOME/$dev_fat
     else
       echo "Unrecognized extension in filename $efi"
     fi
@@ -71,24 +70,26 @@ fi
 
 if [[ $dnf =~ ^[Yy]$ ]]; then
   dev_root="$(sudo fdisk -l | grep "$dev" | grep -v FAT | tail -n1 | awk '{print $1}')"
-  sudo mkdir -p /tmp$dev_root
-  sudo mount $dev_root /tmp$dev_root
-  root="/tmp$dev_root/root"
+  sudo mkdir -p $HOME/$dev_root
+  sudo mount $dev_root $HOME/$dev_root
+  root="$HOME/$dev_root/root"
   sudo cp $(which qemu-aarch64-static) $root/usr/bin
   resolv="$root/etc/resolv.conf"
+  sudo cat $resolv
   sudo /bin/bash -c "echo -e 'nameserver 8.8.8.8\nnameserver 8.8.4.4' > $resolv"
+  sudo cat $root/etc/hosts
   sudo /bin/bash -c "echo -e '127.0.0.1 localhost' > $root/etc/hosts"
   sudo systemd-nspawn -D $root qemu-aarch64-static /bin/env -i TERM="$TERM" \
     PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /bin/bash -c "dnf install -y \
       git gcc g++ libevent libevent-devel openssl openssl-devel gnutls \
       gnutls-devel meson boost boost-devel python3-jinja2 python3-ply \
       python3-yaml libdrm libdrm-devel systemd-udev doxygen cmake graphviz \
-      flex make bison elfutils-libelf-devel ncurses-devel bc tar dwarves
+      flex make bison elfutils-libelf-devel ncurses-devel bc tar dwarves \
       rpm-build"
   sudo killall -9 /usr/bin/qemu-aarch64-static || true
   sudo rm -f $root/usr/bin/qemu-aarch64-static
-  sudo umount /tmp$dev_root
-  sudo rm -rf /tmp$dev_root
+  sudo umount $HOME/$dev_root
+  sudo rm -rf $HOME/$dev_root
 fi
 
 if [[ $fake =~ ^[Yy]$ ]]; then
