@@ -44,19 +44,19 @@ if [[ $1 == *.raw.xz ]] || [[ $1 == *.img.xz ]]; then
   fi
 
   prompt_and_read $1 $dev
-  echo "yes" | sudo fedora-arm-image-installer --image=$1 --media=$dev $ssh_key --resizefs --showboot --target=rpi4 --addconsole -y
+#  echo "yes" | sudo fedora-arm-image-installer --image=$1 --media=$dev $ssh_key --resizefs --showboot --target=rpi4 --addconsole -y
   echo "Completed write to $dev"
   if [ -n "$efi" ]; then
     fw_file=$(realpath $efi)
     if [[ $efi == *.zip ]]; then
-      dev="$(sudo fdisk -l | grep "$dev" | grep FAT | awk '{print $1}')"
-      sudo mkdir -p /tmp$dev
-      sudo mount $dev /tmp$dev
-      cd /tmp$dev
+      dev_fat="$(sudo fdisk -l | grep "$dev" | grep FAT | awk '{print $1}')"
+      sudo mkdir -p /tmp$dev_fat
+      sudo mount $dev_fat /tmp$dev_fat
+      cd /tmp$dev_fat
       sudo unzip -o $fw_file
       cd -
-      sudo umount /tmp$dev
-      sudo rm -rf /tmp$dev
+      sudo umount /tmp$dev_fat
+      sudo rm -rf /tmp$dev_fat
     else
       echo "Unrecognized extension in filename $efi"
     fi
@@ -70,10 +70,10 @@ else
 fi
 
 if [[ $dnf =~ ^[Yy]$ ]]; then
-  dev="$(sudo fdisk -l | grep "$dev" | grep -v FAT | tail -n1 | awk '{print $1}')"
-  sudo mkdir -p /tmp$dev
-  sudo mount $dev /tmp$dev
-  root="/tmp$dev/root"
+  dev_root="$(sudo fdisk -l | grep "$dev" | grep -v FAT | tail -n1 | awk '{print $1}')"
+  sudo mkdir -p /tmp$dev_root
+  sudo mount $dev_root /tmp$dev_root
+  root="/tmp$dev_root/root"
   sudo cp $(which qemu-aarch64-static) $root/usr/bin
   resolv="$root/etc/resolv.conf"
   sudo /bin/bash -c "echo -e 'nameserver 8.8.8.8\nnameserver 8.8.4.4' > $resolv"
@@ -87,8 +87,8 @@ if [[ $dnf =~ ^[Yy]$ ]]; then
       rpm-build"
   sudo killall -9 /usr/bin/qemu-aarch64-static || true
   sudo rm -f $root/usr/bin/qemu-aarch64-static
-  sudo umount /tmp$dev
-  sudo rm -rf /tmp$dev
+  sudo umount /tmp$dev_root
+  sudo rm -rf /tmp$dev_root
 fi
 
 if [[ $fake =~ ^[Yy]$ ]]; then
