@@ -13,7 +13,7 @@ make install
 cd /boot
 to_link="$(ls -t | grep dtb | grep -v ^dtb$ | head -n1)"
 ln -sf $to_link dtb
-to_grub="$(ls -t $PWD/vmlinuz* | head -n1)"
+to_grub="$(ls -t $PWD/vmlinuz-* | head -n1)"
 grubby --set-default $to_grub
 
 # mv /boot/dtbs/<new-version> /boot/dtb-<new-version>
