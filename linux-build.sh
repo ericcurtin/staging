@@ -23,6 +23,7 @@ make dtbs_install
 make install
 cd /boot
 to_link="$(ls -t | grep dtb | grep -v ^dtb$ | head -n1)"
+rm -f dtb
 ln -sf $to_link dtb
 to_grub="$(ls -t $PWD/vmlinuz-* | head -n1)"
 grubby --set-default $to_grub

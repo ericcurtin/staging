@@ -86,7 +86,7 @@ if [[ $dnf =~ ^[Yy]$ ]]; then
       gnutls-devel meson boost boost-devel python3-jinja2 python3-ply \
       python3-yaml libdrm libdrm-devel doxygen cmake graphviz drm-utils \
       flex make bison elfutils-libelf-devel ncurses-devel bc tar dwarves \
-      rpm-build"
+      rpm-build v4l-utils"
   sudo mv /tmp/resolv.conf $resolv
   sudo mv /tmp/hosts $hosts
   sudo killall -9 /usr/bin/qemu-aarch64-static || true
