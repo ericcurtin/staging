@@ -4,8 +4,8 @@ set -e
 
 host="$1"
 
-base="$(basename $PWD)"
-path="~/git/$base/"
+base="$(echo $PWD | sed "s#$HOME##g")"
+path="~/$base/"
 if [ -f "meson.build" ]; then
   cmd="meson build --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install"
 elif [ -f "autogen.sh" ]; then
