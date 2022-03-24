@@ -66,7 +66,8 @@ elif [ $(echo $uname_m) = "x86_64" ]; then
   /usr/bin/qemu-system-x86_64 \
     -machine pc-q35-6.1,accel=kvm -cpu host -m 14G -smp 12 \
     -drive if=virtio,file=/var/lib/libvirt/images/fedora35.qcow2,format=qcow2 \
-    -vga virtio -display sdl,gl=es
+    -vga virtio -display sdl,gl=es -usb -device usb-ehci,id=ehci \
+    -device usb-host,hostbus=1,hostaddr=2 -net user,hostfwd=tcp::8022-:22 -net nic
 #-vga [std|cirrus|vmware|qxl|xenfb|tcx|cg3|virtio|none]
     # -usb -device usb-ehci,id=ehci -device usb-host,hostbus=1,hostaddr=2 for cam
 else
