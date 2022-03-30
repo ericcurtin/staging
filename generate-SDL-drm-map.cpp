@@ -170,8 +170,8 @@ int main() {
       {DRM_FORMAT_YVU444, "DRM_FORMAT_YVU444"}};
 
   for (std::pair<const int, string>& m : map1) {
-    if (map2.contains(m.first)) {
-      printf("%s = %s\n", map1[m.first].c_str(), map2[m.first].c_str());
+    if (map2.count(m.first)) {
+      printf("{%s, %s},\n", map2[m.first].c_str(), map1[m.first].c_str());
     }
   }
 
