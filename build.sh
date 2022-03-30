@@ -4,8 +4,6 @@ set -e
 
 host="$1"
 
-export CC="ccache gcc"
-export CXX="ccache g++"
 base="$(echo $PWD | sed "s#$HOME##g")"
 path="~/$base/"
 if [ -f "meson.build" ]; then
@@ -71,7 +69,7 @@ elif [ -f "autogen.sh" ]; then
   fi
 
   # inotify-tools didn't like autogen.sh --prefix=/usr
-  cmd="./autogen.sh && if [ -f 'configure' ]; then ./configure --prefix=/usr $extra; fi && make -j\$(nproc) && sudo make install"
+  cmd="if [ ! -f 'Makefile' ]; then ./autogen.sh && if [ -f 'configure' ]; then ./configure --prefix=/usr $extra; fi; fi && make -j\$(nproc) && sudo make install"
 elif [ -f "Cargo.lock" ]; then
   cmd="sudo cargo install --path ."
 elif [ -f "Cargo.lock" ]; then
@@ -82,10 +80,14 @@ elif [ -f "Makefile" ]; then
   cmd="make -j\$(nproc)"
 fi
 
+cmd="export CFLAGS='-O0 -ggdb'; export CXXFLAGS=$CFLAGS; export LDFLAGS=$CFLAGS; $cmd"
+cmd="export CFLAGS='$CFLAGS -fsanitize=address'; export CXXFLAGS=$CFLAGS; export LDFLAGS=$CFLAGS; $cmd"
+cmd="if command -v ccache > /dev/null; then export CC='ccache gcc'; export CXX='ccache g++'; fi && $cmd"
+
 if [ -z "$host" ]; then
   /bin/bash -c "$cmd"
 else
-  clean="&& rm -rf build"
+  clean="&& rm -rf build && git clean -fdx"
   if [ -z "$2" ]; then
     unset clean
   fi

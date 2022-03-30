@@ -33,9 +33,6 @@ update() {
   elif [ "$this_update_rem" -eq "1" ]; then
     sudo dnf upgrade -y
   elif [ "$this_update_rem" -eq "2" ]; then
-    sudo apt update
-    sudo setenforce 0 || true
-    sudo dpkg --configure -a --force-all
     zoom_url="https://zoom.us/client/latest/zoom_x86_64.rpm"
     last_modified=$(curl -I -L "$zoom_url" 2>&1 | grep "^Last-Modified:")
     if [ "$(cat /etc/zoom-last.txt)" != "$last_modified" ]; then
