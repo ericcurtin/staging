@@ -10,7 +10,7 @@ if [ -f "meson.build" ]; then
   # -Db_sanitize=address
   # --buildtype=debug
   # --buildtype=release
-  cmd="meson build --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install"
+  cmd="meson build -Db_sanitize=address --buildtype=debug --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install"
 elif [ -f "CMakeLists.txt" ]; then # sdl prefer this over autogen.sh
   if [ -f "sdl2.m4" ]; then # sdl specific
     extra="-DSDL_DLOPEN=ON \
@@ -78,6 +78,8 @@ elif [ -f "Makefile" ] && [ -f "Kbuild" ] && [ -f "Kconfig" ]; then # linux kern
   cmd="if [ ! -f '.config' ]; then cp /boot/config-\$(uname -r) .; fi && make olddefconfig && make -j\$(nproc)"
 elif [ -f "Makefile" ]; then
   cmd="make -j\$(nproc)"
+elif [ -d "osbuild-manifests" ]; then
+  cmd="cd osbuild-manifests; sudo make -j\$(nproc) cs9-rpi4-developer-direct.aarch64.img"
 fi
 
 cmd="export CFLAGS='-O0 -ggdb'; export CXXFLAGS=$CFLAGS; export LDFLAGS=$CFLAGS; $cmd"

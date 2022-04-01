@@ -1,4 +1,6 @@
 #!/bin/bash
 
-sudo cam -c 1 -C -DeDP-1 -s pixelformat=YUYV
+set -e
+
+cam -c1 -S -C0 --stream pixelformat=YUYV
 
