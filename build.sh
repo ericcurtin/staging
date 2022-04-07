@@ -10,7 +10,7 @@ if [ -f "meson.build" ]; then
   # -Db_sanitize=address
   # --buildtype=debug
   # --buildtype=release
-  cmd="meson build -Db_sanitize=address --buildtype=debug --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install"
+  cmd="meson build --buildtype=release --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install"
 elif [ -f "CMakeLists.txt" ]; then # sdl prefer this over autogen.sh
   if [ -f "sdl2.m4" ]; then # sdl specific
     extra="-DSDL_DLOPEN=ON \
@@ -69,7 +69,7 @@ elif [ -f "autogen.sh" ]; then
   fi
 
   # inotify-tools didn't like autogen.sh --prefix=/usr
-  cmd="if [ ! -f 'Makefile' ]; then ./autogen.sh && if [ -f 'configure' ]; then ./configure --prefix=/usr $extra; fi; fi && make -j\$(nproc) && sudo make install"
+  cmd="if [ ! -f 'Makefile' ]; then ./autogen.sh && if [ -f 'configure' ]; then ./configure --prefix=/usr $extra; fi; fi && make -j\$(nproc) V=1 && sudo make install"
 elif [ -f "Cargo.lock" ]; then
   cmd="sudo cargo install --path ."
 elif [ -f "Cargo.lock" ]; then
@@ -82,8 +82,9 @@ elif [ -d "osbuild-manifests" ]; then
   cmd="cd osbuild-manifests; sudo make -j\$(nproc) cs9-rpi4-developer-direct.aarch64.img"
 fi
 
-cmd="export CFLAGS='-O0 -ggdb'; export CXXFLAGS=$CFLAGS; export LDFLAGS=$CFLAGS; $cmd"
-cmd="export CFLAGS='$CFLAGS -fsanitize=address'; export CXXFLAGS=$CFLAGS; export LDFLAGS=$CFLAGS; $cmd"
+# export CFLAGS="-O1 -ggdb"; export CXXFLAGS="$CFLAGS"; export LDFLAGS="$CFLAGS";
+# export CFLAGS="$CFLAGS -fsanitize=address"; export CXXFLAGS="$CFLAGS"; export LDFLAGS="$CFLAGS"
+# cmd="export CFLAGS='$CFLAGS'; export CXXFLAGS='$CFLAGS'; export LDFLAGS='$CFLAGS'; $cmd"
 cmd="if command -v ccache > /dev/null; then export CC='ccache gcc'; export CXX='ccache g++'; fi && $cmd"
 
 if [ -z "$host" ]; then
