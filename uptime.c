@@ -5,7 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 
-int uptime(float* up) {
+int uptime(float* up, float* elapsed) {
   int fd = -1;
   const char* filename = "/proc/uptime";
   char buf[32];
@@ -34,20 +34,33 @@ int uptime(float* up) {
     return 104;
   }
 
+  static float init_time = 0;
+  if (!init_time) {
+    init_time = *up;
+    *elapsed = 0;
+  } else {
+    *elapsed = *up - init_time;
+  }
+
   setlocale(LC_NUMERIC, savelocale);
   free(savelocale);
   return 0;
 }
 
-#define PRINT_UPTIME()                                               \
-  do {                                                               \
-    float up = 0;                                                    \
-    uptime(&up);                                                     \
-    printf("%.2f, %s at %s:%d\n", up, __PRETTY_FUNCTION__, __FILE__, \
-           __LINE__);                                                \
+#define PRINT_UPTIME()                                                     \
+  do {                                                                     \
+    float up;                                                              \
+    float elapsed;                                                         \
+    uptime(&up, &elapsed);                                                 \
+    printf("%.2f (%.2f), %s at %s:%d\n", up, elapsed, __PRETTY_FUNCTION__, \
+           __FILE__, __LINE__);                                            \
   } while (0)
 
 int main() {
-  PRINT_UPTIME();
+  for (int i = 0; i < 10; ++i) {
+    PRINT_UPTIME();
+    sleep(1);
+  }
+
   return 0;
 }
