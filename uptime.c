@@ -6,11 +6,11 @@
 #include <unistd.h>
 
 int uptime(float* up, float* elapsed) {
-  int fd = -1;
+  int fd;
   const char* filename = "/proc/uptime";
   char buf[32];
   int n;
-  if (fd == -1 && (fd = open(filename, O_RDONLY)) == -1) {
+  if ((fd = open(filename, O_RDONLY)) == -1) {
     fputs("Error: /proc must be mounted\n", stderr);
     fflush(NULL);
     return 102;
