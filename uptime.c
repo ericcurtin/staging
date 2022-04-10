@@ -35,11 +35,11 @@ int uptime(float* up, float* elapsed) {
   }
 
   static float init_time = 0;
-  if (!init_time) {
+  if (init_time) {
+    *elapsed = *up - init_time;
+  } else {
     init_time = *up;
     *elapsed = 0;
-  } else {
-    *elapsed = *up - init_time;
   }
 
   setlocale(LC_NUMERIC, savelocale);
