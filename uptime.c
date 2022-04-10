@@ -39,14 +39,15 @@ int uptime(float* up) {
   return 0;
 }
 
-#define PRINT_UPTIME() do { \
-  float up = 0; \
-  uptime(&up); \
-  printf("%f, %s at %s:%d\n", up, __PRETTY_FUNCTION__, __FILE__, __LINE__); \
-} while(0)
+#define PRINT_UPTIME()                                               \
+  do {                                                               \
+    float up = 0;                                                    \
+    uptime(&up);                                                     \
+    printf("%.2f, %s at %s:%d\n", up, __PRETTY_FUNCTION__, __FILE__, \
+           __LINE__);                                                \
+  } while (0)
 
 int main() {
   PRINT_UPTIME();
   return 0;
 }
-
