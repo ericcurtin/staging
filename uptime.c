@@ -5,7 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 
-int uptime(double* up) {
+int uptime(float* up) {
   int fd = -1;
   const char* filename = "/proc/uptime";
   char buf[32];
@@ -27,7 +27,7 @@ int uptime(double* up) {
 
   char* savelocale = strdup(setlocale(LC_NUMERIC, NULL));
   setlocale(LC_NUMERIC, "C");
-  if (sscanf(buf, "%lf", up) < 1) {
+  if (sscanf(buf, "%f", up) < 1) {
     setlocale(LC_NUMERIC, savelocale);
     free(savelocale);
     fputs("bad data in /proc/uptime\n", stderr);
@@ -40,7 +40,7 @@ int uptime(double* up) {
 }
 
 int main() {
-  double up = 0;
+  float up = 0;
   uptime(&up);
   printf("Seconds since uptime: %lf\n", up);
 }
