@@ -86,6 +86,8 @@ fi
 # export CFLAGS="$CFLAGS -fsanitize=address"; export CXXFLAGS="$CFLAGS"; export LDFLAGS="$CFLAGS"
 # cmd="export CFLAGS='$CFLAGS'; export CXXFLAGS='$CFLAGS'; export LDFLAGS='$CFLAGS'; $cmd"
 cmd="if command -v ccache > /dev/null; then export CC='ccache gcc'; export CXX='ccache g++'; fi && $cmd"
+# cmd="export CC='gcc'; export CXX='g++'; $cmd"
+# cmd="export CC='clang'; export CXX='clang++'; $cmd"
 
 if [ -z "$host" ]; then
   /bin/bash -c "$cmd"
