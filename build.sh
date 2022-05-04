@@ -10,7 +10,7 @@ if [ -f "meson.build" ]; then
   # -Db_sanitize=address
   # --buildtype=debug
   # --buildtype=release
-  cmd="meson build --buildtype=release --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install"
+  cmd="meson build -Db_sanitize=address --buildtype=debug --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install"
 elif [ -f "CMakeLists.txt" ]; then # sdl prefer this over autogen.sh
   if [ -f "sdl2.m4" ]; then # sdl specific
     extra="-DSDL_DLOPEN=ON \
