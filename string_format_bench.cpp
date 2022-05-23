@@ -57,6 +57,15 @@ static void stringVAppendf(std::string& output,
   stringAppendfImpl(output, format, ap);
 }
 
+// Basic declarations; allow for parameters of strings and string
+// pieces to be specified.
+static void stringAppendf(std::string &output, const char *format, ...) {
+  va_list ap;
+  va_start(ap, format);
+  stringVAppendf(output, format, ap);
+  va_end(ap);
+}
+
 static int stringAppendfImplHelper2(char* buf,
                                     size_t bufsize,
                                     const char* format,
@@ -85,7 +94,7 @@ static void stringAppendfImpl2(std::string& output,
   output.resize(write_point + 127);
 
   const int bytes_used =
-      stringAppendfImplHelper(&output[write_point], 128, format, args);
+      stringAppendfImplHelper2(&output[write_point], 128, format, args);
   if (bytes_used < 0) {
     output.resize(write_point);
     fprintf(stderr,
@@ -106,15 +115,15 @@ static void stringAppendfImpl2(std::string& output,
 static void stringVAppendf2(std::string& output,
                             const char* format,
                             va_list ap) {
-  stringAppendfImpl(output, format, ap);
+  stringAppendfImpl2(output, format, ap);
 }
 
 // Basic declarations; allow for parameters of strings and string
 // pieces to be specified.
-static void stringAppendf(std::string& output, const char* format, ...) {
+static void stringAppendf2(std::string &output, const char *format, ...) {
   va_list ap;
   va_start(ap, format);
-  stringVAppendf(output, format, ap);
+  stringVAppendf2(output, format, ap);
   va_end(ap);
 }
 
@@ -162,9 +171,9 @@ int main() {
   start = epoch();
   std::string folly2;
   for (int i = 0; i < limit; ++i) {
-    stringAppendf(folly2, "%s %d %f %s %d %f %s %d %f %s %d %f %s %d %f",
-                  "hdja", 22, 32.2, "djksa", 23, 32.23, "dsah", 32, 32.32,
-                  "hjdsa", 21, 21.21, "kjdwqs", 213, 23.321);
+    stringAppendf2(folly2, "%s %d %f %s %d %f %s %d %f %s %d %f %s %d %f",
+                   "hdja", 22, 32.2, "djksa", 23, 32.23, "dsah", 32, 32.32,
+                   "hjdsa", 21, 21.21, "kjdwqs", 213, 23.321);
   }
   printf("%s", folly2.c_str());
   fprintf(stderr, "folly2: %f seconds\n", epoch() - start);
