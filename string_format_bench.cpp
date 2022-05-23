@@ -132,7 +132,7 @@ static void stringAppendf(std::string& output, const char* format, ...) {
     str.resize(write_point + 127);                                  \
     const int size = snprintf(&str[write_point], 128, __VA_ARGS__); \
     str.resize(write_point + size);                                 \
-    if (size <= 127) {                                              \
+    if (size < 128) {                                               \
       break;                                                        \
     }                                                               \
                                                                     \
