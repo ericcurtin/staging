@@ -10,7 +10,7 @@ if [ -f "meson.build" ]; then
   # -Db_sanitize=address
   # --buildtype=debug
   # --buildtype=release
-  cmd="meson build --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install"
+  cmd="meson build --buildtype=debug --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install"
 elif [ -f "CMakeLists.txt" ]; then # sdl prefer this over autogen.sh
   if [ -f "sdl2.m4" ]; then # sdl specific
     extra="-DSDL_DLOPEN=ON \
@@ -83,9 +83,9 @@ elif [ -d "osbuild-manifests" ]; then
 fi
 
 # export CFLAGS="-O1 -ggdb"; export CXXFLAGS="$CFLAGS"; export LDFLAGS="$CFLAGS";
-# export CFLAGS="$CFLAGS -fsanitize=address"; export CXXFLAGS="$CFLAGS"; export LDFLAGS="$CFLAGS"
-# cmd="export CFLAGS='$CFLAGS'; export CXXFLAGS='$CFLAGS'; export LDFLAGS='$CFLAGS'; $cmd"
-cmd="if command -v ccache > /dev/null; then export CC='ccache gcc'; export CXX='ccache g++'; fi && $cmd"
+#export CFLAGS="$CFLAGS -fsanitize=address"; export CXXFLAGS="$CFLAGS"; export LDFLAGS="$CFLAGS"
+#cmd="export CFLAGS='$CFLAGS'; export CXXFLAGS='$CFLAGS'; export LDFLAGS='$CFLAGS'; $cmd"
+# cmd="if command -v ccache > /dev/null; then export CC='ccache gcc'; export CXX='ccache g++'; fi && $cmd"
 # cmd="export CC='gcc'; export CXX='g++'; $cmd"
 # cmd="export CC='clang'; export CXX='clang++'; $cmd"
 
