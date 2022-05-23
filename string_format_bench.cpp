@@ -59,7 +59,7 @@ static void stringVAppendf(std::string& output,
 
 // Basic declarations; allow for parameters of strings and string
 // pieces to be specified.
-static void stringAppendf(std::string &output, const char *format, ...) {
+static void stringAppendf(std::string& output, const char* format, ...) {
   va_list ap;
   va_start(ap, format);
   stringVAppendf(output, format, ap);
@@ -109,7 +109,7 @@ static void stringAppendfImpl2(std::string& output,
   }
 
   // Couldn't fit. Rewrite again, now that we have resized sufficiently.
-  stringAppendfImplHelper(&output[write_point], bytes_used + 1, format, args);
+  stringAppendfImplHelper2(&output[write_point], bytes_used + 1, format, args);
 }
 
 static void stringVAppendf2(std::string& output,
@@ -120,7 +120,7 @@ static void stringVAppendf2(std::string& output,
 
 // Basic declarations; allow for parameters of strings and string
 // pieces to be specified.
-static void stringAppendf2(std::string &output, const char *format, ...) {
+static void stringAppendf2(std::string& output, const char* format, ...) {
   va_list ap;
   va_start(ap, format);
   stringVAppendf2(output, format, ap);
@@ -160,12 +160,22 @@ int main() {
   double start = epoch();
   int limit = 2000000;
   std::string folly;
-  for (int i = 0; i < limit; ++i) {
+  for (int i = 0; i < limit * 16; ++i) {  // This run just gets the fans purring
     stringAppendf(folly, "%s %d %f %s %d %f %s %d %f %s %d %f %s %d %f", "hdja",
                   22, 32.2, "djksa", 23, 32.23, "dsah", 32, 32.32, "hjdsa", 21,
                   21.21, "kjdwqs", 213, 23.321);
   }
   printf("%s", folly.c_str());
+  //  fprintf(stderr, "folly: %f seconds\n", epoch() - start);
+
+  start = epoch();
+  std::string folly1;
+  for (int i = 0; i < limit; ++i) {
+    stringAppendf(folly1, "%s %d %f %s %d %f %s %d %f %s %d %f %s %d %f",
+                  "hdja", 22, 32.2, "djksa", 23, 32.23, "dsah", 32, 32.32,
+                  "hjdsa", 21, 21.21, "kjdwqs", 213, 23.321);
+  }
+  printf("%s", folly1.c_str());
   fprintf(stderr, "folly: %f seconds\n", epoch() - start);
 
   start = epoch();
