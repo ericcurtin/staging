@@ -157,16 +157,27 @@ static double epoch() {
 }
 
 int main() {
-  double start = epoch();
   int limit = 2000000;
-  std::string folly;
-  for (int i = 0; i < limit * 16; ++i) {  // This run just gets the fans purring
-    stringAppendf(folly, "%s %d %f %s %d %f %s %d %f %s %d %f %s %d %f", "hdja",
-                  22, 32.2, "djksa", 23, 32.23, "dsah", 32, 32.32, "hjdsa", 21,
-                  21.21, "kjdwqs", 213, 23.321);
+  double start = epoch();
+  std::string string_printf;
+  for (int i = 0; i < limit; ++i) {
+    STRING_PRINTF(string_printf, "%s %d %f %s %d %f %s %d %f %s %d %f %s %d %f",
+                  "hdja", 22, 32.2, "djksa", 23, 32.23, "dsah", 32, 32.32,
+                  "hjdsa", 21, 21.21, "kjdwqs", 213, 23.321);
   }
-  printf("%s", folly.c_str());
-  //  fprintf(stderr, "folly: %f seconds\n", epoch() - start);
+  printf("%s", string_printf.c_str());
+  fprintf(stderr, "string_printf: %f seconds\n", epoch() - start);
+
+  start = epoch();
+  std::string string_printf2;
+  for (int i = 0; i < limit; ++i) {
+    STRING_PRINTF2(string_printf2,
+                   "%s %d %f %s %d %f %s %d %f %s %d %f %s %d %f", "hdja", 22,
+                   32.2, "djksa", 23, 32.23, "dsah", 32, 32.32, "hjdsa", 21,
+                   21.21, "kjdwqs", 213, 23.321);
+  }
+  printf("%s", string_printf2.c_str());
+  fprintf(stderr, "string_printf2: %f seconds\n", epoch() - start);
 
   start = epoch();
   std::string folly1;
@@ -188,28 +199,7 @@ int main() {
   printf("%s", folly2.c_str());
   fprintf(stderr, "folly2: %f seconds\n", epoch() - start);
 
-  start = time(0);
-  std::string string_printf;
-  for (int i = 0; i < limit; ++i) {
-    STRING_PRINTF(string_printf, "%s %d %f %s %d %f %s %d %f %s %d %f %s %d %f",
-                  "hdja", 22, 32.2, "djksa", 23, 32.23, "dsah", 32, 32.32,
-                  "hjdsa", 21, 21.21, "kjdwqs", 213, 23.321);
-  }
-  printf("%s", string_printf.c_str());
-  fprintf(stderr, "string_printf: %f seconds\n", epoch() - start);
-
-  start = time(0);
-  std::string string_printf2;
-  for (int i = 0; i < limit; ++i) {
-    STRING_PRINTF2(string_printf2,
-                   "%s %d %f %s %d %f %s %d %f %s %d %f %s %d %f", "hdja", 22,
-                   32.2, "djksa", 23, 32.23, "dsah", 32, 32.32, "hjdsa", 21,
-                   21.21, "kjdwqs", 213, 23.321);
-  }
-  printf("%s", string_printf2.c_str());
-  fprintf(stderr, "string_printf2: %f seconds\n", epoch() - start);
-
-  start = time(0);
+  start = epoch();
   std::string to_string;
   for (int i = 0; i < limit; ++i) {
     to_string +=
@@ -224,7 +214,7 @@ int main() {
   printf("%s", to_string.c_str());
   fprintf(stderr, "to_string: %f seconds\n", epoch() - start);
 
-  start = time(0);
+  start = epoch();
   std::ostringstream oss;
   for (int i = 0; i < limit; ++i) {
     oss << "hdja"
