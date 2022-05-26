@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 cam_num=$(cam -l 2>&1 | grep -i logitech | awk -F':' '{printf $1"\n"}')
 
