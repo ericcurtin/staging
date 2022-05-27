@@ -1,4 +1,0 @@
-#!/bin/bash
-
-git difftool $1~1 $1
-
