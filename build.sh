@@ -82,9 +82,9 @@ elif [ -d "osbuild-manifests" ]; then
   cmd="cd osbuild-manifests; sudo make -j\$(nproc) cs9-rpi4-developer-direct.aarch64.img"
 fi
 
-export CFLAGS="-O0 -ggdb"; export CXXFLAGS="$CFLAGS"; export LDFLAGS="$CFLAGS";
-#export CFLAGS="$CFLAGS -fsanitize=address"; export CXXFLAGS="$CFLAGS"; export LDFLAGS="$CFLAGS"
-cmd="export CFLAGS='$CFLAGS'; export CXXFLAGS='$CFLAGS'; export LDFLAGS='$CFLAGS'; $cmd"
+# export CFLAGS="-O0 -ggdb"; export CXXFLAGS="$CFLAGS"; export LDFLAGS="$CFLAGS";
+# export CFLAGS="$CFLAGS -fsanitize=address"; export CXXFLAGS="$CFLAGS"; export LDFLAGS="$CFLAGS"
+# cmd="export CFLAGS='$CFLAGS'; export CXXFLAGS='$CFLAGS'; export LDFLAGS='$CFLAGS'; $cmd"
 # cmd="if command -v ccache > /dev/null; then export CC='ccache gcc'; export CXX='ccache g++'; fi && $cmd"
 # cmd="export CC='gcc'; export CXX='g++'; $cmd"
 # cmd="export CC='clang'; export CXX='clang++'; $cmd"
