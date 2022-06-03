@@ -74,8 +74,9 @@ elif [ -f "Cargo.lock" ]; then
   cmd="sudo cargo install --path ."
 elif [ -f "Cargo.lock" ]; then
   cmd="sudo go install ."
-elif [ -f "Makefile" ] && [ -f "Kbuild" ] && [ -f "Kconfig" ]; then # linux kern
-  cmd="if [ ! -f '.config' ]; then cp /boot/config-\$(uname -r) .; fi && make olddefconfig && make -j\$(nproc)"
+elif [ -f "Makefile" ] && [ -f "Kbuild" ] && [ -f "Kconfig" ]; then
+  # dnf -y install ncurses-devel flex bison elfutils-libelf-devel
+  cmd="if [ ! -f '.config' ]; then cp /boot/config-\$(uname -r) .; fi && make olddefconfig && make -j8 && make -j8 bzImage && make -j8 modules && sudo make modules_install && sudo make install"
 elif [ -f "Makefile" ]; then
   cmd="make -j\$(nproc)"
 elif [ -d "osbuild-manifests" ]; then
