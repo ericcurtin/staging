@@ -6,7 +6,10 @@ img=$1
 dev=$2
 
 if [ -z "$img" ]; then
-  ls *.iso
+  set +e
+  ls *.iso 2> /dev/null
+  ls *.img 2> /dev/null
+  set -e
   echo
   read -p "Image to write: " img
   echo
