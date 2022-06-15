@@ -10,7 +10,12 @@ if [ -f "meson.build" ]; then
   # -Db_sanitize=address
   # --buildtype=debug
   # --buildtype=release
-  cmd="meson build --buildtype=release --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install"
+  cmd="meson build --buildtype=debug --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install"
+elif [ -f "SDL_image.h" ]; then
+  extra="--disable-dependency-tracking --disable-jpg-shared \
+         --disable-png-shared --disable-tif-shared --disable-webp-shared \
+         --disable-static"
+  cmd="if [ ! -f 'Makefile' ]; then ./autogen.sh && if [ -f 'configure' ]; then ./configure --prefix=/usr $extra; sed -i -e 's! -shared ! -Wl,--as-needed\0!g' libtool; fi; fi && make -j\$(nproc) V=1 && sudo make install"
 elif [ -f "CMakeLists.txt" ]; then # sdl prefer this over autogen.sh
   if [ -f "sdl2.m4" ]; then # sdl specific
     extra="-DSDL_DLOPEN=ON \
@@ -30,6 +35,7 @@ elif [ -f "CMakeLists.txt" ]; then # sdl prefer this over autogen.sh
            -DSDL_STATIC=ON \
            -DSDL_STATIC_PIC=ON"
 
+  extra2="&& sudo ln -s /usr/lib64/libSDL2-2.0.so.0 /usr/lib64/libSDL2.so"
     if false; then
     extra="-DSDL_DLOPEN=OFF \
     -DSDL_VIDEO_KMSDRM=ON \
@@ -53,7 +59,7 @@ fi
 
   # -DCMAKE_BUILD_TYPE=Release
   # -DCMAKE_BUILD_TYPE=Debug
-  cmd="mkdir -p build && cd build && cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_BUILD_TYPE=Release $extra .. && make -j\$(nproc) VERBOSE=1 && sudo make install"
+  cmd="mkdir -p build && cd build && cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_BUILD_TYPE=Debug $extra .. && make -j\$(nproc) VERBOSE=1 && sudo make install $extra2"
 elif [ -f "autogen.sh" ]; then
   if grep -q plymouth README; then
     extra="--enable-tracing                                      \
@@ -75,7 +81,7 @@ elif [ -f "Cargo.lock" ]; then
 elif [ -f "Cargo.lock" ]; then
   cmd="sudo go install ."
 elif [ -f "Makefile" ] && [ -f "Kbuild" ] && [ -f "Kconfig" ]; then
-  # dnf -y install ncurses-devel flex bison elfutils-libelf-devel dwarves ccache zstd
+  # dnf -y install ncurses-devel flex bison elfutils-libelf-devel dwarves ccache zstd bc
   cmd="if [ ! -f '.config' ]; then cp /boot/config-\$(uname -r) .; fi && make olddefconfig && make -j8 && make -j8 bzImage && make -j8 modules && sudo make modules_install && sudo make install"
 elif [ -f "Makefile" ]; then
   cmd="make -j\$(nproc)"
