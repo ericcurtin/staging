@@ -81,8 +81,15 @@ elif [ -f "Cargo.lock" ]; then
 elif [ -f "Cargo.lock" ]; then
   cmd="sudo go install ."
 elif [ -f "Makefile" ] && [ -f "Kbuild" ] && [ -f "Kconfig" ]; then
-  # dnf -y install ncurses-devel flex bison elfutils-libelf-devel dwarves ccache zstd bc
-  cmd="if [ ! -f '.config' ]; then cp /boot/config-\$(uname -r) .; fi && make olddefconfig && make -j8 && make -j8 bzImage && make -j8 modules && sudo make modules_install && sudo make install"
+  # dnf -y install ncurses-devel flex bison elfutils-libelf-devel dwarves ccache zstd bc rpm-build bpftool gcc-plugin-devel glibc-static perl-devel perl-generators python3-devel elfutils-devel
+  if [ -e "/boot/dtb" ]; then
+    cmd="if [ ! -f '.config' ]; then cp /boot/config-\$(uname -r) .; fi && make olddefconfig && make -j8 && make -j8 modules && sudo make modules_install && sudo make dtbs_install && sudo make install"
+#    cd /boot
+#    to_link=$(for i in $(ls -t | grep dtb); do if [ -d "$i" ]; then echo $i; break; fi; done)
+#    sudo ln -sf $to_link dtb
+  else
+    cmd="if [ ! -f '.config' ]; then cp /boot/config-\$(uname -r) .; fi && make olddefconfig && make -j8 && make -j8 bzImage && make -j8 modules && sudo make modules_install && sudo make install"
+  fi
 elif [ -f "Makefile" ]; then
   cmd="make -j\$(nproc)"
 elif [ -d "osbuild-manifests" ]; then
