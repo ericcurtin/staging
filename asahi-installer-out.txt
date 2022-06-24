@@ -1,0 +1,177 @@
+$ curl https://leifliddy.com/fedora.sh | sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  1024  100  1024    0     0   3708      0 --:--:-- --:--:-- --:--:--  3792
+
+Bootstrapping installer:
+  Checking version...
+  Version: v0.3.28
+  Downloading...
+  Extracting...
+  Initializing...
+
+The installer needs to run as root.
+Please enter your sudo password if prompted.
+
+Welcome to the Asahi Linux installer!
+
+This installer is in an alpha state, and may not work for everyone.
+It is intended for developers and early adopters who are comfortable
+debugging issues or providing detailed bug reports.
+
+Please make sure you are familiar with our documentation at:
+  https://alx.sh/w
+
+Press enter to continue.
+
+
+By default, this installer will hide certain advanced options that
+are only useful for developers. You can enable expert mode to show them.
+» Enable expert mode? (y/N): y
+
+Collecting system information...
+  Product name: Mac mini (M1, 2020)
+  SoC: Apple M1
+  Device class: j274ap
+  Product type: Macmini9,1
+  Board ID: 0x22
+  Chip ID: 0x8103
+  System firmware: iBoot-7459.121.3
+  Boot UUID: 5DE51D9E-9FC7-49C0-B91C-00C94677ADA9
+  Boot VGID: 5DE51D9E-9FC7-49C0-B91C-00C94677ADA9
+  Default boot VGID: 5DE51D9E-9FC7-49C0-B91C-00C94677ADA9
+  Boot mode: macOS
+  OS version: 12.4 (21F79)
+  System rOS version: 12.4 (21F79)
+  No Fallback rOS
+  Login user: ecurtin
+
+Collecting partition information...
+  System disk: disk0
+
+Collecting OS information...
+
+Partitions in system disk (disk0):
+  1: APFS [Macintosh HD] (122.55 GB, 6 volumes)
+    OS: [B*] [Macintosh HD] macOS v12.4 [disk4s1, 5DE51D9E-9FC7-49C0-B91C-00C94677ADA9]
+  2: (free space: 122.55 GB)
+  3: APFS (System Recovery) (5.37 GB, 2 volumes)
+    OS: [  ] recoveryOS v12.4 [Primary recoveryOS]
+
+  [B ] = Booted OS, [R ] = Booted recovery, [? ] = Unknown
+  [ *] = Default boot volume
+
+Using OS 'Macintosh HD' (disk4s1) for machine authentication.
+
+Choose what to do:
+  f: Install an OS into free space
+  r: Resize an existing partition to make space for a new OS
+  q: Quit without doing anything
+» Action (f): f
+
+Choose an OS to install:
+  1: Fedora Minimal (Fedora Linux ARM)
+» OS:
+Enter one of the following: 1
+» OS: 1
+
+Downloading OS package info...
+-
+
+Minimum required space for this OS: 8.00 GB
+
+Available free space: 122.55 GB
+
+How much space should be allocated to the new OS?
+  You can enter a size such as '1GB', a fraction such as '50%',
+  the word 'min' for the smallest allowable size, or
+  the word 'max' to use all available space.
+» New OS size (max):
+
+The new OS will be allocated 122.55 GB of space,
+leaving 458.75 KB of free space.
+
+Enter a name for your OS
+» OS name (Fedora): m1
+
+Choose the macOS version to use for boot firmware:
+(If unsure, just press enter)
+  1: 12.3
+» Version (1):
+
+Using macOS 12.3 for OS firmware
+
+Downloading macOS OS package info...
+-
+
+Creating new stub macOS named m1
+Installing stub macOS into disk0s3 (m1)
+Preparing target volumes...
+Checking volumes...
+Beginning stub OS install...
+|
+Setting up System volume...
+
+Setting up Data volume...
+Setting up Preboot volume...
+/ 100.00%
+Setting up Recovery volume...
+\ 100.00%
+Wrapping up...
+
+Stub OS installation complete.
+
+Adding partition EFI (500.17 MB)...
+  Formatting as FAT...
+Adding partition Root (119.55 GB)...
+Collecting firmware...
+Installing OS...
+  Copying from esp into disk0s4 partition...
+\ 100.00%
+  Copying firmware into disk0s4 partition...
+  Extracting root.img into disk0s5 partition...
+- 100.00%
+Preparing to finish installation...
+Collecting installer data...
+
+To continue the installation, you will need to enter your macOS
+admin credentials.
+
+Password for ecurtin:
+
+Setting the new OS as the default boot volume...
+
+Installation successful!
+
+Install information:
+  APFS VGID: 95C3A988-B221-4F25-8F6C-4F2548BFCE10
+  EFI PARTUUID: e4d9d5f0-65ac-4e5d-8b48-c0eb6a94f54a
+
+To be able to boot your new OS, you will need to complete one more step.
+Please read the following instructions carefully. Failure to do so
+will leave your new installation in an unbootable state.
+
+Press enter to continue.
+
+
+
+
+When the system shuts down, follow these steps:
+
+1. Wait 15 seconds for the system to fully shut down.
+2. Press and hold down the power button to power on the system.
+   * It is important that the system be fully powered off before this step,
+     and that you press and hold down the button once, not multiple times.
+     This is required to put the machine into the right mode.
+3. Release it once 'Entering startup options' is displayed,
+   or you see a spinner.
+4. Wait for the volume list to appear.
+5. Choose 'm1'.
+6. You will briefly see a 'macOS Recovery' dialog.
+   * If you are asked to 'Select a volume to recover',
+     then choose your normal macOS volume and click Next.
+     You may need to authenticate yourself with your macOS credentials.
+7. Once the 'Asahi Linux installer' screen appears, follow the prompts.
+
+Press enter to shut down the system.
+
