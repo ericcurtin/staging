@@ -10,7 +10,7 @@ if [ -f "meson.build" ]; then
   # -Db_sanitize=address
   # --buildtype=debug
   # --buildtype=release
-  cmd="meson build --buildtype=debug --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install"
+  cmd="meson build --buildtype=release --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install"
 elif [ -f "SDL_image.h" ]; then
   extra="--disable-dependency-tracking --disable-jpg-shared \
          --disable-png-shared --disable-tif-shared --disable-webp-shared \
@@ -58,8 +58,8 @@ fi
   fi
 
   # -DCMAKE_BUILD_TYPE=Release
-  # -DCMAKE_BUILD_TYPE=Debug
-  cmd="mkdir -p build && cd build && cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_BUILD_TYPE=Debug $extra .. && make -j\$(nproc) VERBOSE=1 && sudo make install $extra2"
+  # -DCMAKE_BUILD_TYPE=Debug this meses up the ln -s
+  cmd="mkdir -p build && cd build && cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_BUILD_TYPE=Release $extra .. && make -j\$(nproc) VERBOSE=1 && sudo make install $extra2"
 elif [ -f "autogen.sh" ]; then
   if grep -q plymouth README; then
     extra="--enable-tracing                                      \
