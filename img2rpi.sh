@@ -57,7 +57,7 @@ if [[ $1 == *.raw.xz ]] || [[ $1 == *.img.xz ]]; then
       sudo umount $HOME/$dev_fat
       sudo rm -rf $HOME/$dev_fat
     else
-      echo "Unrecognized extension in filename $efi"
+      echo "Unrecognized extension in efi filename: '$efi'"
     fi
   fi
 elif [[ $1 == *.iso ]] || [[ $1 == *.img ]] || [[ $1 == *.raw ]]; then
@@ -65,7 +65,7 @@ elif [[ $1 == *.iso ]] || [[ $1 == *.img ]] || [[ $1 == *.raw ]]; then
   sudo dd of=$dev if=$1 bs=4M conv=fdatasync status=progress
   echo "Completed write to $dev"
 else
-  echo "Unrecognized extension in filename $1"
+  echo "Unrecognized extension in image filename: '$1'"
 fi
 
 if [[ $dnf =~ ^[Yy]$ ]]; then
