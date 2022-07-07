@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 echo "initial boot time"
 ssh guest@10.42.0.220 "sudo systemd-analyze && sudo du -sh /boot/initramfs* && sudo reboot"
 echo "rebooting and sleeping for 64 seconds"
