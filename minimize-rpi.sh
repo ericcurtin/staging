@@ -1,7 +1,7 @@
 #!/bin/bash
 
 for i in $(ssh guest@10.42.0.220 "ls /usr/lib/dracut/modules.d/"); do
-  if [ "$i" == "00systemd" ]; then
+  if [ "$i" == "00systemd" ] || [ "$i" == "01systemd-initrd" ]; then
     echo "skipping '$i'"
     continue
   fi
