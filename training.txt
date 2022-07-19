@@ -1,0 +1,35 @@
+# /etc/systemd/system/myapp.service
+[Unit]
+Description=my application
+
+[Service]
+Type=notify
+RemainAfterExit=yes
+ExecStart=/bin/myapp 10
+
+[Install]
+WantedBy=application.target
+
+
+# /etc/systemd/system/myapp.service.d/block-others-init.conf
+[Unit]
+Before=dev-mqueue.mount
+Before=sys-kernel-debug.mount
+Before=sys-kernel-tracing.mount
+Before=kmod-static-nodes.service
+Before=systemd-journald.service
+Before=systemd-modules-load.service
+Before=systemd-remount-fs.service
+Before=systemd-udev-trigger.service
+Before=sys-kernel-config.mount
+Before=dev-hugepages.mount
+Before=modprobe@configfs.service
+Before=modprobe@drm.service
+Before=modprobe@fuse.service
+Before=sys-fs-fuse-connections.mount
+
+
+# /etc/systemd/system/myapp.service.d/override.conf
+[Unit]
+DefaultDependencies=no
+
