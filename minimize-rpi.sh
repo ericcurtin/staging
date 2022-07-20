@@ -18,13 +18,12 @@ sleep 64
 tested="true"
 
 for i in $(ssh guest@$host "ls /usr/lib/dracut/modules.d/"); do
-  if [ "$i" == "62bluetooth" ]; then
+  if [ "$i" == "90kernel-modules" ]; then
     tested="false"
   fi
 
-  if [ "$i" == "00systemd" ] || [ "$i" == "01systemd-initrd" ] || [ "$i" == "05nss-softokn" ] || [ "$i" == "90dmraid" ]; then
+  if [ "$i" == "00systemd" ] || [ "$i" == "01systemd-initrd" ] || [ "$i" == "05nss-softokn" ] || [ "$i" == "90dmraid" ] || [ "$i" == "90kernel-modules" ]; then
     echo "skipping: '$i'"
-    echo
     continue
   fi
 
