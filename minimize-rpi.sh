@@ -18,11 +18,17 @@ sleep 64
 tested="true"
 
 for i in $(ssh guest@$host "ls /usr/lib/dracut/modules.d/"); do
-  if [ "$i" == "90kernel-modules" ]; then
+  if [ "$i" == "95udev-rules" ]; then
     tested="false"
   fi
 
-  if [ "$i" == "00systemd" ] || [ "$i" == "01systemd-initrd" ] || [ "$i" == "05nss-softokn" ] || [ "$i" == "90dmraid" ] || [ "$i" == "90kernel-modules" ]; then
+  if [ "$i" == "00systemd" ] ||
+     [ "$i" == "01systemd-initrd" ] ||
+     [ "$i" == "05nss-softokn" ] ||
+     [ "$i" == "90dmraid" ] ||
+     [ "$i" == "90kernel-modules" ] ||
+     [ "$i" == "95rootfs-block" ] ||
+     [ "$i" == "95udev-rules" ]; then
     echo "skipping: '$i'"
     continue
   fi
