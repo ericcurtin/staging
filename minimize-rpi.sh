@@ -18,7 +18,7 @@ sleep 64
 tested="true"
 
 for i in $(ssh guest@$host "ls /usr/lib/dracut/modules.d/"); do
-  if [ "$i" == "95udev-rules" ]; then
+  if [ "$i" == "99fs-lib" ]; then
     tested="false"
   fi
 
@@ -28,7 +28,9 @@ for i in $(ssh guest@$host "ls /usr/lib/dracut/modules.d/"); do
      [ "$i" == "90dmraid" ] ||
      [ "$i" == "90kernel-modules" ] ||
      [ "$i" == "95rootfs-block" ] ||
-     [ "$i" == "95udev-rules" ]; then
+     [ "$i" == "95udev-rules" ] ||
+     [ "$i" == "99base" ] ||
+     [ "$i" == "99fs-lib" ]; then
     echo "skipping: '$i'"
     continue
   fi
