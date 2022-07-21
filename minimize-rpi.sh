@@ -21,10 +21,10 @@ git-push.sh guest@$host
 cd -
 
 ssh guest@$host "cd git/libcamera && meson build --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install"
-ssh guest@$host "cd git/twincam && meson build --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install && sudo ./install-minimal.sh"
+perf="sudo systemd-analyze && sudo du -sh /boot/initramfs* &&"
+ssh guest@$host "cd git/twincam && meson build --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install && $perf sudo ./install-minimal.sh"
 
 echo "initial boot time"
-perf="sudo systemd-analyze && sudo du -sh /boot/initramfs* &&"
 ssh guest@$host "sudo mkdir -p /root/modules && $perf sudo reboot" || true
 echo "rebooting and sleeping for 64 seconds"
 echo
@@ -83,7 +83,9 @@ if [ "$tested" == "false" ]; then
 fi
 
 for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '{print \$NF}' | grep -v ext4"); do
-  if [ "$i" == */modules.alias.bin ]; then
+  if [ $i == */modules.alias.bin ] ||
+     [ $i == */qed.ko.xz ] ||
+     [ $i == */cxgb4.ko.xz ]; then
     echo "skipping: '$i'"
     continue
   fi
