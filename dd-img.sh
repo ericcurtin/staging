@@ -7,9 +7,7 @@ dev=$2
 
 if [ -z "$img" ]; then
   set +e
-  ls *.iso 2> /dev/null
-  ls *.img 2> /dev/null
-  ls *.raw.xz 2> /dev/null
+  ls *.iso *.img *.img.xz *.raw.xz 2> /dev/null
   set -e
   echo
   read -p "Image to write: " img
@@ -25,7 +23,7 @@ if [ -z "$dev" ]; then
   echo
 fi
 
-if [[ $img == *.raw.xz ]]; then
+if [[ $img == *.raw.xz ]] || [[ $img == *.img.xz ]]; then
   xzcat $img | sudo dd of=$dev bs=4M status=progress
 else
   sudo dd if=$img of=$dev bs=4M status=progress
