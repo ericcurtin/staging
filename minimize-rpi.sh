@@ -21,7 +21,7 @@ git-push.sh guest@$host
 cd -
 
 ssh guest@$host "cd git/libcamera && meson build --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install"
-ssh guest@$host "cd git/twincam && meson build --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install && ./install-minimal.sh"
+ssh guest@$host "cd git/twincam && meson build --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install && sudo ./install-minimal.sh"
 
 echo "initial boot time"
 perf="sudo systemd-analyze && sudo du -sh /boot/initramfs* &&"
@@ -47,6 +47,7 @@ for i in $(ssh guest@$host "ls /usr/lib/dracut/modules.d/"); do
   if [ "$i" == "00systemd" ] ||
      [ "$i" == "01systemd-initrd" ] ||
      [ "$i" == "05nss-softokn" ] ||
+     [ "$i" == "81twincam" ] ||
      [ "$i" == "90dmraid" ] ||
      [ "$i" == "90kernel-modules" ] ||
      [ "$i" == "95rootfs-block" ] ||
