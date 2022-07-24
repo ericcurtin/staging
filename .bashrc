@@ -22,7 +22,7 @@ fi
 unset rc
 
 update() {
-  set -e
+  set -ex
 
   cd /tmp
 
