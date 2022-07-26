@@ -10,6 +10,7 @@ ssh guest@$host "sudo dnf install -y epel-release"
 ssh guest@$host "sudo dnf install -y git gcc g++ libevent libevent-devel \
   openssl openssl-devel gnutls gnutls-devel meson boost boost-devel \
   python3-pip systemd-udev doxygen cmake graphviz libatomic texlive-latex"
+ssh guest@$host "sudo dnf remove -y rsyslog"
 ssh guest@$host "sudo pip install jinja2 ply pyyaml"
 
 cd ../libcamera
@@ -82,11 +83,12 @@ if [ "$tested" == "false" ]; then
   sleep 64
 fi
 
+tested="true"
 pre=""
 post=""
 
 for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '{print \$NF}' | grep -v ext4"); do
-  if [[ "$i" == */modules.dep.bin ]]; then
+  if [[ "$i" == */gspca_stv06xx.ko.xz ]]; then
     tested="false"
   fi
 
@@ -98,7 +100,54 @@ for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '
      [[ $i == */target_core_mod.ko.xz ]] ||
      [[ $i == */zstd_compress.ko.xz ]] ||
      [[ $i == */videodev.ko.xz ]] ||
-     [[ $i == */modules.dep.bin ]]; then
+     [[ $i == */modules.dep.bin ]] ||
+     [[ $i == */libnvdimm.ko.xz ]] ||
+     [[ $i == */qedf.ko.xz ]] ||
+     [[ $i == */ufshcd-core.ko.xz ]] ||
+     [[ $i == */dm-mod.ko.xz ]] ||
+     [[ $i == */fuse.ko.xz ]] ||
+     [[ $i == */modules.order ]] ||
+     [[ $i == */modules.dep ]] ||
+     [[ $i == */modules.builtin.modinfo ]] ||
+     [[ $i == */modules.alias.bin ]] ||
+     [[ $i == */modules.alias ]] |
+     [[ $i == */raid6_pq.ko.xz ]] ||
+     [[ $i == */mmc_core.ko.xz ]] ||
+     [[ $i == */libfc.ko.xz ]] ||
+     [[ $i == */uvcvideo.ko.xz ]] ||
+     [[ $i == */nvme-core.ko.xz ]] ||
+     [[ $i == */scsi_transport_iscsi.ko.xz ]] ||
+     [[ $i == */jbd2.ko.xz ]] ||
+     [[ $i == */tls.ko.xz ]] ||
+     [[ $i == */overlay.ko.xz ]] ||
+     [[ $i == */snd.ko.xz ]] ||
+     [[ $i == */rmi_core.ko.xz ]] ||
+     [[ $i == */hv_vmbus.ko.xz ]] ||
+     [[ $i == */libsas.ko.xz ]] ||
+     [[ $i == */nvmet.ko.xz ]] ||
+     [[ $i == */libiscsi.ko.xz ]] ||
+     [[ $i == */hv_vmbus.ko.xz ]] ||
+     [[ $i == */mptbase.ko.xz ]] ||
+     [[ $i == */fscache.ko.xz ]] ||
+     [[ $i == */fat.ko.xz ]] ||
+     [[ $i == */usb-storage.ko.xz ]] ||
+     [[ $i == */mtd.ko.xz ]] ||
+     [[ $i == */nvme-fc.ko.xz ]] ||
+     [[ $i == */libfcoe.ko.xz ]] ||
+     [[ $i == */ccp.ko.xz ]] ||
+     [[ $i == */sdhci.ko.xz ]] ||
+     [[ $i == */cec.ko.xz ]] ||
+     [[ $i == */videobuf2-common.ko.xz ]] ||
+     [[ $i == */gspca_main.ko.xz ]] ||
+     [[ $i == */hisi_sas_main.ko.xz ]] ||
+     [[ $i == */qmi_helpers.ko.xz ]] ||
+     [[ $i == */scsi_transport_fc.ko.xz ]] ||
+     [[ $i == */cdrom.ko.xz ]] ||
+     [[ $i == */nvme.ko.xz ]] ||
+     [[ $i == */mc.ko.xz ]] ||
+     [[ $i == */dw_mmc.ko.xz ]] ||
+     [[ $i == */nvmet-fc.ko.xz ]] ||
+     [[ $i == */error.ko.xz ]]; then
     echo "skipping: '$i'"
     continue
   fi

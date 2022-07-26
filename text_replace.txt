@@ -1,0 +1,2 @@
+:%s/^{/{static int a = 1; if (a) printk("ERIC %s called from %pS\\n", __PRETTY_FUNCTION__, __builtin_return_address(0)); a = 0;/g
+
