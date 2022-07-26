@@ -82,12 +82,30 @@ if [ "$tested" == "false" ]; then
   sleep 64
 fi
 
+pre=""
+post=""
+
 for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '{print \$NF}' | grep -v ext4"); do
-  if [ $i == */modules.alias.bin ] ||
-     [ $i == */qed.ko.xz ] ||
-     [ $i == */cxgb4.ko.xz ]; then
+  if [[ "$i" == */modules.dep.bin ]]; then
+    tested="false"
+  fi
+
+  if [[ $i == */modules.alias.bin ]] ||
+     [[ $i == */qed.ko.xz ]] ||
+     [[ $i == */cxgb4.ko.xz ]] ||
+     [[ $i == */sunrpc.ko.xz ]] ||
+     [[ $i == */libceph.ko.xz ]] ||
+     [[ $i == */target_core_mod.ko.xz ]] ||
+     [[ $i == */zstd_compress.ko.xz ]] ||
+     [[ $i == */videodev.ko.xz ]] ||
+     [[ $i == */modules.dep.bin ]]; then
     echo "skipping: '$i'"
     continue
+  fi
+
+  if [ "$tested" == "false" ]; then
+    pre="$perf"
+    post="&& sudo dracut -f && sudo reboot"
   fi
 
   echo "removing: '$i'"
