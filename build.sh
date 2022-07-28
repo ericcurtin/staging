@@ -81,7 +81,7 @@ elif [ -f "Cargo.lock" ]; then
 elif [ -f "Cargo.lock" ]; then
   cmd="sudo go install ."
 elif [ -f "Makefile" ] && [ -f "Kbuild" ] && [ -f "Kconfig" ]; then
-  # dnf -y install ncurses-devel flex bison elfutils-libelf-devel dwarves ccache zstd bc rpm-build bpftool gcc-plugin-devel glibc-static perl-devel perl-generators python3-devel elfutils-devel the_silver_searcher openssl-devel openssl
+  # dnf -y install ncurses-devel flex bison elfutils-libelf-devel dwarves ccache zstd bc rpm-build bpftool gcc perl-devel perl-generators python3-devel elfutils-devel the_silver_searcher openssl-devel openssl
   if [ -e "/boot/dtb" ]; then
     cmd="if [ ! -f '.config' ]; then cp /boot/config-\$(uname -r) .; fi && make olddefconfig && make -j8 && make -j8 modules && sudo make modules_install && sudo make dtbs_install && sudo make install"
 #    cd /boot

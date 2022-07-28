@@ -88,7 +88,7 @@ pre=""
 post=""
 
 for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '{print \$NF}' | grep -v ext4"); do
-  if [[ "$i" == */gspca_stv06xx.ko.xz ]]; then
+  if [[ "$i" == */camellia_generic.ko.xz ]]; then
     tested="false"
   fi
 
@@ -106,6 +106,7 @@ for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '
      [[ $i == */ufshcd-core.ko.xz ]] ||
      [[ $i == */dm-mod.ko.xz ]] ||
      [[ $i == */fuse.ko.xz ]] ||
+     [[ $i == */modules.builtin ]] ||
      [[ $i == */modules.order ]] ||
      [[ $i == */modules.dep ]] ||
      [[ $i == */modules.builtin.modinfo ]] ||
@@ -147,7 +148,41 @@ for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '
      [[ $i == */mc.ko.xz ]] ||
      [[ $i == */dw_mmc.ko.xz ]] ||
      [[ $i == */nvmet-fc.ko.xz ]] ||
-     [[ $i == */error.ko.xz ]]; then
+     [[ $i == */error.ko.xz ]] ||
+     [[ $i == */mptscsih.ko.xz ]] ||
+     [[ $i == */phy-tegra-xusb.ko.xz ]] ||
+     [[ $i == */ci_hdrc.ko.xz ]] ||
+     [[ $i == */udc-core.ko.xz ]] ||
+     [[ $i == */videobuf2-v4l2.ko.xz ]] ||
+     [[ $i == */snd-rawmidi.ko.xz ]] ||
+     [[ $i == */sg.ko.xz ]] ||
+     [[ $i == */netfs.ko.xz ]] ||
+     [[ $i == */trusted.ko.xz ]] ||
+     [[ $i == */pmbus_core.ko.xz ]] ||
+     [[ $i == */tee.ko.xz ]] ||
+     [[ $i == */dw_dmac_core.ko.xz ]] ||
+     [[ $i == */hdma.ko.xz ]] ||
+     [[ $i == */nd_btt.ko.xz ]] ||
+     [[ $i == */qcom_glink.ko.xz ]] ||
+     [[ $i == */qcom_rpmh.ko.xz ]] ||
+     [[ $i == */qcom_smd.ko.xz ]] ||
+     [[ $i == */scsi_transport_sas.ko.xz ]] ||
+     [[ $i == */nvme-fabrics.ko.xz ]] ||
+     [[ $i == */videobuf-core.ko.xz ]] ||
+     [[ $i == */spmi.ko.xz ]] ||
+     [[ $i == */i2c-hid.ko.xz ]] ||
+     [[ $i == */twofish_common.ko.xz ]] ||
+     [[ $i == */vdpa.ko.xz ]] ||
+     [[ $i == */v4l2-dv-timings.ko.xz ]] ||
+     [[ $i == */i2c-designware-core.ko.xz ]] ||
+     [[ $i == */vfat.ko.xz ]] ||
+     [[ $i == */pci-hyperv.ko.xz ]] ||
+     [[ $i == */sr_mod.ko.xz ]] ||
+     [[ $i == */arm_scpi.ko.xz ]] ||
+     [[ $i == */virtio_blk.ko.xz ]] ||
+     [[ $i == */virtio_scsi.ko.xz ]] ||
+     [[ $i == */mtd_blkdevs.ko.xz ]] ||
+     [[ $i == */uas.ko.xz ]]; then
     echo "skipping: '$i'"
     continue
   fi
