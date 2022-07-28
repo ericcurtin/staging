@@ -92,6 +92,7 @@ for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '
     tested="false"
   fi
 
+  # awk -F= '{print $3}' | awk '{print $1}' | awk -F/ '{print "     [[ $i == */"$NF" ]] ||"}' | sort | uniq
   if [[ $i == */modules.alias.bin ]] ||
      [[ $i == */qed.ko.xz ]] ||
      [[ $i == */cxgb4.ko.xz ]] ||
@@ -203,7 +204,14 @@ for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '
      [[ $i == */raspberrypi.ko.xz ]] ||
      [[ $i == */dns_resolver.ko.xz ]] ||
      [[ $i == */cast_common.ko.xz ]] ||
-     [[ $i == */async_raid6_recov.ko.xz ]]; then
+     [[ $i == */async_raid6_recov.ko.xz ]] ||
+     [[ $i == */async_pq.ko.xz ]] ||
+     [[ $i == */async_xor.ko.xz ]] ||
+     [[ $i == */gpio-generic.ko.xz ]] ||
+     [[ $i == */hid-roccat.ko.xz ]] ||
+     [[ $i == */i2c-algo-bit.ko.xz ]] ||
+     [[ $i == */i2c-algo-pca.ko.xz ]] ||
+     [[ $i == */iscsi_boot_sysfs.ko.xz ]]; then
     echo "skipping: '$i'"
     continue
   fi
