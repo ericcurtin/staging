@@ -88,7 +88,7 @@ pre=""
 post=""
 
 for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '{print \$NF}' | grep -v ext4"); do
-  if [[ "$i" == */camellia_generic.ko.xz ]]; then
+  if [[ "$i" == */nd_blk.ko.xz ]]; then
     tested="false"
   fi
 
@@ -182,7 +182,21 @@ for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '
      [[ $i == */virtio_blk.ko.xz ]] ||
      [[ $i == */virtio_scsi.ko.xz ]] ||
      [[ $i == */mtd_blkdevs.ko.xz ]] ||
-     [[ $i == */uas.ko.xz ]]; then
+     [[ $i == */uas.ko.xz ]] ||
+     [[ $i == */sha256-arm64.ko.xz ]] ||
+     [[ $i == */ff-memless.ko.xz ]] ||
+     [[ $i == */rpmsg_core.ko.xz ]] ||
+     [[ $i == */smem.ko.xz ]] ||
+     [[ $i == */phy-generic.ko.xz ]] ||
+     [[ $i == */memstick.ko.xz ]] ||
+     [[ $i == */smem.ko.xz ]] ||
+     [[ $i == */rpmsg_core.ko.xz ]] ||
+     [[ $i == */reed_solomon.ko.xz ]] ||
+     [[ $i == */libahci_platform.ko.xz ]] ||
+     [[ $i == */blowfish_common.ko.xz ]] ||
+     [[ $i == */libdes.ko.xz ]] ||
+     [[ $i == */qcom-geni-se.ko.xz ]] ||
+     [[ $i == */mbcache.ko.xz ]]; then
     echo "skipping: '$i'"
     continue
   fi
