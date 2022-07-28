@@ -88,7 +88,7 @@ pre=""
 post=""
 
 for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '{print \$NF}' | grep -v ext4"); do
-  if [[ "$i" == */nd_blk.ko.xz ]]; then
+  if [[ "$i" == */videobuf2-vmalloc.ko.xz ]]; then
     tested="false"
   fi
 
@@ -196,7 +196,14 @@ for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '
      [[ $i == */blowfish_common.ko.xz ]] ||
      [[ $i == */libdes.ko.xz ]] ||
      [[ $i == */qcom-geni-se.ko.xz ]] ||
-     [[ $i == */mbcache.ko.xz ]]; then
+     [[ $i == */mbcache.ko.xz ]] ||
+     [[ $i == */ehci-platform.ko.xz ]] ||
+     [[ $i == */tifm_core.ko.xz ]] ||
+     [[ $i == */videobuf2-vmalloc.ko.xz ]] ||
+     [[ $i == */raspberrypi.ko.xz ]] ||
+     [[ $i == */dns_resolver.ko.xz ]] ||
+     [[ $i == */cast_common.ko.xz ]] ||
+     [[ $i == */async_raid6_recov.ko.xz ]]; then
     echo "skipping: '$i'"
     continue
   fi
