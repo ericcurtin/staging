@@ -211,7 +211,19 @@ for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '
      [[ $i == */hid-roccat.ko.xz ]] ||
      [[ $i == */i2c-algo-bit.ko.xz ]] ||
      [[ $i == */i2c-algo-pca.ko.xz ]] ||
-     [[ $i == */iscsi_boot_sysfs.ko.xz ]]; then
+     [[ $i == */iscsi_boot_sysfs.ko.xz ]] ||
+     [[ $i == */asn1_encoder.ko.xz ]] ||
+     [[ $i == */async_memcpy.ko.xz ]] ||
+     [[ $i == */cmd-db.ko.xz ]] ||
+     [[ $i == */ecdh_generic.ko.xz ]] ||
+     [[ $i == */ezusb.ko.xz ]] ||
+     [[ $i == */grace.ko.xz ]] ||
+     [[ $i == */libcrc32c.ko.xz ]] ||
+     [[ $i == */mdt_loader.ko.xz ]] ||
+     [[ $i == */nfs_acl.ko.xz ]] ||
+     [[ $i == */qcom_glink_smem.ko.xz ]] ||
+     [[ $i == */ulpi.ko.xz ]] ||
+     [[ $i == */videobuf2-memops.ko.xz ]]; then
     echo "skipping: '$i'"
     continue
   fi
