@@ -223,7 +223,8 @@ for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '
      [[ $i == */nfs_acl.ko.xz ]] ||
      [[ $i == */qcom_glink_smem.ko.xz ]] ||
      [[ $i == */ulpi.ko.xz ]] ||
-     [[ $i == */videobuf2-memops.ko.xz ]]; then
+     [[ $i == */videobuf2-memops.ko.xz ]] ||
+     [[ $i == */xxhash_generic.ko.xz ]]; then
     echo "skipping: '$i'"
     continue
   fi
