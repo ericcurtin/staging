@@ -87,6 +87,9 @@ elif [ -f "Makefile" ] && [ -f "Kbuild" ] && [ -f "Kconfig" ]; then
 #    cd /boot
 #    to_link=$(for i in $(ls -t | grep dtb); do if [ -d "$i" ]; then echo $i; break; fi; done)
 #    sudo ln -sf $to_link dtb
+# make dist-srpm
+# build locally: make dist-rpm-baseonly, all the rpms: make dist-rpms
+# generate config: make dist-configs
   else
     cmd="if [ ! -f '.config' ]; then cp /boot/config-\$(uname -r) .; fi && make olddefconfig && make -j8 && make -j8 bzImage && make -j8 modules && sudo make modules_install && sudo make install"
   fi
