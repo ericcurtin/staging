@@ -14,22 +14,29 @@ fi
 
 uname_m=$(uname -m)
 if [ $(echo $uname_m) = "arm64" ]; then
+  edk2_code=$(ls /opt/homebrew/Cellar/qemu/*/share/qemu/edk2-aarch64-code.fd | head -n1)
+  edk2_vars=$(ls /opt/homebrew/Cellar/qemu/*/share/qemu/edk2-arm-vars.fd | head -n1)
+  
   # accel tcg
-  /opt/homebrew/Cellar/qemu-virgl/20211212.1/bin/qemu-system-aarch64 \
-    -machine virt,highmem=off -accel hvf \
-    -cpu cortex-a72 -smp 8 -m 6G \
-    -device intel-hda -device hda-output \
-    -device virtio-gpu-gl-pci \
-    -serial stdio \
-    -device qemu-xhci -device usb-kbd \
-    -device virtio-mouse-pci \
-    -display cocoa,gl=es \
-    -netdev vmnet-bridged,id=net0,ifname=en1 \
-    -device virtio-net,netdev=net0 \
-    -device usb-host,productid=0x0843,vendorid=0x046d \
-    -drive "if=pflash,format=raw,file=$dir/edk2-aarch64-code.fd,readonly=on" \
-    -drive "if=pflash,format=raw,file=$dir/edk2-arm-vars.fd,discard=on" \
-    -drive "if=virtio,format=raw,file=$dir/hdd.raw,discard=on"
+  qemu-system-aarch64 \
+    -monitor stdio \
+    -M virt,highmem=off \
+    -accel hvf \
+    -cpu host \
+    -smp 8 \
+    -m 3G \
+    -device virtio-gpu-pci \
+    -display default,show-cursor=on \
+    -device qemu-xhci \
+    -device usb-kbd \
+    -device usb-tablet \
+    -device intel-hda \
+    -device hda-duplex \
+    -net user,hostfwd=tcp::8022-:22 \
+    -net nic \
+    -drive "if=pflash,format=raw,file=$edk2_code,readonly=on" \
+    -drive "if=pflash,format=raw,file=$edk2_vars,discard=on" \
+    -drive "if=virtio,format=raw,file=/Users/ecurtin/fedora.raw,discard=on" 
 
 # -usb -device usb-ehci,id=ehci -device usb-host,vendorid=0x0843,productid=0x046d \
 
