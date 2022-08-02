@@ -25,18 +25,19 @@ ssh guest@$host "cd git/libcamera && meson build --prefix=/usr && ninja -v -C bu
 perf="sudo systemd-analyze && sudo du -sh /boot/initramfs* &&"
 ssh guest@$host "cd git/twincam && meson build --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install && $perf sudo ./install-minimal.sh"
 
+s="62"
 echo "initial boot time"
 ssh guest@$host "sudo mkdir -p /root/modules && $perf sudo reboot" || true
-echo "rebooting and sleeping for 64 seconds"
+echo "rebooting and sleeping for $s seconds"
 echo
-sleep 64
+sleep $s
 
 perf="sudo journalctl -r | grep 'seq: 0' | head -n1 && $perf"
 echo "initial boot time 2nd boot"
 ssh guest@$host "$perf sudo dracut -f && sudo reboot" || true
-echo "rebooting and sleeping for 64 seconds"
+echo "rebooting and sleeping for $s seconds"
 echo
-sleep 64
+sleep $s
 
 tested="true"
 
@@ -67,9 +68,9 @@ for i in $(ssh guest@$host "ls /usr/lib/dracut/modules.d/"); do
   echo "removing: '$i'"
   ssh guest@$host "$pre sudo mv /usr/lib/dracut/modules.d/$i /root/modules.d/ $post" || true
   if [ "$tested" == "false" ]; then
-    echo "rebooting and sleeping for 64 seconds"
+    echo "rebooting and sleeping for $s seconds"
     echo
-    sleep 64
+    sleep $s
   fi
 done
 
@@ -78,9 +79,9 @@ pre="$perf"
 post="&& sudo dracut -f && sudo reboot"
 ssh guest@$host "$pre true $post" || true
 if [ "$tested" == "false" ]; then
-  echo "rebooting and sleeping for 64 seconds"
+  echo "rebooting and sleeping for $s seconds"
   echo
-  sleep 64
+  sleep $s
 fi
 
 tested="true"
@@ -88,7 +89,7 @@ pre=""
 post=""
 
 for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '{print \$NF}' | grep -v ext4"); do
-  if [[ "$i" == */videobuf2-vmalloc.ko.xz ]]; then
+  if [[ "$i" == */dma/*.ko.xz ]]; then
     tested="false"
   fi
 
@@ -100,7 +101,7 @@ for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '
      [[ $i == */libceph.ko.xz ]] ||
      [[ $i == */target_core_mod.ko.xz ]] ||
      [[ $i == */zstd_compress.ko.xz ]] ||
-     [[ $i == */videodev.ko.xz ]] ||
+     [[ $i == */videode*.ko.xz ]] ||
      [[ $i == */modules.dep.bin ]] ||
      [[ $i == */libnvdimm.ko.xz ]] ||
      [[ $i == */qedf.ko.xz ]] ||
@@ -200,7 +201,7 @@ for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '
      [[ $i == */mbcache.ko.xz ]] ||
      [[ $i == */ehci-platform.ko.xz ]] ||
      [[ $i == */tifm_core.ko.xz ]] ||
-     [[ $i == */videobuf2-vmalloc.ko.xz ]] ||
+     [[ $i == */videobuf2*.ko.xz ]] ||
      [[ $i == */raspberrypi.ko.xz ]] ||
      [[ $i == */dns_resolver.ko.xz ]] ||
      [[ $i == */cast_common.ko.xz ]] ||
@@ -221,10 +222,50 @@ for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '
      [[ $i == */libcrc32c.ko.xz ]] ||
      [[ $i == */mdt_loader.ko.xz ]] ||
      [[ $i == */nfs_acl.ko.xz ]] ||
-     [[ $i == */qcom_glink_smem.ko.xz ]] ||
      [[ $i == */ulpi.ko.xz ]] ||
-     [[ $i == */videobuf2-memops.ko.xz ]] ||
-     [[ $i == */xxhash_generic.ko.xz ]]; then
+     [[ $i == */xxhash_generic.ko.xz ]] ||
+     [[ $i == */sha2-ce.ko.xz ]] ||
+     [[ $i == *raspberryp*.ko.xz ]] ||
+     [[ $i == *bcm*.ko.xz ]] ||
+     [[ $i == *qcom*.ko.xz ]] ||
+     [[ $i == */asn1_encoder.ko.xz ]] ||
+     [[ $i == */async_tx.ko.xz ]] ||
+     [[ $i == */auth_rpcgss.ko.xz ]] ||
+     [[ $i == */bluetooth.ko.xz ]] ||
+     [[ $i == */cec.ko.xz ]] ||
+     [[ $i == */cfg80211.ko.xz ]] ||
+     [[ $i == */cordic.ko.xz ]] ||
+     [[ $i == */cxgb4.ko.xz ]] ||
+     [[ $i == */dns_resolver.ko.xz ]] ||
+     [[ $i == */failover.ko.xz ]] ||
+     [[ $i == */gre.ko.xz ]] ||
+     [[ $i == */ip6_udp_tunnel.ko.xz ]] ||
+     [[ $i == */libarc4.ko.xz ]] ||
+     [[ $i == */libcrc32c.ko.xz ]] ||
+     [[ $i == */libcxgb.ko.xz ]] ||
+     [[ $i == */lz4_compress.ko.xz ]] ||
+     [[ $i == */mac80211.ko.xz ]] ||
+     [[ $i == */nvme-core.ko.xz ]] ||
+     [[ $i == */pci-hyperv-intf.ko.xz ]] ||
+     [[ $i == */phy-tegra-xusb.ko.xz ]] ||
+     [[ $i == */qed.ko.xz ]] ||
+     [[ $i == */reed_solomon.ko.xz ]] ||
+     [[ $i == */rfkill.ko.xz ]] ||
+     [[ $i == */sunrpc.ko.xz ]] ||
+     [[ $i == */tls.ko.xz ]] ||
+     [[ $i == */vmw_vsock_virtio_transport_common.ko.xz ]] ||
+     [[ $i == */vsock.ko.xz ]] ||
+     [[ $i == */crypto/*.ko.xz ]] ||
+     [[ $i == */sound/*.ko.xz ]] ||
+     [[ $i == *virtio*.ko.xz ]] ||
+     [[ $i == *serio*.ko.xz ]] ||
+     [[ $i == */dma/*.ko.xz ]] ||
+     [[ $i == *videobuf*.ko.xz ]]; then
+    echo "skipping: '$i'"
+    continue
+  fi
+
+  if ! ssh guest@$host "/bin/bash -c '[ -e /$i ]'"; then
     echo "skipping: '$i'"
     continue
   fi
@@ -237,9 +278,9 @@ for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '
   echo "removing: '$i'"
   ssh guest@$host "$pre sudo mv /$i /root/modules/ $post" || true
   if [ "$tested" == "false" ]; then
-    echo "rebooting and sleeping for 64 seconds"
+    echo "rebooting and sleeping for $s seconds"
     echo
-    sleep 64
+    sleep $s
   fi
 done
 
