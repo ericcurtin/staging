@@ -13,9 +13,10 @@ import socket
 import socketserver
 import subprocess
 import sys
+import tempfile
 import time
 
-is_verbosse = False
+is_verbose = False
 def print_verbose(s):
     if is_verbose:
         print(s)
@@ -31,24 +32,54 @@ def bool_arg(val):
     return "on" if val else "off"
 
 def find_qemu(arch):
-    if arch == platform.machine():
-        binary_name = "qemu-kvm"
-    else:
-        binary_name = f"qemu-system-{arch}"
+    binary_name = f"qemu-system-{arch}"
 
-    for d in ["/usr/bin", "/usr/libexec"]:
+    if "QEMU_BUILD_DIR" in os.environ:
+        p = os.path.join(os.environ["QEMU_BUILD_DIR"], binary_name)
+        if os.path.isfile(p):
+            return p
+        else:
+            exit_error(f"Can't find {binary_name}")
+
+    qemu_bin_dirs = ["/usr/bin", "/usr/libexec"]
+    if "PATH" in os.environ:
+        qemu_bin_dirs += os.environ["PATH"].split(":")
+
+    for d in qemu_bin_dirs:
         p = os.path.join(d, binary_name)
         if os.path.isfile(p):
             return p
 
     exit_error(f"Can't find {binary_name}")
 
+def qemu_available_accels(qemu):
+    cmd = qemu + ' -accel help'
+    info = subprocess.check_output(cmd.split(" ")).decode('utf-8')
+    accel_list = []
+    for accel in ('kvm', 'xen', 'hvf', 'hax', 'tcg'):
+        if info.find(accel) > 0:
+            accel_list.append(accel)
+    return accel_list
+
 def random_id():
     return binascii.b2a_hex(os.urandom(8)).decode('utf8')
 
 def machine_id():
-    with open("/etc/machine-id", "r") as f:
-        mid = f.read().strip()
+    try:
+        with open("/etc/machine-id", "r") as f:
+            mid = f.read().strip()
+    except FileNotFoundError:
+        if sys.platform == "darwin":
+            # for macOS
+            import plistlib
+            cmd = "ioreg -rd1 -c IOPlatformExpertDevice -a"
+            plist_data = subprocess.check_output(cmd.split(" "))
+            mid = plistlib.loads(plist_data)[0]["IOPlatformUUID"].replace("-","")
+        else:
+            # fallback for the other distros
+            hostname = socket.gethostname()
+            mid = ''.join(hex(ord(x))[2:] for x in (hostname*16)[:16])
+
     return mid
 
 def generate_mac_address():
@@ -87,11 +118,14 @@ def run_http_server(path):
 
     return http_port
 
-def find_omvf():
+def find_ovmf(args):
     dirs = [
         "~/.local/share/ovmf",
-        "/usr/share/OVMF"
+        "/usr/share/OVMF",
+        "/usr/share/edk2/ovmf/"
     ]
+    if args.ovmf_dir:
+        dirs.append(args.ovmf_dir)
 
     for d in dirs:
         path = os.path.expanduser(d)
@@ -99,6 +133,20 @@ def find_omvf():
             return path
 
     raise RuntimeError("Could not find OMVF")
+
+# location can differ depending on how qemu is installed
+def find_edk2():
+    dirs = [
+        "/usr/local/share/qemu",
+        "/opt/homebrew/share/qemu"
+    ]
+
+    for d in dirs:
+        path = os.path.expanduser(d)
+        if os.path.exists(path):
+            return path
+
+    raise RuntimeError("Could not find edk2 directory")
 
 def qemu_run_command(qmp_socket_path, command):
     sock2 = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
@@ -119,6 +167,21 @@ def virtio_serial_connect(virtio_socket_path):
             return sock
         except FileNotFoundError:
             pass
+
+def available_tcp_port(port_range_from = 1024):
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    port = port_range_from
+    port_range_to = port_range_from + 32 # limit for retry
+    while port < port_range_to:
+        try:
+            s.bind(('', port))
+        except OSError:
+            port += 1
+            continue
+        break
+    s.close()
+    return port
 
 class WatchdogCommand:
     START = 1
@@ -194,10 +257,18 @@ def main():
                         help=f"Run without graphics")
     parser.add_argument("--watchdog", default=False, action="store_true",
                         help=f"Enable watchdog")
+    parser.add_argument("--tpm2", default=False, action="store_true",
+                        help=f"Enable TPM2")
     parser.add_argument("--snapshot", default=False, action="store_true",
                         help=f"Work on a snapshot  of the image")
+    parser.add_argument("--ovmf-dir", action="store",
+                        help="Specify directory for OVMF files (Open Virtual Machine Firmware)")
     parser.add_argument("--secureboot", dest="secureboot", action="store_true", default=False,
                         help="Enable SecureBoot")
+    parser.add_argument("--ssh-port", type=int, default=2222,
+                        help="SSH port forwarding to SSH_PORT (default 2222)")
+    parser.add_argument("--cdrom", action="store",
+                        help="Specify .iso to load")
     parser.add_argument("image", type=str, help="The image to boot")
     parser.add_argument('extra_args', nargs=argparse.REMAINDER, metavar="...", help="extra qemu arguments")
 
@@ -206,46 +277,65 @@ def main():
     global is_verbose
     is_verbose = args.verbose
 
-    native = platform.machine() == args.arch
+    # arm64 is an alias for aarch64 on macOS
+    if args.arch == "arm64":
+        args.arch = "aarch64"
 
     qemu = find_qemu(args.arch)
+    accel_list = qemu_available_accels(qemu)
     qemu_args = [qemu]
 
     if args.arch == "x86_64":
         machine = "q35"
         default_cpu = "qemu64,+ssse3,+sse4.1,+sse4.2,+popcnt"
 
-        omvf = find_omvf()
+        ovmf = find_ovmf(args)
         if args.secureboot:
             qemu_args += [
-                "-drive", f"file={omvf}/OVMF_CODE.secboot.fd,if=pflash,format=raw,unit=0,readonly=on",
-                "-drive", f"file={omvf}/OVMF_VARS.secboot.fd,if=pflash,format=raw,unit=1,snapshot=on,readonly=off",
+                "-drive", f"file={ovmf}/OVMF_CODE.secboot.fd,if=pflash,format=raw,unit=0,readonly=on",
+                "-drive", f"file={ovmf}/OVMF_VARS.secboot.fd,if=pflash,format=raw,unit=1,snapshot=on,readonly=off",
             ]
         else:
             qemu_args += [
-                "-drive", f"file={omvf}/OVMF_CODE.fd,if=pflash,format=raw,unit=0,readonly=on",
-                "-drive", f"file={omvf}/OVMF_VARS.fd,if=pflash,format=raw,unit=1,snapshot=on,readonly=off",
+                "-drive", f"file={ovmf}/OVMF_CODE.fd,if=pflash,format=raw,unit=0,readonly=on",
+                "-drive", f"file={ovmf}/OVMF_VARS.fd,if=pflash,format=raw,unit=1,snapshot=on,readonly=off",
             ]
     elif args.arch == "aarch64":
         machine = "virt"
         default_cpu = "cortex-a57"
-        qemu_args += [
-            "-bios", "/usr/share/edk2/aarch64/QEMU_EFI.fd",
-            "-boot", "efi"
-        ]
+        if sys.platform == "darwin":
+            edk2 = find_edk2()
+            qemu_args += [
+                "-device", "virtio-gpu-pci", # for display
+                "-display", "default,show-cursor=on", # for display
+                "-device", "qemu-xhci", # for keyboard
+                "-device", "usb-kbd", # for keyboard
+                "-device", "usb-tablet", # for mouse
+                "-smp", str(os.cpu_count()), # for max cores
+                "-drive", f"file={edk2}/edk2-aarch64-code.fd,if=pflash,format=raw,unit=0,readonly=on",
+                "-drive", f"file={edk2}/edk2-arm-vars.fd,if=pflash,format=raw,unit=1,snapshot=on,readonly=off"
+            ]
+        else:
+            qemu_args += [
+                "-bios", "/usr/share/edk2/aarch64/QEMU_EFI.fd",
+                "-boot", "efi"
+            ]
     else:
         exit_error(f"unsupported architecture {args.arch}")
 
-    use_kvm = native and os.path.exists("/dev/kvm")
-    if use_kvm:
+    accel_enabled = True
+    if 'kvm' in accel_list and os.path.exists("/dev/kvm"):
         qemu_args += ['-enable-kvm']
+    elif 'hvf' in accel_list:
+        qemu_args += ['-accel', 'hvf']
     else:
+        accel_enabled = False
         print_verbose("Acceleration: off")
 
     qemu_args += [
         "-m", str(args.memory),
         "-machine", machine,
-        "-cpu", "host" if use_kvm else default_cpu
+        "-cpu", "host" if accel_enabled else default_cpu
     ]
 
     guestfwds=""
@@ -259,7 +349,7 @@ def main():
             print_verbose(f"publishing {args.publish_dir} on http://10.0.2.100/")
 
     portfwd = {
-        2222:22
+        available_tcp_port(args.ssh_port): 22
     }
     for local, remote in portfwd.items():
         print_verbose(f"port: {local} → {remote}")
@@ -279,10 +369,12 @@ def main():
 
     runvm_id = random_id()
 
+    tmpdir = tempfile.TemporaryDirectory(prefix=f"runvm-{runvm_id}")
+
     watchdog_pid = 0
     if args.watchdog:
-        qmp_socket_path = f"/tmp/runvm-sock-{runvm_id}"
-        watch_socket_path = f"/tmp/runvm-watch-{runvm_id}"
+        qmp_socket_path = os.path.join(tmpdir.name, "qmp-socket")
+        watch_socket_path = os.path.join(tmpdir.name, "watch-socket")
 
         qemu_args += [
             "-qmp", f"unix:{qmp_socket_path},server=on,wait=off",
@@ -295,11 +387,44 @@ def main():
             run_watchdog(watch_socket_path, qmp_socket_path)
             sys.exit(0)
 
+    if args.tpm2:
+        if shutil.which("swtpm") is None:
+            exit_error("Command `swtpm` not found in path, this is needed for tpm2 support")
+
+        tpm2_socket = os.path.join(tmpdir.name, "tpm-socket")
+
+        if args.snapshot:
+            tpm2_path = os.path.join(tmpdir.name, "tpm2_state")
+        else:
+            tpm2_path = ".tpm2_state"
+        os.makedirs(tpm2_path, exist_ok=True)
+
+        swtpm_args = ["swtpm", "socket", "--tpm2", "--tpmstate", f"dir={tpm2_path}", "--ctrl", f"type=unixio,path={tpm2_socket}" ]
+        res = subprocess.Popen(swtpm_args)
+
+        qemu_args += [
+            "-chardev", f"socket,id=chrtpm,path={tpm2_socket}",
+            "-tpmdev", "emulator,id=tpm0,chardev=chrtpm",
+            "-device", "tpm-tis,tpmdev=tpm0"
+        ]
+
     print_verbose(f"Image: {args.image}")
 
-    qemu_args += [
-        "-drive", f"file={args.image},index=0,media=disk,format=qcow2,if=virtio,snapshot={bool_arg(args.snapshot)}",
-    ]
+    # sudo qemu-img create hdd.raw 128G
+    if args.image.endswith(".raw"):
+        qemu_args += [
+            "-drive", f"file={args.image},index=0,media=disk,format=raw,if=virtio,snapshot={bool_arg(args.snapshot)}",
+        ]
+    else: # assume qcow2
+        qemu_args += [
+            "-drive", f"file={args.image},index=0,media=disk,format=qcow2,if=virtio,snapshot={bool_arg(args.snapshot)}",
+        ]
+
+    if args.cdrom:
+        qemu_args += [
+            "-cdrom", args.cdrom,
+            "-boot", "d"
+        ]
 
     qemu_args += args.extra_args
 
@@ -312,6 +437,8 @@ def main():
 
     if watchdog_pid:
         os.kill(watchdog_pid, signal.SIGTERM)
+
+    tmpdir.cleanup()
 
     return res.returncode
 
