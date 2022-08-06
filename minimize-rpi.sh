@@ -89,7 +89,7 @@ pre=""
 post=""
 
 for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '{print \$NF}' | grep -v ext4"); do
-  if [[ "$i" == */dma/*.ko.xz ]]; then
+  if [[ "$i" == */cifs_arc4.ko.xz ]]; then
     tested="false"
   fi
 
@@ -241,18 +241,11 @@ for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '
      [[ $i == */gre.ko.xz ]] ||
      [[ $i == */ip6_udp_tunnel.ko.xz ]] ||
      [[ $i == */libarc4.ko.xz ]] ||
-     [[ $i == */libcrc32c.ko.xz ]] ||
      [[ $i == */libcxgb.ko.xz ]] ||
      [[ $i == */lz4_compress.ko.xz ]] ||
      [[ $i == */mac80211.ko.xz ]] ||
-     [[ $i == */nvme-core.ko.xz ]] ||
      [[ $i == */pci-hyperv-intf.ko.xz ]] ||
-     [[ $i == */phy-tegra-xusb.ko.xz ]] ||
-     [[ $i == */qed.ko.xz ]] ||
-     [[ $i == */reed_solomon.ko.xz ]] ||
      [[ $i == */rfkill.ko.xz ]] ||
-     [[ $i == */sunrpc.ko.xz ]] ||
-     [[ $i == */tls.ko.xz ]] ||
      [[ $i == */vmw_vsock_virtio_transport_common.ko.xz ]] ||
      [[ $i == */vsock.ko.xz ]] ||
      [[ $i == */crypto/*.ko.xz ]] ||
@@ -260,12 +253,30 @@ for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '
      [[ $i == *virtio*.ko.xz ]] ||
      [[ $i == *serio*.ko.xz ]] ||
      [[ $i == */dma/*.ko.xz ]] ||
-     [[ $i == *videobuf*.ko.xz ]]; then
+     [[ $i == *videobuf*.ko.xz ]] ||
+     [[ $i == */regmap-spmi.ko.xz ]] ||
+     [[ $i == */sdhci-pltfm.ko.xz ]] ||
+     [[ $i == */hid-sjoy.ko.xz ]] ||
+     [[ $i == */asn1_encoder.ko.xz ]] ||
+     [[ $i == */auth_rpcgss.ko.xz ]] ||
+     [[ $i == */bluetooth.ko.xz ]] ||
+     [[ $i == */cec.ko.xz ]] ||
+     [[ $i == */cfg80211.ko.xz ]] ||
+     [[ $i == */cordic.ko.xz ]] ||
+     [[ $i == */cxgb4.ko.xz ]] ||
+     [[ $i == */dns_resolver.ko.xz ]] ||
+     [[ $i == */failover.ko.xz ]] ||
+     [[ $i == */gre.ko.xz ]] ||
+     [[ $i == */ip6_udp_tunnel.ko.xz ]] ||
+     [[ $i == */libarc4.ko.xz ]] ||
+     [[ $i == */libcxgb.ko.xz ]] ||
+     [[ $i == */libdes.ko.xz ]] ||
+     [[ $i == */libpoly1305.ko.xz ]]; then
     echo "skipping: '$i'"
     continue
   fi
 
-  if ! ssh guest@$host "/bin/bash -c '[ -e /$i ]'"; then
+  if ! ssh guest@$host "/bin/bash -c '[ -f /$i ]'"; then
     echo "skipping: '$i'"
     continue
   fi

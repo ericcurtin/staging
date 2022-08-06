@@ -23,9 +23,11 @@ if [ -z "$dev" ]; then
   echo
 fi
 
+# conv=fsync flushes caches at the end, just to be sure everything is written
+# to disk
 if [[ $img == *.raw.xz ]] || [[ $img == *.img.xz ]]; then
-  xzcat $img | sudo dd of=$dev bs=4M status=progress
+  xzcat $img | sudo dd of=$dev bs=4M status=progress conv=fsync
 else
-  sudo dd if=$img of=$dev bs=4M status=progress
+  sudo dd if=$img of=$dev bs=4M status=progress conv=fsync
 fi
 
