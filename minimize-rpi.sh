@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 host="192.168.1.136"
 
@@ -25,7 +25,7 @@ ssh guest@$host "cd git/libcamera && meson build --prefix=/usr && ninja -v -C bu
 perf="sudo systemd-analyze && sudo du -sh /boot/initramfs* &&"
 ssh guest@$host "cd git/twincam && meson build --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install && $perf sudo ./install-minimal.sh"
 
-s="62"
+s="61"
 echo "initial boot time"
 ssh guest@$host "sudo mkdir -p /root/modules && $perf sudo reboot" || true
 echo "rebooting and sleeping for $s seconds"
@@ -294,4 +294,14 @@ for i in $(ssh guest@$host "sudo lsinitrd -s | grep -i lib/modules | tac | awk '
     sleep $s
   fi
 done
+
+pre="$perf"
+post="&& sudo dracut -f && sudo reboot"
+
+ssh guest@$host "$pre true $post" || true
+echo "rebooting and sleeping for $s seconds"
+echo
+sleep $s
+
+ssh guest@$host "$pre true" || true
 
