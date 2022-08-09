@@ -5,7 +5,7 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
-export PATH="$HOME/git/sample-images/osbuild-manifests:$HOME/go/bin:$HOME/git/staging:$HOME/git/dns:/var/lib/snapd/snap/bin:$HOME/.local/bin:$HOME/bin:$PATH"
+export PATH="$HOME/go/bin:$HOME/git/staging:$HOME/git/dns:/var/lib/snapd/snap/bin:$HOME/.local/bin:$HOME/bin:$PATH"
 
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
