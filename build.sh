@@ -83,6 +83,7 @@ elif [ -f "Cargo.lock" ]; then
 elif [ -f "Makefile" ] && [ -f "Kbuild" ] && [ -f "Kconfig" ]; then
   # sudo dnf install -y 'dnf-command(config-manager)'
   # sudo dnf config-manager --set-enabled crb
+  # sudo dnf install -y epel-release
   # sudo dnf -y install ncurses-devel flex bison elfutils-libelf-devel dwarves ccache zstd bc rpm-build bpftool gcc perl-devel perl-generators python3-devel elfutils-devel the_silver_searcher openssl-devel openssl system-sb-certs dracut linux-firmware binutils-devel gcc-plugin-devel glibc-static libcap-devel libcap-ng-devel libmnl-devel llvm nss-tools numactl-devel pesign python3-docutils libbpf-devel
   if [ -e "/boot/dtb" ]; then
     cmd="if [ ! -f '.config' ]; then cp /boot/config-\$(uname -r) .; fi && make olddefconfig && make -j$njobs && make -j$njobs modules && sudo make modules_install && sudo make dtbs_install && sudo make install"
