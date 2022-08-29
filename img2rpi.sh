@@ -76,12 +76,9 @@ if [[ $dnf =~ ^[Yy]$ ]]; then
   sudo cp $(which qemu-aarch64-static) $root/usr/bin
   resolv="$root/etc/resolv.conf"
   hosts="$root/etc/hosts"
-  sudo cp $resolv /tmp/resolv.conf
-  sudo cp $hosts /tmp/hosts
-  sudo /bin/bash -c "echo -e 'nameserver 8.8.8.8\nnameserver 8.8.4.4' > $resolv"
-  sudo /bin/bash -c "echo -e '127.0.0.1 localhost' > $hosts"
   sudo systemd-nspawn -D $root qemu-aarch64-static /bin/env -i TERM="$TERM" \
-    PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /bin/bash -c "dnf install -y \
+    PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /bin/bash -c "echo -e 'nameserver 8.8.8.8\nnameserver 8.8.4.4' > $resolv && \
+      echo -e '127.0.0.1 localhost' > $host && dnf install -y \
       git gcc g++ libevent libevent-devel openssl openssl-devel gnutls \
       gnutls-devel meson boost boost-devel python3-jinja2 python3-ply \
       python3-yaml libdrm libdrm-devel doxygen cmake graphviz drm-utils \
