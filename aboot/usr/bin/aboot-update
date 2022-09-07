@@ -1,0 +1,111 @@
+#!/usr/bin/bash
+
+set -eu
+
+usage() {
+    echo "Usage:"
+    echo "  aboot-update [OPTION...] KERNEL_VERSION"
+    echo
+    echo "Options:"
+    echo "  -r,--root PATH          - The location for the root directory where images are stored"
+    echo "  -d,--destination PATH   - Write image to this file/device (not in --root)"
+    echo
+}
+
+DESTINATION=
+ROOTDIR=
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -d|--destination)
+      DESTINATION="$2"
+      shift 2
+      ;;
+    -r|--root)
+      ROOTDIR="$2"
+      shift 2
+      ;;
+    -*|--*)
+      usage
+      echo "Unknown option $1"
+      exit 1
+      ;;
+    *)
+      break;
+      ;;
+  esac
+done
+
+if [[ $# -lt 1 ]]; then
+    usage
+    echo "error: No kernel version specified"
+    exit 1
+fi
+
+KERNEL_VERSION="$1"
+
+BOOT_DIR=$ROOTDIR/boot
+ABOOT_CONFIG=$BOOT_DIR/aboot.cfg
+
+MAKE_LINK=no
+if [ "$DESTINATION" == "" ]; then
+    DESTINATION="$BOOT_DIR/aboot-$KERNEL_VERSION.img"
+    MAKE_LINK=yes
+fi
+
+# Defaults (from mkbootimg)
+PAGESIZE=2048
+BASE=0x10000000
+KERNEL_OFFSET=0x00008000
+RAMDISK_OFFSET=0x01000000
+TAGS_OFFSET=0x00000100
+SECOND_OFFSET=0x00f00000
+DTB_OFFSET=0x01f00000
+DTB_FILE=
+CMDLINE=
+
+if [ -f "$ABOOT_CONFIG" ]; then
+    source "$ABOOT_CONFIG"
+fi
+
+KERNEL_ADDR=$(( $BASE + $KERNEL_OFFSET ))
+RAMDISK_ADDR=$(( $BASE + $RAMDISK_OFFSET ))
+TAGS_ADDR=$(( $BASE + $TAGS_OFFSET ))
+SECOND_ADDR=$(( $BASE + $SECOND_OFFSET ))
+DTB_ADDR=$(( $BASE + $DTB_OFFSET ))
+
+PAGESIZE_ARGS="-c pagesize=$PAGESIZE"
+ADDR_ARGS="-c kerneladdr=$KERNEL_ADDR -c ramdiskaddr=$RAMDISK_ADDR -c tagsaddr=$TAGS_ADDR -c secondaddr=$SECOND_ADDR"
+
+KERNEL=vmlinuz-$KERNEL_VERSION
+INITRD=initramfs-$KERNEL_VERSION.img
+DTB_DIR=$BOOT_DIR/dtb-$KERNEL_VERSION
+
+if [ "$CMDLINE" ==  "" ]; then
+    if [[ -f $ROOTDIR/etc/kernel/cmdline ]]; then
+        CMDLINE=$(cat $ROOTDIR/etc/kernel/cmdline)
+    elif [[ -f $ROOTDIR/usr/lib/kernel/cmdline ]]; then
+        CMDLINE=$(cat $ROOTDIR/usr/lib/kernel/cmdline)
+    elif [[ -f $ROOTDIR/proc/cmdline ]]; then
+        CMDLINE=$(cat $ROOTDIR/proc/cmdline)
+    fi
+fi
+
+DTB_ARGS=""
+if [ "$DTB_FILE" != "" ]; then
+    DTB_ARGS="-d $DTB_DIR/$DTB_FILE -c dtbaddr=$DTB_ADDR"
+fi
+
+INITRD_ARGS=""
+if [[ -f $BOOT_DIR/$INITRD ]]; then
+    INITRD_ARGS="-r $BOOT_DIR/$INITRD"
+fi
+
+set -x
+
+abootimg --create "$DESTINATION" $PAGESIZE_ARGS $ADDR_ARGS $INITRD_ARGS -k "$BOOT_DIR/$KERNEL"  -c "cmdline = $CMDLINE" $DTB_ARGS
+
+if [ "$MAKE_LINK" == "yes" ]; then
+    # Update symlink to latest version
+    ln -sf aboot-$KERNEL_VERSION.img $BOOT_DIR/aboot.img
+fi

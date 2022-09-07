@@ -1,0 +1,48 @@
+#!/usr/bin/python3
+"""
+Update the aboot image based
+
+Create a /boot/aboot-$kernel_version based on the configuration from
+/boot/aboot.cfg
+
+Notes:
+  - Requires 'abootimg' in the buildroot.
+"""
+
+
+import shutil
+import subprocess
+import sys
+
+import osbuild.api
+
+
+SCHEMA_2 = """
+"options": {
+  "additionalProperties": false,
+  "required": ["kernel"],
+  "properties": {
+    "kernel": {
+      "description": "The version of the kernel",
+      "type": "string"
+    }
+  }
+}
+"""
+
+
+def main(tree, options):
+    kernel = options.get("kernel")
+
+    cmd = [ "/usr/bin/aboot-update", "-r", tree ]
+
+    cmd += [ kernel  ]
+
+    subprocess.run(cmd, check=True)
+
+    return 0
+
+if __name__ == '__main__':
+    args = osbuild.api.arguments()
+    r = main(args["tree"], args["options"])
+    sys.exit(r)
