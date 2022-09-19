@@ -86,9 +86,8 @@ elif [ -f "Makefile" ] && [ -f "Kbuild" ] && [ -f "Kconfig" ]; then
   # sudo dnf install -y epel-release
   # sudo dnf -y install ncurses-devel flex bison elfutils-libelf-devel dwarves ccache zstd bc rpm-build bpftool gcc perl-devel perl-generators python3-devel elfutils-devel the_silver_searcher openssl-devel openssl dracut linux-firmware binutils-devel gcc-plugin-devel glibc-static libcap-devel libcap-ng-devel libmnl-devel llvm nss-tools numactl-devel pesign python3-docutils libbpf-devel
   # sudo dnf -y install system-sb-certs
-  if [ -e "/boot/dtb" ]; then
-    cmd="if [ ! -f '.config' ]; then cp /boot/config-\$(uname -r) .; fi && make olddefconfig && make -j$njobs && make -j$njobs modules && sudo make modules_install && sudo make dtbs_install && sudo make install"
-#    cd /boot
+  if [ -e "/boot/dtb" ] || [ -e "/boot/dtbs" ]; then
+    cmd="if [ ! -f '.config' ]; then cp /boot/config-\$(uname -r) .; fi && make olddefconfig && make -j$njobs && make -j$njobs modules && sudo make modules_install && sudo make dtbs_install && sudo make install && cd /boot && ln -sf dtbs dtb"
 #    to_link=$(for i in $(ls -t | grep dtb); do if [ -d "$i" ]; then echo $i; break; fi; done)
 #    sudo ln -sf $to_link dtb
 # make dist-srpm
