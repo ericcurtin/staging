@@ -96,7 +96,6 @@
 -rw-r--r--. 1 root root  15292 Jul 18 20:57 gspca_stv0680.ko.xz
 -rw-r--r--. 1 root root  15284 Jul 18 20:57 gspca_sq905c.ko.xz
 -rw-r--r--. 1 root root  15108 Jul 18 20:57 tcm_loop.ko.xz
--rw-r--r--. 1 root root  14940 Jul 18 20:57 zram.ko.xz
 -rw-r--r--. 1 root root  14820 Jul 18 20:57 gspca_tv8532.ko.xz
 -rw-r--r--. 1 root root  14780 Jul 18 20:57 gspca_finepix.ko.xz
 -rw-r--r--. 1 root root  14724 Jul 18 20:57 gspca_benq.ko.xz
