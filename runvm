@@ -5,5 +5,5 @@ set -e
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 nohup socat TCP-LISTEN:8022,reuseaddr,fork TCP:localhost:2222 &
-$SCRIPT_DIR/../sample-images/osbuild-manifests/runvm --memory 4G --nographics $@
+$SCRIPT_DIR/../sample-images/osbuild-manifests/runvm --memory 4G $@
 

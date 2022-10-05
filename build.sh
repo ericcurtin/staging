@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 host="$1"
 njobs=6
