@@ -21,7 +21,7 @@ task3() {
   rm -rf *.tar.xz
   tar -cJf libostree-2022.5.tar.xz *
   cd -
-  cp ~/git/ostree/* /home/ecurtin/rpmbuild/SOURCES/
+  cp ~/git/ostree/* /home/ecurtin/rpmbuild/SOURCES/ || true
   sudo rm -rf /home/ecurtin/rpmbuild/SRPMS/ostree*.src.rpm
   rpmbuild -bs ostree.spec
 }
@@ -35,6 +35,8 @@ wait
 sudo mock -r centos-stream+epel-9-aarch64 --rebuild /home/ecurtin/rpmbuild/SRPMS/aboot-update-0.1-2.fc36.src.rpm
 cp /var/lib/mock/centos-stream+epel-9-aarch64/result/* /home/ecurtin/rpmbuild/RPMS/
 sudo mock -a https://buildlogs.centos.org/9-stream/automotive/aarch64/packages-main/ -a https://buildlogs.centos.org/9-stream/autosd/aarch64/packages-main/ -r centos-stream+epel-9-aarch64 --rebuild /home/ecurtin/rpmbuild/SRPMS/autosig-qemu-dtb-0.1-3.fc36.src.rpm
+cp /var/lib/mock/centos-stream+epel-9-aarch64/result/* /home/ecurtin/rpmbuild/RPMS/
+sudo mock -a https://buildlogs.centos.org/9-stream/automotive/aarch64/packages-main/ -a https://buildlogs.centos.org/9-stream/autosd/aarch64/packages-main/ -r centos-stream+epel-9-aarch64 --rebuild /home/ecurtin/rpmbuild/SRPMS/ostree*.fc36.src.rpm
 cp /var/lib/mock/centos-stream+epel-9-aarch64/result/* /home/ecurtin/rpmbuild/RPMS/
 
 cd /home/ecurtin/rpmbuild/RPMS/
