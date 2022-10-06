@@ -20,8 +20,7 @@ task3() {
   cd ~/git/ostree/
   rm -rf *.tar.xz
   tar -cJf libostree-2022.5.tar.xz *
-  cd -
-  cp ~/git/ostree/* /home/ecurtin/rpmbuild/SOURCES/ || true
+  cp * /home/ecurtin/rpmbuild/SOURCES/ || true
   sudo rm -rf /home/ecurtin/rpmbuild/SRPMS/ostree*.src.rpm
   rpmbuild -bs ostree.spec
 }
