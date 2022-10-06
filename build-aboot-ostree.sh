@@ -27,8 +27,8 @@ task3() {
 
 sudo rm -rf /var/lib/mock/centos-stream+epel-9-aarch64/result
 cd /home/ecurtin/rpmbuild/SOURCES/
-task1 &
-task2 &
+# task1 &
+# task2 &
 task3 &
 wait
 
