@@ -23,6 +23,7 @@ task3() {
   rm -rf *.tar.xz
   rm -rf /home/ecurtin/rpmbuild/SOURCES/libostree-2022.5
   mkdir -p /home/ecurtin/rpmbuild/SOURCES/libostree-2022.5
+  git submodule update --init
   cp -r * /home/ecurtin/rpmbuild/SOURCES/libostree-2022.5/
   cd /home/ecurtin/rpmbuild/SOURCES/
   tar -cJf libostree-2022.5.tar.xz libostree-2022.5
