@@ -21,7 +21,7 @@ task3() {
   rm -rf *.tar.xz
   rm -rf /home/ecurtin/rpmbuild/SOURCES/libostree-2022.5
   mkdir -p /home/ecurtin/rpmbuild/SOURCES/libostree-2022.5
-  cp * /home/ecurtin/rpmbuild/SOURCES/libostree-2022.5/ || true
+  cp -r * /home/ecurtin/rpmbuild/SOURCES/libostree-2022.5/
   cd /home/ecurtin/rpmbuild/SOURCES/
   tar -cJf libostree-2022.5.tar.xz libostree-2022.5
   sudo rm -rf /home/ecurtin/rpmbuild/SRPMS/ostree*.src.rpm
