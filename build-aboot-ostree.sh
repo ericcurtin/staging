@@ -41,6 +41,14 @@ task4() {
   sudo podman run --rm --privileged -v /home/ecurtin/rpmbuild/:/home/ecurtin/rpmbuild/ -ti conmock /bin/bash -c "mock -r centos-stream+epel-9-aarch64 --rebuild --resultdir /var/lib/mock/centos-stream+epel-9-aarch64/aboot-deploy/ /home/ecurtin/rpmbuild/SRPMS/aboot-deploy*.src.rpm && cp /var/lib/mock/centos-stream+epel-9-aarch64/aboot-deploy/* /home/ecurtin/rpmbuild/RPMS"
 }
 
+build-osbuild-aboot() {
+  cd ~/git/osbuild-aboot
+  cp * /home/ecurtin/rpmbuild/SOURCES/
+  sudo rm -rf /home/ecurtin/rpmbuild/SRPMS/osbuild-aboot*.src.rpm
+  rpmbuild -bs aboot-deploy.spec
+  sudo podman run --rm --privileged -v /home/ecurtin/rpmbuild/:/home/ecurtin/rpmbuild/ -ti conmock /bin/bash -c "mock --rebuild --resultdir /var/lib/mock/centos-stream+epel-9-aarch64/osbuild-aboot/ /home/ecurtin/rpmbuild/SRPMS/osbuild-aboot*.src.rpm && cp /var/lib/mock/centos-stream+epel-9-aarch64/osbuild-aboot/* /home/ecurtin/rpmbuild/RPMS"
+}
+
 cd ~/git/staging
 sudo podman build -t conmock -f Mockfile
 
@@ -50,6 +58,7 @@ task1 &
 task2 &
 task3 &
 task4 &
+build-osbuild-aboot &
 wait
 
 cd /home/ecurtin/rpmbuild/RPMS/
