@@ -30,7 +30,7 @@ task3() {
   sudo rm -rf /home/ecurtin/rpmbuild/SRPMS/ostree*.src.rpm
   rpmbuild -bs ostree.spec
   sudo podman run --rm --privileged -v /home/ecurtin/rpmbuild/:/home/ecurtin/rpmbuild/ -ti conmock /bin/bash -c "mock -a https://buildlogs.centos.org/9-stream/automotive/aarch64/packages-main/ -a https://buildlogs.centos.org/9-stream/autosd/aarch64/packages-main/ -r centos-stream+epel-9-aarch64 --rebuild --resultdir /var/lib/mock/centos-stream+epel-9-aarch64/ostree/ /home/ecurtin/rpmbuild/SRPMS/ostree*.fc36.src.rpm && cp /var/lib/mock/centos-stream+epel-9-aarch64/ostree/* /home/ecurtin/rpmbuild/RPMS" &
-  sudo mock --rebuild /home/ecurtin/rpmbuild/SRPMS/ostree*.fc36.src.rpm
+#  sudo mock --rebuild /home/ecurtin/rpmbuild/SRPMS/ostree*.fc36.src.rpm
 }
 
 task4() {
