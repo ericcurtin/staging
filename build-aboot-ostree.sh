@@ -45,7 +45,7 @@ build-osbuild-aboot() {
   cd ~/git/osbuild-aboot
   cp * /home/ecurtin/rpmbuild/SOURCES/
   sudo rm -rf /home/ecurtin/rpmbuild/SRPMS/osbuild-aboot*.src.rpm
-  rpmbuild -bs aboot-deploy.spec
+  rpmbuild -bs osbuild-aboot.spec
   sudo podman run --rm --privileged -v /home/ecurtin/rpmbuild/:/home/ecurtin/rpmbuild/ -ti conmock /bin/bash -c "mock --rebuild --resultdir /var/lib/mock/centos-stream+epel-9-aarch64/osbuild-aboot/ /home/ecurtin/rpmbuild/SRPMS/osbuild-aboot*.src.rpm && cp /var/lib/mock/centos-stream+epel-9-aarch64/osbuild-aboot/* /home/ecurtin/rpmbuild/RPMS"
 }
 
