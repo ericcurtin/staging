@@ -61,6 +61,10 @@ task4 &
 build-osbuild-aboot &
 wait
 
+sudo rpm -Uvh --force /home/ecurtin/rpmbuild/RPMS/osbuild-aboot*.noarch.rpm &
+
 cd /home/ecurtin/rpmbuild/RPMS/
 sudo createrepo .
+
+wait
 
