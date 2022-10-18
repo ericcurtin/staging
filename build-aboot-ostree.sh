@@ -25,6 +25,7 @@ build-ostree() {
   mkdir -p /home/ecurtin/rpmbuild/SOURCES/libostree-2022.5
   git submodule update --init
   cp -r * /home/ecurtin/rpmbuild/SOURCES/libostree-2022.5/
+  cp -r *.spec /home/ecurtin/rpmbuild/SOURCES/
   cd /home/ecurtin/rpmbuild/SOURCES/
   tar -cJf libostree-2022.5.tar.xz libostree-2022.5
   sudo rm -rf /home/ecurtin/rpmbuild/SRPMS/ostree*.src.rpm
