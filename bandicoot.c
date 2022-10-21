@@ -1,3 +1,7 @@
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE 1
+#endif
+
 #include <ctype.h>
 #include <dlfcn.h>
 #include <errno.h>
@@ -10,13 +14,32 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#define DEMANGLE 1
+
+#define PERR(...)                          \
+  do {                                     \
+    char* str;                             \
+    if (asprintf(&str, __VA_ARGS__) < 0) { \
+      perror("");                          \
+    } else {                               \
+      perror(str);                         \
+      free(str);                           \
+    }                                      \
+  } while (0)
+
 static char* qx(char** cmd, int inc_stderr) {
   int stdout_fds[2];
-  pipe(stdout_fds);
+  if (pipe(stdout_fds) == -1) {
+    PERR("pipe(%p)", stdout_fds);
+    return NULL;
+  }
 
   int stderr_fds[2];
   if (!inc_stderr) {
-    pipe(stderr_fds);
+    if (pipe(stderr_fds) == -1) {
+      PERR("pipe(%p)", stderr_fds);
+      return NULL;
+    }
   }
 
   const pid_t pid = fork();

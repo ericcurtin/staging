@@ -65,6 +65,7 @@ wait
 sudo rpm -Uvh --force /home/ecurtin/rpmbuild/RPMS/osbuild-aboot*.noarch.rpm &
 
 cd /home/ecurtin/rpmbuild/RPMS/
+sudo rm -rf repodata
 sudo createrepo .
 
 wait
