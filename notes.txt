@@ -1,0 +1,20 @@
+In file included from drivers/accessibility/speakup/makemapdata.c:15:
+drivers/accessibility/speakup/utils.h: In function 'hash_name':
+drivers/accessibility/speakup/utils.h:57:9: error: unknown type name 'u_char'; did you mean 'char'?
+   57 |         u_char *pn = (u_char *)name;
+      |         ^~~~~~
+      |         char
+drivers/accessibility/speakup/utils.h:57:23: error: 'u_char' undeclared (first use in this function); did you mean 'putchar'?
+   57 |         u_char *pn = (u_char *)name;
+      |                       ^~~~~~
+      |                       putchar
+drivers/accessibility/speakup/utils.h:57:23: note: each undeclared identifier is reported only once for each function it appears in
+drivers/accessibility/speakup/utils.h:57:31: error: expected expression before  )' token
+   57 |         u_char *pn = (u_char *)name;
+      |                               ^
+make[4]: *** [scripts/Makefile.host:128: drivers/accessibility/speakup/makemapdata.o] Error 1
+make[3]: *** [scripts/Makefile.build:500: drivers/accessibility/speakup] Error 2
+make[2]: *** [scripts/Makefile.build:500: drivers/accessibility] Error 2
+make[1]: *** [scripts/Makefile.build:500: drivers] Error 2
+make: *** [Makefile:2002: .] Error 2
+
