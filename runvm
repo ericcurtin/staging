@@ -2,6 +2,11 @@
 
 set -e
 
+if ! [ -e "${@: -1}" ]; then
+  echo "${@: -1} doesn't exist"
+  exit 1
+fi
+
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 nohup socat TCP-LISTEN:8022,reuseaddr,fork TCP:localhost:2222 &
