@@ -36,7 +36,7 @@ def main(tree, options):
 
     cmd = [ "/usr/bin/aboot-update", "-r", tree ]
 
-    cmd += [ kernel  ]
+    cmd += [ kernel ]
 
     subprocess.run(cmd, check=True)
 
