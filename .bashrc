@@ -34,7 +34,7 @@ update() {
     sudo dnf upgrade -y
   elif [ "$this_update_rem" -eq "2" ]; then
     zoom_url="https://zoom.us/client/latest/zoom_x86_64.rpm"
-    last_modified=$(curl -I -L "$zoom_url" 2>&1 | grep "^Last-Modified:")
+    last_modified=$(curl -I -L "$zoom_url" 2>&1 | grep -i "^Last-Modified:")
     if [ "$(cat /etc/zoom-last.txt)" != "$last_modified" ]; then
       curl -LO https://zoom.us/client/latest/zoom_x86_64.rpm
       sudo dnf install -y /tmp/zoom_x86_64.rpm
