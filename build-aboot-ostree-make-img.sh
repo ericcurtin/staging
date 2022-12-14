@@ -2,10 +2,18 @@
 
 set -ex
 
-cd ~/git/sample-images/osbuild-manifests
+un=$(id -un)
 
+cd ~/git/sample-images/osbuild-manifests/
 EPOCH=$(date +%s)
-IMG="cs9-abootqemu-minimal-ostree"
-# IMG="cs9-abootqemu-minimal-regular"
-nohup /bin/bash -c "../../staging/build-aboot-ostree.sh > ~/build-aboot-ostree$EPOCH.txt 2>&1 && sudo make $IMG.aarch64.qcow2 > ~/$IMG$EPOCH.txt 2>&1" &
+../../staging/build-aboot-ostree.sh > ~/build-aboot-ostree$EPOCH.txt 2>&1
+
+# type_img="qemu-minimal-ostree"
+type_img="abootqemu-minimal-ostree"
+# type_img="abootqemu-minimal-regular"
+img="cs9-$type_img.aarch64.qcow2"
+
+# sudo make cs9-abootqemu-minimal-ostree.aarch64.qcow2 > ~/abootqemu-ostree$EPOCH.txt 2>&1
+sudo make $img > ~/$type_img$EPOCH.txt 2>&1
+sudo chown $un:$un $img
 
