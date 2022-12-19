@@ -54,12 +54,13 @@ cd ~/git/staging
 sudo podman build -t conmock -f Mockfile
 
 sudo rm -rf /var/lib/mock/centos-stream+epel-9-aarch64/result
+mkdir -p /home/ecurtin/rpmbuild/SOURCES/
 cd /home/ecurtin/rpmbuild/SOURCES/
-# build-aboot-update &
-# build-autosig-qemu-dtb &
+build-aboot-update &
+build-autosig-qemu-dtb &
 build-ostree &
 build-aboot-deploy &
-# build-osbuild-aboot &
+build-osbuild-aboot &
 wait
 
 sudo rpm -Uvh --force /home/ecurtin/rpmbuild/RPMS/osbuild-aboot*.noarch.rpm &
