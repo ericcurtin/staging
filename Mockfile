@@ -1,7 +1,7 @@
 FROM centos:stream9
 
 RUN dnf update -y
-RUN dnf install -y 'dnf-command(config-manager)'
+RUN dnf install -y 'dnf-command(config-manager)' epel-release
 RUN dnf config-manager --add-repo https://buildlogs.centos.org/9-stream/automotive/aarch64/packages-main/
 RUN dnf config-manager --add-repo https://buildlogs.centos.org/9-stream/autosd/aarch64/packages-main/
 RUN dnf install -y mock cpio qemu-kvm autosig-u-boot
