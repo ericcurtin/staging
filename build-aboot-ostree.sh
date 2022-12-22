@@ -37,8 +37,10 @@ build-ostree() {
   tar -cJf libostree-2022.5.tar.xz libostree-2022.5
   sudo rm -rf /home/ecurtin/rpmbuild/SRPMS/ostree*.src.rpm
   rpmbuild -bs ostree.spec
-  sudo podman run --rm --privileged -v /home/ecurtin/rpmbuild/:/home/ecurtin/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/ecurtin/rpmbuild/SRPMS/ostree*.*.src.rpm && cp $rpmbuild_dir/*/* /home/ecurtin/rpmbuild/RPMS"
-#  sudo mock --rebuild /home/ecurtin/rpmbuild/SRPMS/ostree*.fc36.src.rpm
+  sudo podman run --rm --privileged -v /home/ecurtin/rpmbuild/:/home/ecurtin/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/ecurtin/rpmbuild/SRPMS/ostree*.*.src.rpm && cp $rpmbuild_dir/*/* /home/ecurtin/rpmbuild/RPMS" &
+  sudo mock --rebuild /home/ecurtin/rpmbuild/SRPMS/ostree*.*.src.rpm
+  sudo rpm -Uvh --force /var/lib/mock/*-aarch64/result/ostree-2*.*.*.aarch64.rpm /var/lib/mock/*-aarch64/result/ostree-libs-2*.*.*.aarch64.rpm
+  wait
 }
 
 build-aboot-deploy() {
