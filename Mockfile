@@ -7,6 +7,6 @@ RUN dnf config-manager --add-repo https://buildlogs.centos.org/9-stream/automoti
 RUN dnf config-manager --add-repo https://buildlogs.centos.org/9-stream/autosd/aarch64/packages-main/
 RUN dnf install -y --nogpgcheck mock cpio qemu-kvm autosig-u-boot rpm-build \
   autoconf automake bison dracut git gpgme-devel gtk-doc libattr-devel \
-  libcap-devel libtool make openssl-devel e2p fuse libarchive libcurl liblzma \
-  libselinux libsoup libsystemd mount zlib
+  libcap-devel libtool make openssl-devel fuse libarchive libcurl libselinux \
+  libsoup zlib
 
