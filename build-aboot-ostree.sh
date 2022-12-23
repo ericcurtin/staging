@@ -9,7 +9,7 @@ usergroupadd="groupadd -g $GID $GROUP && useradd -M -s /bin/bash -g $GID -u $UID
 
 nohup sudo dnf clean all &
 
-rpmbuild_dir="/root/rpmbuild/RPMS/"
+rpmbuild_dir="/root/rpmbuild/RPMS"
 
 build-aboot-update() {
   cp ~/git/aboot-update/* /home/ecurtin/rpmbuild/SOURCES/
@@ -22,7 +22,7 @@ build-autosig-qemu-dtb() {
   cp ~/git/autosig-qemu-dtb/* /home/ecurtin/rpmbuild/SOURCES/
   sudo rm -rf /home/ecurtin/rpmbuild/SRPMS/autosig*.src.rpm
   rpmbuild -bs autosig-qemu-dtb.spec
-  sudo podman run --rm --privileged -v /home/ecurtin/rpmbuild/:/home/ecurtin/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/ecurtin/rpmbuild/SRPMS/autosig-qemu-dtb-0.1-3.*.src.rpm && cp $rpmbuild_dir/*/* /home/ecurtin/rpmbuild/RPMS/"
+  sudo podman run --rm --privileged -v /home/ecurtin/rpmbuild/:/home/ecurtin/rpmbuild/ -ti conmock-fedora /bin/bash -c "mock -a https://buildlogs.centos.org/9-stream/automotive/aarch64/packages-main/ -a https://buildlogs.centos.org/9-stream/autosd/aarch64/packages-main/ -r centos-stream+epel-9-aarch64 --rebuild --resultdir /var/lib/mock/centos-stream+epel-9-aarch64/autosig-qemu-dtb/ /home/ecurtin/rpmbuild/SRPMS/autosig-qemu-dtb-0.1-3.*.src.rpm && cp /var/lib/mock/centos-stream+epel-9-aarch64/autosig-qemu-dtb/* /home/ecurtin/rpmbuild/RPMS/"
 }
 
 build-ostree() {
@@ -60,7 +60,10 @@ build-osbuild-aboot() {
 }
 
 cd ~/git/staging
-sudo podman build -t conmock -f Mockfile
+sudo podman build -t conmock -f Mockfile &
+sudo podman build -t conmock-fedora -f Mockfile-fedora &
+
+wait
 
 sudo rm -rf /var/lib/mock/centos-stream+epel-9-aarch64/result
 mkdir -p /home/ecurtin/rpmbuild/SOURCES/

@@ -1,0 +1,5 @@
+FROM fedora:37
+
+RUN dnf update -y
+RUN dnf install -y mock cpio qemu-kvm rpm-build
+
