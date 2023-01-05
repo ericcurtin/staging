@@ -5,6 +5,7 @@ set -ex
 USER=$(id -un)
 GID=$(id -g)
 GROUP=$(id -gn)
+uname_m=$(uname -m)
 usergroupadd="groupadd -g $GID $GROUP && useradd -M -s /bin/bash -g $GID -u $UID $USER"
 
 nohup sudo dnf clean all &
@@ -22,7 +23,7 @@ build-autosig-qemu-dtb() {
   cp ~/git/autosig-qemu-dtb/* /home/ecurtin/rpmbuild/SOURCES/
   sudo rm -rf /home/ecurtin/rpmbuild/SRPMS/autosig*.src.rpm
   rpmbuild -bs autosig-qemu-dtb.spec
-  sudo podman run --rm --privileged -v /home/ecurtin/rpmbuild/:/home/ecurtin/rpmbuild/ -ti conmock-fedora /bin/bash -c "mock -a https://buildlogs.centos.org/9-stream/automotive/aarch64/packages-main/ -a https://buildlogs.centos.org/9-stream/autosd/aarch64/packages-main/ -r centos-stream+epel-9-aarch64 --rebuild --resultdir /var/lib/mock/centos-stream+epel-9-aarch64/autosig-qemu-dtb/ /home/ecurtin/rpmbuild/SRPMS/autosig-qemu-dtb-0.1-3.*.src.rpm && cp /var/lib/mock/centos-stream+epel-9-aarch64/autosig-qemu-dtb/* /home/ecurtin/rpmbuild/RPMS/"
+  sudo podman run --rm --privileged -v /home/ecurtin/rpmbuild/:/home/ecurtin/rpmbuild/ -ti conmock-fedora /bin/bash -c "mock -a https://buildlogs.centos.org/9-stream/automotive/$uname_m/packages-main/ -a https://buildlogs.centos.org/9-stream/autosd/$uname_m/packages-main/ -r centos-stream+epel-9-$uname_m --rebuild --resultdir /var/lib/mock/centos-stream+epel-9-$uname_m/autosig-qemu-dtb/ /home/ecurtin/rpmbuild/SRPMS/autosig-qemu-dtb-0.1-3.*.src.rpm && cp /var/lib/mock/centos-stream+epel-9-$uname_m/autosig-qemu-dtb/* /home/ecurtin/rpmbuild/RPMS/"
 }
 
 build-ostree() {
@@ -39,7 +40,7 @@ build-ostree() {
   rpmbuild -bs ostree.spec
   sudo podman run --rm --privileged -v /home/ecurtin/rpmbuild/:/home/ecurtin/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/ecurtin/rpmbuild/SRPMS/ostree*.*.src.rpm && cp $rpmbuild_dir/*/* /home/ecurtin/rpmbuild/RPMS" &
   sudo mock --rebuild /home/ecurtin/rpmbuild/SRPMS/ostree*.*.src.rpm
-  sudo rpm -Uvh --force /var/lib/mock/*-aarch64/result/ostree-2*.*.*.aarch64.rpm /var/lib/mock/*-aarch64/result/ostree-libs-2*.*.*.aarch64.rpm
+  sudo rpm -Uvh --force /var/lib/mock/*-$uname_m/result/ostree-2*.*.*.$uname_m.rpm /var/lib/mock/*-$uname_m/result/ostree-libs-2*.*.*.$uname_m.rpm
   wait
 }
 
@@ -65,7 +66,7 @@ sudo podman build -t conmock-fedora -f Mockfile-fedora &
 
 wait
 
-sudo rm -rf /var/lib/mock/centos-stream+epel-9-aarch64/result
+sudo rm -rf /var/lib/mock/centos-stream+epel-9-$uname_m/result
 mkdir -p /home/ecurtin/rpmbuild/SOURCES/
 cd /home/ecurtin/rpmbuild/SOURCES/
 build-aboot-update &
