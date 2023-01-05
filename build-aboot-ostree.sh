@@ -13,51 +13,51 @@ nohup sudo dnf clean all &
 rpmbuild_dir="/root/rpmbuild/RPMS"
 
 build-aboot-update() {
-  cp ~/git/aboot-update/* /home/ecurtin/rpmbuild/SOURCES/
-  sudo rm -rf /home/ecurtin/rpmbuild/SRPMS/aboot-update-0.1-2.*.src.rpm
+  cp ~/git/aboot-update/* /home/$USER/rpmbuild/SOURCES/
+  sudo rm -rf /home/$USER/rpmbuild/SRPMS/aboot-update-0.1-2.*.src.rpm
   rpmbuild -bs aboot-update.spec
-  sudo podman run --rm --privileged -v /home/ecurtin/rpmbuild/:/home/ecurtin/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/ecurtin/rpmbuild/SRPMS/aboot-update-0.1-2.*.src.rpm && cp $rpmbuild_dir/*/* /home/ecurtin/rpmbuild/RPMS/"
+  sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/$USER/rpmbuild/SRPMS/aboot-update-0.1-2.*.src.rpm && cp $rpmbuild_dir/*/* /home/$USER/rpmbuild/RPMS/"
 }
 
 build-autosig-qemu-dtb() {
-  cp ~/git/autosig-qemu-dtb/* /home/ecurtin/rpmbuild/SOURCES/
-  sudo rm -rf /home/ecurtin/rpmbuild/SRPMS/autosig*.src.rpm
+  cp ~/git/autosig-qemu-dtb/* /home/$USER/rpmbuild/SOURCES/
+  sudo rm -rf /home/$USER/rpmbuild/SRPMS/autosig*.src.rpm
   rpmbuild -bs autosig-qemu-dtb.spec
-  sudo podman run --rm --privileged -v /home/ecurtin/rpmbuild/:/home/ecurtin/rpmbuild/ -ti conmock-fedora /bin/bash -c "mock -a https://buildlogs.centos.org/9-stream/automotive/$uname_m/packages-main/ -a https://buildlogs.centos.org/9-stream/autosd/$uname_m/packages-main/ -r centos-stream+epel-9-$uname_m --rebuild --resultdir /var/lib/mock/centos-stream+epel-9-$uname_m/autosig-qemu-dtb/ /home/ecurtin/rpmbuild/SRPMS/autosig-qemu-dtb-0.1-3.*.src.rpm && cp /var/lib/mock/centos-stream+epel-9-$uname_m/autosig-qemu-dtb/* /home/ecurtin/rpmbuild/RPMS/"
+  sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock-fedora /bin/bash -c "mock -a https://buildlogs.centos.org/9-stream/automotive/$uname_m/packages-main/ -a https://buildlogs.centos.org/9-stream/autosd/$uname_m/packages-main/ -r centos-stream+epel-9-$uname_m --rebuild --resultdir /var/lib/mock/centos-stream+epel-9-$uname_m/autosig-qemu-dtb/ /home/$USER/rpmbuild/SRPMS/autosig-qemu-dtb-0.1-3.*.src.rpm && cp /var/lib/mock/centos-stream+epel-9-$uname_m/autosig-qemu-dtb/* /home/$USER/rpmbuild/RPMS/"
 }
 
 build-ostree() {
   cd ~/git/ostree/
   rm -rf *.tar.xz
-  rm -rf /home/ecurtin/rpmbuild/SOURCES/libostree*
-  mkdir -p /home/ecurtin/rpmbuild/SOURCES/libostree-2022.5
+  rm -rf /home/$USER/rpmbuild/SOURCES/libostree*
+  mkdir -p /home/$USER/rpmbuild/SOURCES/libostree-2022.5
   git submodule update --init
-  cp -r * /home/ecurtin/rpmbuild/SOURCES/libostree-2022.5/
-  cp -r *.spec /home/ecurtin/rpmbuild/SOURCES/
-  cd /home/ecurtin/rpmbuild/SOURCES/
+  cp -r * /home/$USER/rpmbuild/SOURCES/libostree-2022.5/
+  cp -r *.spec /home/$USER/rpmbuild/SOURCES/
+  cd /home/$USER/rpmbuild/SOURCES/
   tar -cJf libostree-2022.5.tar.xz libostree-2022.5
-  sudo rm -rf /home/ecurtin/rpmbuild/SRPMS/ostree*.src.rpm
+  sudo rm -rf /home/$USER/rpmbuild/SRPMS/ostree*.src.rpm
   rpmbuild -bs ostree.spec
-  sudo podman run --rm --privileged -v /home/ecurtin/rpmbuild/:/home/ecurtin/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/ecurtin/rpmbuild/SRPMS/ostree*.*.src.rpm && cp $rpmbuild_dir/*/* /home/ecurtin/rpmbuild/RPMS" &
-  sudo mock --rebuild /home/ecurtin/rpmbuild/SRPMS/ostree*.*.src.rpm
+  sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/$USER/rpmbuild/SRPMS/ostree*.*.src.rpm && cp $rpmbuild_dir/*/* /home/$USER/rpmbuild/RPMS" &
+  sudo mock --rebuild /home/$USER/rpmbuild/SRPMS/ostree*.*.src.rpm
   sudo rpm -Uvh --force /var/lib/mock/*-$uname_m/result/ostree-2*.*.*.$uname_m.rpm /var/lib/mock/*-$uname_m/result/ostree-libs-2*.*.*.$uname_m.rpm
   wait
 }
 
 build-aboot-deploy() {
   cd ~/git/aboot-deploy
-  cp * /home/ecurtin/rpmbuild/SOURCES/
-  sudo rm -rf /home/ecurtin/rpmbuild/SRPMS/aboot-deploy*.src.rpm
+  cp * /home/$USER/rpmbuild/SOURCES/
+  sudo rm -rf /home/$USER/rpmbuild/SRPMS/aboot-deploy*.src.rpm
   rpmbuild -bs aboot-deploy.spec
-  sudo podman run --rm --privileged -v /home/ecurtin/rpmbuild/:/home/ecurtin/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/ecurtin/rpmbuild/SRPMS/aboot-deploy*.*src.rpm && cp $rpmbuild_dir/*/* /home/ecurtin/rpmbuild/RPMS"
+  sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/$USER/rpmbuild/SRPMS/aboot-deploy*.*src.rpm && cp $rpmbuild_dir/*/* /home/$USER/rpmbuild/RPMS"
 }
 
 build-osbuild-aboot() {
   cd ~/git/osbuild-aboot
-  cp * /home/ecurtin/rpmbuild/SOURCES/
-  sudo rm -rf /home/ecurtin/rpmbuild/SRPMS/osbuild-aboot*.src.rpm
+  cp * /home/$USER/rpmbuild/SOURCES/
+  sudo rm -rf /home/$USER/rpmbuild/SRPMS/osbuild-aboot*.src.rpm
   rpmbuild -bs osbuild-aboot.spec
-  sudo podman run --rm --privileged -v /home/ecurtin/rpmbuild/:/home/ecurtin/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/ecurtin/rpmbuild/SRPMS/osbuild-aboot*.src.rpm && cp $rpmbuild_dir/*/* /home/ecurtin/rpmbuild/RPMS"
+  sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/$USER/rpmbuild/SRPMS/osbuild-aboot*.src.rpm && cp $rpmbuild_dir/*/* /home/$USER/rpmbuild/RPMS"
 }
 
 cd ~/git/staging
@@ -67,8 +67,8 @@ sudo podman build -t conmock-fedora -f Mockfile-fedora &
 wait
 
 sudo rm -rf /var/lib/mock/centos-stream+epel-9-$uname_m/result
-mkdir -p /home/ecurtin/rpmbuild/SOURCES/
-cd /home/ecurtin/rpmbuild/SOURCES/
+mkdir -p /home/$USER/rpmbuild/SOURCES/
+cd /home/$USER/rpmbuild/SOURCES/
 build-aboot-update &
 build-autosig-qemu-dtb &
 build-ostree &
@@ -76,9 +76,9 @@ build-aboot-deploy &
 build-osbuild-aboot &
 wait
 
-sudo rpm -Uvh --force /home/ecurtin/rpmbuild/RPMS/osbuild-aboot*.noarch.rpm &
+sudo rpm -Uvh --force /home/$USER/rpmbuild/RPMS/osbuild-aboot*.noarch.rpm &
 
-cd /home/ecurtin/rpmbuild/RPMS/
+cd /home/$USER/rpmbuild/RPMS/
 sudo rm -rf repodata
 sudo createrepo .
 
