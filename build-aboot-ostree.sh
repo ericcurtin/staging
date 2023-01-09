@@ -32,7 +32,7 @@ fi
   cp ~/git/autosig-qemu-dtb/* /home/$USER/rpmbuild/SOURCES/
   sudo rm -rf /home/$USER/rpmbuild/SRPMS/autosig*.src.rpm
   rpmbuild -bs autosig-qemu-dtb.spec
-  sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpm -Uvh /home/$USER/rpmbuild/RPMS/autosig-u-boot*.rpm && rpmbuild -rb /home/$USER/rpmbuild/SRPMS/autosig-qemu-dtb-*.*.*.src.rpm && cp $rpmbuild_dir/*/* /home/$USER/rpmbuild/RPMS/"
+  sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/$USER/rpmbuild/SRPMS/autosig-qemu-dtb-*.*.*.src.rpm && cp $rpmbuild_dir/*/* /home/$USER/rpmbuild/RPMS/"
 }
 
 build-ostree() {
