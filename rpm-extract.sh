@@ -2,7 +2,7 @@
 
 set -x
 
-abs_fn=$(echo "$(cd "$(dirname -- "$1")" >/dev/null; pwd -P)/$(basename -- "$1")")
+abs_fn=$1
 fn=$(basename $abs_fn)
 dir=$(echo $fn | awk -F'.' '{print $1}')
 

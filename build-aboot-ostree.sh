@@ -20,10 +20,19 @@ build-aboot-update() {
 }
 
 build-autosig-qemu-dtb() {
+if false; then # attempted re-build for x86
+  cd /home/$USER/rpmbuild/SOURCES
+  curl -OL https://source.denx.de/u-boot/u-boot/-/archive/v2022.07/u-boot-v2022.07.tar.gz
+  cp  ~/git/autosig-u-boot/* /home/$USER/rpmbuild/SOURCES/
+  sudo rm -rf /home/$USER/rpmbuild/SRPMS/autosig-u-boot*.src.rpm
+  rpmbuild -bs autosig-u-boot.spec
+  sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/$USER/rpmbuild/SRPMS/autosig-u-boot*.*.*.src.rpm && cp $rpmbuild_dir/*/* /home/$USER/rpmbuild/RPMS/"
+fi
+
   cp ~/git/autosig-qemu-dtb/* /home/$USER/rpmbuild/SOURCES/
   sudo rm -rf /home/$USER/rpmbuild/SRPMS/autosig*.src.rpm
   rpmbuild -bs autosig-qemu-dtb.spec
-  sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock-fedora /bin/bash -c "mock -a https://buildlogs.centos.org/9-stream/automotive/$uname_m/packages-main/ -a https://buildlogs.centos.org/9-stream/autosd/$uname_m/packages-main/ -r centos-stream+epel-9-$uname_m --rebuild --resultdir /var/lib/mock/centos-stream+epel-9-$uname_m/autosig-qemu-dtb/ /home/$USER/rpmbuild/SRPMS/autosig-qemu-dtb-0.1-3.*.src.rpm && cp /var/lib/mock/centos-stream+epel-9-$uname_m/autosig-qemu-dtb/* /home/$USER/rpmbuild/RPMS/"
+  sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpm -Uvh /home/$USER/rpmbuild/RPMS/autosig-u-boot*.rpm && rpmbuild -rb /home/$USER/rpmbuild/SRPMS/autosig-qemu-dtb-*.*.*.src.rpm && cp $rpmbuild_dir/*/* /home/$USER/rpmbuild/RPMS/"
 }
 
 build-ostree() {
@@ -40,7 +49,8 @@ build-ostree() {
   rpmbuild -bs ostree.spec
   sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/$USER/rpmbuild/SRPMS/ostree*.*.src.rpm && cp $rpmbuild_dir/*/* /home/$USER/rpmbuild/RPMS" &
   sudo mock --rebuild /home/$USER/rpmbuild/SRPMS/ostree*.*.src.rpm
-  sudo rpm -Uvh --force /var/lib/mock/*-$uname_m/result/ostree-2*.*.*.$uname_m.rpm /var/lib/mock/*-$uname_m/result/ostree-libs-2*.*.*.$uname_m.rpm
+  mockdir="/var/lib/mock/*-$uname_m/result"
+  sudo rpm -Uvh --force $mockdir/ostree-2*.*.*.$uname_m.rpm $mockdir/ostree-libs-2*.*.*.$uname_m.rpm $mockdir/ostree-devel-2*.*.*.$uname_m.rpm
   wait
 }
 

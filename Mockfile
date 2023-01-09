@@ -9,5 +9,5 @@ RUN dnf install -y --nogpgcheck mock cpio qemu-kvm autosig-u-boot rpm-build \
   autoconf automake bison dracut git gpgme-devel gtk-doc libattr-devel \
   libcap-devel libtool make openssl-devel fuse libarchive libselinux libsoup \
   zlib gobject-introspection-devel e2fsprogs-devel fuse-devel libarchive-devel \
-  libcurl-devel libsoup-devel systemd-devel xz-devel
+  libcurl-devel libsoup-devel systemd-devel xz-devel flex python3-devel swig bc
 
