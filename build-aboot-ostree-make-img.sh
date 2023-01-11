@@ -18,7 +18,8 @@ for type_img in abootqemu-minimal-ostree abootqemu-minimal-regular; do
 img="cs9-$type_img.$uname_m.qcow2"
 
 # sudo make cs9-abootqemu-minimal-ostree.aarch64.qcow2 > ~/abootqemu-ostree$EPOCH.txt 2>&1
-sudo make $img DEFINES='extra_repos=[{"id":"extra","baseurl":"file:///home/ecurtin/rpmbuild/RPMS/"}]' > ~/$type_img$EPOCH.txt 2>&1
+# sudo make $img DEFINES='extra_repos=[{"id":"extra","baseurl":"file:///home/ecurtin/rpmbuild/RPMS/"}]' > ~/$type_img$EPOCH.txt 2>&1
+sudo make $img > ~/$type_img$EPOCH.txt 2>&1
 sudo chown $un:$un $img
 done
 
