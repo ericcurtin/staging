@@ -21,18 +21,22 @@ fi
 
 unset rc
 
+exists() {
+  command -v $1 > /dev/null
+}
+
 update() {
   set -ex
 
   cd /tmp
 
   local this_update=$(cat /etc/update-counter.txt)
-  local this_update_rem=$((this_update % 6))
-  if [ "$this_update_rem" -eq "0" ]; then
+  local update_cnt=$((this_update % 6))
+  if [ "$update_cnt" -eq "0" ]; then
     sudo dnf upgrade-minimal -y
-  elif [ "$this_update_rem" -eq "1" ]; then
+  elif [ "$update_cnt" -eq "1" ]; then
     sudo dnf upgrade -y
-  elif [ "$this_update_rem" -eq "2" ]; then
+  elif [ "$UNAME_M" = "x86_64" ] && [ "$update_cnt" -eq "2" ]; then
     zoom_url="https://zoom.us/client/latest/zoom_x86_64.rpm"
     last_modified=$(curl -I -L "$zoom_url" 2>&1 | grep -i "^Last-Modified:")
     if [ "$(cat /etc/zoom-last.txt)" != "$last_modified" ]; then
@@ -46,9 +50,9 @@ update() {
 #    sudo apt-get download zotero
 #    echo "$last_modified" > /etc/zotero-last.txt
 #  fi
-#  elif [ "$this_update_rem" -eq "3" ]; then
+#  elif [ "$update_cnt" -eq "3" ]; then
 #    sudo snap refresh
-  elif [ "$this_update_rem" -eq "3" ]; then
+  elif [ "$update_cnt" -eq "3" ]; then
     set +e
     sudo fwupdmgr refresh --force
     local ret=$?
@@ -63,9 +67,9 @@ update() {
       echo "'sudo fwupdmgr update' failed with $ret"
       exit $ret
     fi
-  elif [ "$this_update_rem" -eq "4" ]; then
+  elif exists cpan-outdated && exists cpanm && [ "$update_cnt" -eq "4" ]; then
     sudo cpan-outdated -p | sudo cpanm
-  elif [ "$this_update_rem" -eq "5" ]; then
+  elif [ "$update_cnt" -eq "5" ]; then
     sudo flatpak update -y --noninteractive
   fi
 
