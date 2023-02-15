@@ -20,7 +20,8 @@ build-aboot-update() {
 }
 
 build-autosig-qemu-dtb() {
-if false; then # attempted re-build for x86
+if true; then # re-build for additional AB functionality
+# if false; then # attempted re-build for x86
   cd /home/$USER/rpmbuild/SOURCES
   curl -OL https://source.denx.de/u-boot/u-boot/-/archive/v2022.07/u-boot-v2022.07.tar.gz
   cp  ~/git/autosig-u-boot/* /home/$USER/rpmbuild/SOURCES/
@@ -30,7 +31,7 @@ if false; then # attempted re-build for x86
 fi
 
   cp ~/git/autosig-qemu-dtb/* /home/$USER/rpmbuild/SOURCES/
-  sudo rm -rf /home/$USER/rpmbuild/SRPMS/autosig*.src.rpm
+  sudo rm -rf /home/$USER/rpmbuild/SRPMS/autosig-qemu-dtb*.src.rpm
   rpmbuild -bs autosig-qemu-dtb.spec
   sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/$USER/rpmbuild/SRPMS/autosig-qemu-dtb-*.*.*.src.rpm && cp $rpmbuild_dir/*/* /home/$USER/rpmbuild/RPMS/"
 }
