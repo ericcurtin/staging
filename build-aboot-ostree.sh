@@ -28,6 +28,10 @@ if true; then # re-build for additional AB functionality
   sudo rm -rf /home/$USER/rpmbuild/SRPMS/autosig-u-boot*.src.rpm
   rpmbuild -bs autosig-u-boot.spec
   sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/$USER/rpmbuild/SRPMS/autosig-u-boot*.*.*.src.rpm && cp $rpmbuild_dir/*/* /home/$USER/rpmbuild/RPMS/"
+  TMPDIR=$(mktemp -d)
+  rpm2cpio /home/$USER/rpmbuild/RPMS/autosig-u-boot*.rpm | cpio -id -D $TMPDIR
+  mv $TMPDIR/boot/u-boot.bin /home/$USER/git/sample-images/osbuild-manifests/qemu-u-boot-aarch64.bin
+  rm -rf $TMPDIR
 fi
 
   cp ~/git/autosig-qemu-dtb/* /home/$USER/rpmbuild/SOURCES/
