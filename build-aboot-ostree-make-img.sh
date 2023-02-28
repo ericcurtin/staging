@@ -16,7 +16,7 @@ uname_m=$(uname -m)
 makes() {
   sudo make $img $ostree_repo > ~/$type_img$EPOCH.txt 2>&1
   if [ -n "$img_repo" ]; then
-     sudo make $img_repo DEFINES='extra_rpms=[\"git\"] distro_version=\"9.1\"' OSTREE_REPO=ostree-repo
+     sudo make $img_repo DEFINES='extra_rpms=[\"git\"] distro_version=\"9.1\"' $ostree_repo
   fi
 }
 
@@ -25,7 +25,7 @@ for type_img in abootqemu-minimal-ostree abootqemu-minimal-regular qemu-minimal-
   img="cs9-$type_img.$uname_m.qcow2"
 
   if [[ "$type_img" == *-ostree ]]; then
-    ostree_repo="OSTREE_REPO=ostree-repo"
+    ostree_repo="OSTREE_REPO=$type_img-repo"
     img_repo="cs9-$type_img.$uname_m.repo"
   fi
 
