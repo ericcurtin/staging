@@ -14,11 +14,19 @@ EPOCH=$(date +%s)
 uname_m=$(uname -m)
 
 makes() {
+  cd $type_img
   sudo make $img $ostree_repo > ~/$type_img$EPOCH.txt 2>&1
   if [ -n "$img_repo" ]; then
      sudo make $img_repo DEFINES='extra_rpms=["git"] distro_version="9.1"' $ostree_repo
   fi
 }
+
+for type_img in abootqemu-minimal-ostree abootqemu-minimal-regular qemu-minimal-ostree qemu-minimal-regular; do
+  mkdir -p $type_img
+  cp -r * $type_img/ &
+done
+
+wait
 
 for type_img in abootqemu-minimal-ostree abootqemu-minimal-regular qemu-minimal-ostree qemu-minimal-regular; do
 #for type_img in abootqemu-minimal-ostree; do
