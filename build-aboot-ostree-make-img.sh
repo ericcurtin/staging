@@ -45,5 +45,5 @@ done
 
 wait
 
-sudo chown $un:$un cs9-*.qcow2
+sudo chown $un:$un */cs9-*.qcow2
 
