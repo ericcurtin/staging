@@ -16,7 +16,7 @@ uname_m=$(uname -m)
 makes() {
   sudo make $img $ostree_repo > ~/$type_img$EPOCH.txt 2>&1
   if [ -n "$img_repo" ]; then
-     sudo make $img_repo DEFINES='extra_rpms=[\"git\"] distro_version=\"9.1\"' $ostree_repo
+     sudo make $img_repo DEFINES='extra_rpms=["git"] distro_version="9.1"' $ostree_repo
   fi
 }
 
