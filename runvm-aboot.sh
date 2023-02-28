@@ -1,6 +1,8 @@
 #!/bin/bash
 
-set -e
+set -ex
 
-qemu-system-aarch64 -machine virt -m 4G -nographic -cpu cortex-a57 -bios u-boot.bin -hda $1
+cd ~/git/sample-images/osbuild-manifests
+
+taskset -c 4-7 ./runvm --publish-dir=$1-repo --aboot --nographics $1.aarch64.qcow2 -smp 4
 
