@@ -23,7 +23,9 @@ makes() {
 
 for type_img in abootqemu-minimal-ostree abootqemu-minimal-regular qemu-minimal-ostree qemu-minimal-regular; do
   mkdir -p $type_img
-  cp -r * $type_img/ &
+  for i in $(git ls-files | awk -F/ '{print $1}' | uniq); do
+    cp -r $i $type_img/ &
+  done
 done
 
 wait
