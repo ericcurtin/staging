@@ -1,0 +1,16 @@
+FROM fedora:38
+
+RUN dnf install -y git rpm-build
+RUN dnf install -y curl
+RUN curl -OL https://download-ib01.fedoraproject.org/pub/fedora/linux/development/38/Everything/source/tree/Packages/c/chromium-110.0.5481.100-1.fc38.src.rpm
+RUN mkdir -p /root/rpmbuild/SOURCES/
+RUN cd /root/rpmbuild/SOURCES && rpm2cpio /chromium-110.0.5481.100-1.fc38.src.rpm | cpio -idmv
+RUN dnf install -y libusb1-devel
+RUN cd /root/rpmbuild/SOURCES && rpmbuild -bp chromium.spec
+RUN dnf install -y 'dnf-command(download)'
+RUN dnf install -y alsa-lib-devel atk-devel bison brotli-devel bzip2-devel clang clang-tools-extra cups-devel dbus-devel dbus-glib-devel desktop-file-utils elfutils-libelf-devel expat-devel flac-devel flex fontconfig-devel glib2-devel glibc-devel gn gperf hwdata java-1.8.0-openjdk-headless kernel-headers libXdamage-devel libXtst-devel libaom-devel libappstream-glib libcap-devel libcurl-devel libdrm-devel libevent-devel libffi-devel libgcrypt-devel libjpeg-devel libpng-devel libudev-devel libusb-compat-0.1-devel libutempter-devel libuuid-devel libwebp-devel libxshmfence-devel libxslt-devel lld llvm mesa-libGL-devel mesa-libgbm-devel minizip-compat-devel ninja-build nodejs nss-devel opus-devel pam-devel pciutils-devel pulseaudio-libs-devel python3-beautifulsoup4 python3-devel python3-html5lib python3-importlib-metadata python3-jinja2 python3-markupsafe python3-ply python3-simplejson python3-zipp speech-dispatcher-devel systemd xcb-proto yasm zlib-devel
+RUN dnf builddep -y /chromium-110.0.5481.100-1.fc38.src.rpm
+RUN dnf download google-noto-sans-cjk-jp-fonts
+RUN rpm -Uvh --force --nodeps google-noto-sans-cjk-jp-fonts*.rpm
+# RUN cd /root/rpmbuild/SOURCES && rpmbuild -ba chromium.spec
+
