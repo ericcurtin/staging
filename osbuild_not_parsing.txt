@@ -1,0 +1,112 @@
+#!/usr/bin/python3
+"""
+This copies /etc to get the right selinux context on the new fstab file
+"""
+
+import os
+import subprocess
+import sys
+
+import osbuild.api
+from osbuild.util import ostree
+from typing import Dict
+from urllib.parse import ParseResult, urlparse
+
+SCHEMA_2 = r"""
+"options": {
+  "additionalProperties": false,
+  "required": ["paths", "deployment"],
+  "properties": {
+    "paths": {
+      "description": "Array of items to copy",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["from", "to"],
+        "properties": {
+          "from": {
+            "type": "string",
+            "description": "The source",
+            "pattern": "^input:\/\/[^\/]+\/"
+          },
+          "to": {
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "The destination, if a mount",
+                "pattern": "^mount:\/\/[^\/]+\/"
+              },
+              {
+                "type": "string",
+                "description": "The destination, if a tree",
+                "pattern": "^tree:\/\/\/"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "deployment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["osname", "ref"],
+      "properties": {
+        "osname": {
+          "description": "Name of the stateroot to be used in the deployment",
+          "type": "string"
+        },
+        "ref": {
+          "description": "OStree ref to create and use for deployment",
+          "type": "string"
+        },
+        "serial": {
+          "description": "The deployment serial (usually '0')",
+          "type": "number",
+          "default": 0
+        }
+      }
+    }
+},
+"inputs": {
+  "type": "object",
+  "additionalProperties": true
+}
+"""
+
+"""
+Traceback (most recent call last):
+  File "/usr/bin/osbuild", line 33, in <module>
+    sys.exit(load_entry_point('osbuild==78', 'console_scripts', 'osbuild')())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/osbuild/main_cli.py", line 110, in osbuild_cli
+    res = fmt.validate(desc, index)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/osbuild/formats/v2.py", line 523, in validate
+    validate_pipeline(pipeline, path=["pipelines", i])
+  File "/usr/lib/python3.11/site-packages/osbuild/formats/v2.py", line 511, in validate_pipeline
+    validate_stage(stage, path + ["stages", i])
+  File "/usr/lib/python3.11/site-packages/osbuild/formats/v2.py", line 501, in validate_stage
+    schema = index.get_schema("Stage", name, version="2")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/osbuild/meta.py", line 622, in get_schema
+    info = self.get_module_info(klass, name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/osbuild/meta.py", line 596, in get_module_info
+    info = ModuleInfo.load(self.path, klass, name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/osbuild/meta.py", line 454, in load
+    "2": parse_schema(values.get("SCHEMA_2")),
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/osbuild/meta.py", line 446, in parse_schema
+    return cls._parse_schema(klass, name, node)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/site-packages/osbuild/meta.py", line 402, in _parse_schema
+    raise SyntaxError(msg, detail) from None
+  File "stages/org.osbuild.ostree.copy", line 76
+    }
+     ^
+SyntaxError: Invalid schema: Expecting ',' delimiter
+"""
+
