@@ -15,14 +15,16 @@ uname_m=$(uname -m)
 
 makes() {
   cd $type_img
-  sudo make $img $ostree_repo > ~/$img$EPOCH.txt 2>&1
+#  sudo make $img $ostree_repo > ~/$img$EPOCH.txt 2>&1
 #  if [ -n "$img_repo" ]; then
 #    sudo make $img_repo DEFINES='extra_rpms=["git"] distro_version="9.1"' $ostree_repo
 #  fi
 
   if [[ "$type_img" == aboot* ]]; then
-    img="cs9-$type_img.$uname_m.aboot"
+    img="cs9-$type_img.$uname_m.ext4"
     sudo make $img $ostree_repo > ~/$img$EPOCH.txt 2>&1
+#    img="cs9-$type_img.$uname_m.aboot"
+#    sudo make $img $ostree_repo > ~/$img$EPOCH.txt 2>&1
 #    if [ -n "$img_repo" ]; then
 #      sudo make $img_repo DEFINES='extra_rpms=["git"] distro_version="9.1"' $ostree_repo
 #    fi
