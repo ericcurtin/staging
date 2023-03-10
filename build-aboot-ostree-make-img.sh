@@ -6,7 +6,7 @@ un=$(id -un)
 
 cd ~/git/sample-images/osbuild-manifests/
 EPOCH=$(date +%s)
-../../staging/build-aboot-ostree.sh > ~/build-aboot-ostree$EPOCH.txt 2>&1
+# ../../staging/build-aboot-ostree.sh > ~/build-aboot-ostree$EPOCH.txt 2>&1
 
 # type_img="qemu-minimal-ostree"
 # type_img="abootqemu-minimal-ostree"
@@ -27,6 +27,7 @@ makes() {
     mkdir -p mnt
     sudo mount $dev mnt
     ls -ltr mnt
+    sudo umount mnt
     sudo losetup -D
     rm -rf mnt
 #    img="cs9-$type_img.$uname_m.aboot"
