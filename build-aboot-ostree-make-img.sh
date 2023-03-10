@@ -29,7 +29,7 @@ makes() {
     ls -ltr mnt
     sudo umount mnt
     sudo losetup -D
-    rm -rf mnt
+    sudo rm -rf mnt
 #    img="cs9-$type_img.$uname_m.aboot"
 #    sudo make $img $ostree_repo > ~/$img$EPOCH.txt 2>&1
 #    if [ -n "$img_repo" ]; then
