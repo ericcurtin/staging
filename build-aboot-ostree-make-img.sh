@@ -26,6 +26,7 @@ makes() {
     dev=$(sudo losetup --show -fP $img)
     mkdir -p mnt
     mount $dev mnt
+    ls -ltr mnt
     sudo losetup -D
     rm -rf mnt
 #    img="cs9-$type_img.$uname_m.aboot"
