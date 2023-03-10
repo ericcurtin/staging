@@ -28,8 +28,8 @@ makes() {
     sudo mount $dev mnt
     ls -ltr mnt
     sudo umount mnt
-    sudo losetup -D
     sync
+    sudo losetup -D
     sudo rm -rf mnt
 #    img="cs9-$type_img.$uname_m.aboot"
 #    sudo make $img $ostree_repo > ~/$img$EPOCH.txt 2>&1
