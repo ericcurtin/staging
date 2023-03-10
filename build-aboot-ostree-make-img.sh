@@ -24,14 +24,12 @@ makes() {
     img="cs9-$type_img.$uname_m.ext4"
     sudo make $img $ostree_repo > ~/$img$EPOCH.txt 2>&1
     dev=$(sudo losetup --show -fP $img)
+    rm -rf mnt
     mkdir -p mnt
     sudo mount $dev mnt
     ls -ltr mnt
     sudo umount mnt
     sudo losetup -D
-    sync
-    sleep 4
-    sudo rm -rf mnt
 #    img="cs9-$type_img.$uname_m.aboot"
 #    sudo make $img $ostree_repo > ~/$img$EPOCH.txt 2>&1
 #    if [ -n "$img_repo" ]; then
