@@ -25,7 +25,7 @@ makes() {
     sudo make $img $ostree_repo > ~/$img$EPOCH.txt 2>&1
     dev=$(sudo losetup --show -fP $img)
     mkdir -p mnt
-    mount $dev mnt
+    sudo mount $dev mnt
     ls -ltr mnt
     sudo losetup -D
     rm -rf mnt
