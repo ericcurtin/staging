@@ -23,8 +23,8 @@ makes() {
   if [[ "$type_img" == aboot* ]]; then
     img="cs9-$type_img.$uname_m.ext4"
     sudo make $img $ostree_repo > ~/$img$EPOCH.txt 2>&1
-    dev=$(sudo losetup --show -fP $img)
     rm -rf mnt
+    dev=$(sudo losetup --show -fP $img)
     mkdir -p mnt
     sudo mount $dev mnt
     ls -ltr mnt
