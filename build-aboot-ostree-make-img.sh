@@ -23,6 +23,11 @@ makes() {
   if [[ "$type_img" == aboot* ]]; then
     img="cs9-$type_img.$uname_m.ext4"
     sudo make $img $ostree_repo > ~/$img$EPOCH.txt 2>&1
+    dev=$(sudo losetup --show -fP $img)
+    mkdir -p mnt
+    mount $dev mnt
+    sudo losetup -D
+    rm -rf mnt
 #    img="cs9-$type_img.$uname_m.aboot"
 #    sudo make $img $ostree_repo > ~/$img$EPOCH.txt 2>&1
 #    if [ -n "$img_repo" ]; then
