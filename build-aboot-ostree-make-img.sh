@@ -47,8 +47,8 @@ done
 
 wait
 
-for type_img in abootqemu-minimal-ostree abootqemu-minimal-regular qemu-minimal-ostree qemu-minimal-regular; do
-#for type_img in abootqemu-minimal-ostree; do
+# for type_img in abootqemu-minimal-ostree abootqemu-minimal-regular qemu-minimal-ostree qemu-minimal-regular; do
+for type_img in abootqemu-minimal-ostree; do
   img="cs9-$type_img.$uname_m.qcow2"
 
   if [[ "$type_img" == *-ostree ]]; then
