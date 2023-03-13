@@ -33,8 +33,9 @@ host="$1"
 
 export GIT_SSH_COMMAND="ssh -p$port"
 branch="$(git rev-parse --abbrev-ref HEAD)"
-base="$(basename $PWD)"
-path="~/git/$base/"
+base=$(echo "$PWD" | sed "s#$HOME#~#g")
+echo $base
+path="$base"
 $GIT_SSH_COMMAND $host "mkdir -p $path && cd $path && git init && git config receive.denyCurrentBranch ignore"
 
 git push -f $host:$path
