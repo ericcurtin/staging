@@ -22,7 +22,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-function git-grepblame {
+git-grepblame() {
   local script
   script="$(cat <<'EOF'
   my $input = do { local $/=undef; <> };
@@ -38,6 +38,7 @@ function git-grepblame {
   }
 EOF
   )"
+
   git grep --null --line-number "$@" | perl -e "$script"
 }
 

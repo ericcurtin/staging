@@ -14,9 +14,9 @@ rpmbuild_dir="/root/rpmbuild/RPMS"
 
 build-aboot-update() {
   cp ~/git/aboot-update/* /home/$USER/rpmbuild/SOURCES/
-  sudo rm -rf /home/$USER/rpmbuild/SRPMS/aboot-update-0.1-2.*.src.rpm
+  sudo rm -rf /home/$USER/rpmbuild/SRPMS/aboot-update-*.src.rpm
   rpmbuild -bs aboot-update.spec
-  sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/$USER/rpmbuild/SRPMS/aboot-update-0.1-2.*.src.rpm && cp $rpmbuild_dir/*/* /home/$USER/rpmbuild/RPMS/"
+  sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/$USER/rpmbuild/SRPMS/aboot-update-*.src.rpm && cp $rpmbuild_dir/*/* /home/$USER/rpmbuild/RPMS/"
 }
 
 build-autosig-qemu-dtb() {
