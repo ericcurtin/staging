@@ -19,9 +19,9 @@ tag_head="automotive9s-packages-main"
 gitlab_auto="https://gitlab.com/centos/automotive/rpms"
 pkg_name=$(basename $PWD)
 commit=$(git rev-parse HEAD)
-cbs-add-pkg "candidate" &
-cbs-add-pkg "testing" &
-cbs-add-pkg "release" &
+cbs-add-pkg "candidate"
+cbs-add-pkg "testing"
+cbs-add-pkg "release"
 
 set -x
 
