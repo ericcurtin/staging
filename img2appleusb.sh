@@ -21,7 +21,7 @@ dev_root=$(sudo lvscan 2>&1 | grep ACTIVE | awk -F"'" '{print $2}')
 root="$HOME/$dev_root"
 sudo mkdir -p $root
 sudo mount $dev_root $root
-kver=$(ls $dev_root/lib/modules)
+kver=$(ls ~$dev_root/lib/modules)
 sudo systemd-nspawn -D $root qemu-aarch64-static /bin/env -i TERM="$TERM" \
  PATH=/bin:/usr/bin:/sbin:/usr/sbin:/bin /bin/bash -c "dracut -f --kver $kver"
 

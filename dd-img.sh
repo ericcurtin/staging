@@ -25,6 +25,7 @@ fi
 
 # conv=fsync flushes caches at the end, just to be sure everything is written
 # to disk
+while true; do grep Dirty /proc/meminfo; sleep 1; done &
 if [[ $img == *.raw.xz ]] || [[ $img == *.img.xz ]]; then
   xzcat $img | sudo dd of=$dev bs=4M status=progress conv=fsync
 else

@@ -70,7 +70,7 @@ update() {
   elif exists cpan-outdated && exists cpanm && [ "$update_cnt" -eq "4" ]; then
     sudo cpan-outdated -p | sudo cpanm
   elif [ "$update_cnt" -eq "5" ]; then
-    sudo flatpak update -y --noninteractive
+    sudo dbus-launch flatpak update -y --noninteractive
   fi
 
   echo $((this_update + 1)) > /etc/update-counter.txt
