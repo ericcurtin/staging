@@ -82,7 +82,7 @@ sudo podman build -t conmock-fedora -f Mockfile-fedora &
 wait
 
 rpmdir="/home/$USER/rpmbuild/RPMS/"
-rm -rf $rpmdir
+sudo rm -rf $rpmdir
 sudo rm -rf /var/lib/mock/centos-stream+epel-9-$uname_m/result
 mkdir -p /home/$USER/rpmbuild/SOURCES/
 cd /home/$USER/rpmbuild/SOURCES/
