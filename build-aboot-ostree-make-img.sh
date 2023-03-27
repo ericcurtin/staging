@@ -15,30 +15,31 @@ uname_m=$(uname -m)
 
 makes() {
   cd $type_img
-#  sudo make $img $ostree_repo > ~/$img$EPOCH.txt 2>&1
-#  if [ -n "$img_repo" ]; then
-#    sudo make $img_repo DEFINES='extra_rpms=["git"] distro_version="9.1"' $ostree_repo
-#  fi
+  sudo make $img $ostree_repo > ~/$img$EPOCH.txt 2>&1
+  if [ -n "$img_repo" ]; then
+    sudo make $img_repo DEFINES='extra_rpms=["git"] distro_version="9.9"' $ostree_repo
+  fi
 
-  if [[ "$type_img" == aboot* ]]; then
-    img="cs9-$type_img.$uname_m.ext4"
-    sudo make $img $ostree_repo > ~/$img$EPOCH.txt 2>&1
-    rm -rf mnt
-    dev=$(sudo losetup --show -fP $img)
-    mkdir -p mnt
-    sudo mount $dev mnt
-    ls -ltr mnt
-    sudo umount mnt
-    sudo losetup -d $dev
+#  if [[ "$type_img" == aboot* ]]; then
+#    img="cs9-$type_img.$uname_m.ext4"
+#    sudo make $img $ostree_repo > ~/$img$EPOCH.txt 2>&1
+#    rm -rf mnt
+#    dev=$(sudo losetup --show -fP $img)
+#    mkdir -p mnt
+#    sudo mount $dev mnt
+#    ls -ltr mnt
+#    sudo umount mnt
+#    sudo losetup -d $dev
 #    img="cs9-$type_img.$uname_m.aboot"
 #    sudo make $img $ostree_repo > ~/$img$EPOCH.txt 2>&1
 #    if [ -n "$img_repo" ]; then
 #      sudo make $img_repo DEFINES='extra_rpms=["git"] distro_version="9.1"' $ostree_repo
 #    fi
-  fi
+#  fi
 }
 
-for type_img in abootqemu-minimal-ostree abootqemu-minimal-regular qemu-minimal-ostree qemu-minimal-regular; do
+#for type_img in abootqemu-minimal-ostree abootqemu-minimal-regular qemu-minimal-ostree qemu-minimal-regular; do
+for type_img in abootqemu-minimal-ostree; do
   mkdir -p $type_img
   for i in $(git ls-files | awk -F/ '{print $1}' | uniq); do
     cp -r $i $type_img/ &
@@ -48,8 +49,8 @@ done
 wait
 
 #for type_img in abootqemu-minimal-ostree abootqemu-minimal-regular qemu-minimal-ostree qemu-minimal-regular; do
-#for type_img in abootqemu-minimal-ostree; do
-for type_img in qdrive3-minimal-regular qdrive3-minimal-ostree abootqemu-minimal-ostree abootqemu-minimal-regular; do
+for type_img in abootqemu-minimal-ostree; do
+#for type_img in qdrive3-minimal-regular qdrive3-minimal-ostree abootqemu-minimal-ostree abootqemu-minimal-regular; do
   img="cs9-$type_img.$uname_m.qcow2"
 
   if [[ "$type_img" == *-ostree ]]; then
