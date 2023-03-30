@@ -38,8 +38,10 @@ makes() {
 #  fi
 }
 
+images=("abootqemu-minimal-ostree")
+
 #for type_img in abootqemu-minimal-ostree abootqemu-minimal-regular qemu-minimal-ostree qemu-minimal-regular; do
-for type_img in abootqemu-minimal-ostree; do
+for type_img in ${images[@]}; do
   mkdir -p $type_img
   for i in $(git ls-files | awk -F/ '{print $1}' | uniq); do
     cp -r $i $type_img/ &
@@ -49,7 +51,7 @@ done
 wait
 
 #for type_img in abootqemu-minimal-ostree abootqemu-minimal-regular qemu-minimal-ostree qemu-minimal-regular; do
-for type_img in abootqemu-minimal-ostree; do
+for type_img in ${images[@]}; do
 #for type_img in qdrive3-minimal-regular qdrive3-minimal-ostree abootqemu-minimal-ostree abootqemu-minimal-regular; do
   img="cs9-$type_img.$uname_m.qcow2"
 
