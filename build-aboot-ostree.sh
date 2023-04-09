@@ -44,12 +44,13 @@ build-ostree() {
   cd ~/git/ostree/
   rm -rf *.tar.xz
   rm -rf /home/$USER/rpmbuild/SOURCES/libostree*
-  mkdir -p /home/$USER/rpmbuild/SOURCES/libostree-2022.5
+  ostree_ver="2024.2"
+  mkdir -p /home/$USER/rpmbuild/SOURCES/libostree-$ostree_ver
   git submodule update --init
-  cp -r * /home/$USER/rpmbuild/SOURCES/libostree-2022.5/
+  cp -r * /home/$USER/rpmbuild/SOURCES/libostree-$ostree_ver/
   cp -r *.spec /home/$USER/rpmbuild/SOURCES/
   cd /home/$USER/rpmbuild/SOURCES/
-  tar -cJf libostree-2022.5.tar.xz libostree-2022.5
+  tar -cJf libostree-$ostree_ver.tar.xz libostree-$ostree_ver
   sudo rm -rf /home/$USER/rpmbuild/SRPMS/ostree*.src.rpm
   rpmbuild -bs ostree.spec
   sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/$USER/rpmbuild/SRPMS/ostree*.*.src.rpm && cp $rpmbuild_dir/*/* /home/$USER/rpmbuild/RPMS" &
