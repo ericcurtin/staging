@@ -76,6 +76,14 @@ build-osbuild-aboot() {
   sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/$USER/rpmbuild/SRPMS/osbuild-aboot*.src.rpm && cp $rpmbuild_dir/*/* /home/$USER/rpmbuild/RPMS"
 }
 
+build-greenboot() {
+  cd ~/git/greenboot
+  cp * /home/$USER/rpmbuild/SOURCES/
+  sudo rm -rf /home/$USER/rpmbuild/SRPMS/greenboot*.src.rpm
+  rpmbuild -bs greenboot.spec
+  sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/$USER/rpmbuild/SRPMS/greenboot*.src.rpm && cp $rpmbuild_dir/*/* /home/$USER/rpmbuild/RPMS"
+}
+
 cd ~/git/staging
 sudo podman build -t conmock -f Mockfile &
 sudo podman build -t conmock-fedora -f Mockfile-fedora &
@@ -90,6 +98,7 @@ cd /home/$USER/rpmbuild/SOURCES/
 # in review, whole manifest https://gitlab.com/CentOS/automotive/sample-images/-/merge_requests/135
 # build-aboot-update & # in review https://gitlab.com/CentOS/automotive/rpms/aboot-update/-/merge_requests/1
 build-autosig-qemu-dtb & # in review https://gitlab.com/CentOS/automotive/rpms/autosig-qemu-dtb/-/merge_requests/1
+build-greenboot &
 # build-ostree & # merged https://github.com/ostreedev/ostree/pull/2793
 # build-aboot-deploy & # merged https://gitlab.com/CentOS/automotive/rpms/aboot-deploy/-/commit/1ba3a334507bb04d5b9c29a32a96534da9c50cf4
 # build-osbuild-aboot & # Need to create repo
