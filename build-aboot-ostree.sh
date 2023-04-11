@@ -101,7 +101,7 @@ cd /home/$USER/rpmbuild/SOURCES/
 # build-aboot-update & # in review https://gitlab.com/CentOS/automotive/rpms/aboot-update/-/merge_requests/1
 build-autosig-qemu-dtb & # in review https://gitlab.com/CentOS/automotive/rpms/autosig-qemu-dtb/-/merge_requests/1
 build-greenboot &
-# build-ostree & # merged https://github.com/ostreedev/ostree/pull/2793
+build-ostree & # merged https://github.com/ostreedev/ostree/pull/2793
 # build-aboot-deploy & # merged https://gitlab.com/CentOS/automotive/rpms/aboot-deploy/-/commit/1ba3a334507bb04d5b9c29a32a96534da9c50cf4
 # build-osbuild-aboot & # Need to create repo
 wait
