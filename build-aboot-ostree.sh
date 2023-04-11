@@ -78,7 +78,7 @@ build-osbuild-aboot() {
 
 build-greenboot() {
   cd ~/git/greenboot
-  cp * /home/$USER/rpmbuild/SOURCES/
+  cp -r * /home/$USER/rpmbuild/SOURCES/
   sudo rm -rf /home/$USER/rpmbuild/SRPMS/greenboot*.src.rpm
   rpmbuild -bs greenboot.spec
   sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/$USER/rpmbuild/SRPMS/greenboot*.src.rpm && cp $rpmbuild_dir/*/* /home/$USER/rpmbuild/RPMS"

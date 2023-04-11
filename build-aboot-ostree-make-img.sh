@@ -38,7 +38,7 @@ makes() {
 #  fi
 }
 
-images=("abootqemu-minimal-ostree")
+images=("abootqemu-minimal-ostree" "qemu-minimal-ostree")
 
 #for type_img in abootqemu-minimal-ostree abootqemu-minimal-regular qemu-minimal-ostree qemu-minimal-regular; do
 for type_img in ${images[@]}; do
