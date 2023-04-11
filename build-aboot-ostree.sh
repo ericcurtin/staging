@@ -78,6 +78,7 @@ build-osbuild-aboot() {
 
 build-greenboot() {
   cd ~/git/greenboot
+  git archive HEAD > /home/$USER/rpmbuild/SOURCES/v0.15.4.tar.gz
   cp -r * /home/$USER/rpmbuild/SOURCES/
   sudo rm -rf /home/$USER/rpmbuild/SRPMS/greenboot*.src.rpm
   rpmbuild -bs greenboot.spec
