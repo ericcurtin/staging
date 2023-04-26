@@ -10,7 +10,7 @@ if [ -f "meson.build" ]; then
   # -Db_sanitize=address
   # --buildtype=debug
   # --buildtype=release
-  cmd="meson build --buildtype=release --prefix=/usr && ninja -v -C build && sudo ninja -v -C build install"
+  cmd="meson build --buildtype=release --prefix=/usr && ninja -v -C build"
 elif [ -f "SDL_image.h" ]; then
   extra="--disable-dependency-tracking --disable-jpg-shared \
          --disable-png-shared --disable-tif-shared --disable-webp-shared \

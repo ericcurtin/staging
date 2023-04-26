@@ -56,7 +56,7 @@ build-ostree() {
   sudo podman run --rm --privileged -v /home/$USER/rpmbuild/:/home/$USER/rpmbuild/ -ti conmock /bin/bash -c "$usergroupadd && rpmbuild -rb /home/$USER/rpmbuild/SRPMS/ostree*.*.src.rpm && cp $rpmbuild_dir/*/* /home/$USER/rpmbuild/RPMS" &
   sudo mock --rebuild /home/$USER/rpmbuild/SRPMS/ostree*.*.src.rpm
   mockdir="/var/lib/mock/*-$uname_m/result"
-  sudo rpm -Uvh --force $mockdir/ostree-2*.*.*.$uname_m.rpm $mockdir/ostree-libs-2*.*.*.$uname_m.rpm $mockdir/ostree-devel-2*.*.*.$uname_m.rpm
+  sudo rpm -Uvh --force $mockdir/ostree-2*.*.*.$uname_m.rpm $mockdir/ostree-libs-2*.*.*.$uname_m.rpm
   wait
 }
 
