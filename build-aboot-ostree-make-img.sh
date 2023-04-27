@@ -39,6 +39,7 @@ makes() {
 }
 
 images=("abootqemu-minimal-ostree" "qemu-minimal-ostree")
+#images=("qemu-developer-ostree")
 
 #for type_img in abootqemu-minimal-ostree abootqemu-minimal-regular qemu-minimal-ostree qemu-minimal-regular; do
 for type_img in ${images[@]}; do
