@@ -5,9 +5,11 @@ RUN dnf install -y 'dnf-command(config-manager)' epel-release
 RUN dnf config-manager --set-enabled crb
 RUN dnf config-manager --add-repo https://buildlogs.centos.org/9-stream/automotive/aarch64/packages-main/
 RUN dnf config-manager --add-repo https://buildlogs.centos.org/9-stream/autosd/aarch64/packages-main/
-RUN dnf install -y --nogpgcheck mock cpio qemu-kvm autosig-u-boot rpm-build \
-  autoconf automake bison dracut git gpgme-devel gtk-doc libattr-devel \
-  libcap-devel libtool make openssl-devel fuse libarchive libselinux libsoup \
-  zlib gobject-introspection-devel e2fsprogs-devel fuse-devel libarchive-devel \
-  libcurl-devel libsoup-devel systemd-devel xz-devel flex python3-devel swig bc
+RUN if [ $(uname -m) == "aarch64" ]; then dnf install -y --nogpgcheck autosig-u-boot; fi
+RUN dnf install -y --allowerasing --nogpgcheck mock cpio qemu-kvm rpm-build autoconf \
+  automake bison dracut git gpgme-devel gtk-doc libattr-devel libcap-devel libtool \
+  make openssl-devel fuse libarchive libselinux libsoup zlib \
+  gobject-introspection-devel e2fsprogs-devel fuse-devel libarchive-devel \
+  libcurl-devel libsoup-devel systemd-devel xz-devel flex python3-devel swig bc \
+  centos-release-automotive
 
