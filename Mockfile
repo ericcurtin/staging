@@ -11,5 +11,10 @@ RUN dnf install -y --allowerasing --nogpgcheck mock cpio qemu-kvm rpm-build auto
   make openssl-devel fuse libarchive libselinux libsoup zlib \
   gobject-introspection-devel e2fsprogs-devel fuse-devel libarchive-devel \
   libcurl-devel libsoup-devel systemd-devel xz-devel flex python3-devel swig bc \
-  centos-release-automotive
+  centos-release-automotive audit-libs-devel bzip2-devel cryptsetup-devel dbus-devel \
+  elfutils-devel firewalld-filesystem gcc-c++ gettext gnu-efi gnu-efi-devel \
+  gnutls-devel gperf hostname kmod-devel libacl-devel libfdisk-devel libgcrypt-devel \
+  libidn2-devel libmicrohttpd-devel libseccomp-devel libxkbcommon-devel \
+  libzstd-devel lz4 lz4-devel pam-devel perl tree valgrind-devel meson \
+  bash-completion tpm2-tss-devel
 
