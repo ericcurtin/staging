@@ -100,6 +100,8 @@ elif [ -f "Makefile" ]; then
   cmd="make -j$njobs"
 elif [ -d "osbuild-manifests" ]; then
   cmd="cd osbuild-manifests; sudo make -j$njobs cs9-rpi4-developer-direct.aarch64.img"
+elif [ -f "configure.ac" ]; then
+  cmd="libtoolize --force && aclocal && autoheader && automake --force-missing --add-missing && autoconf && ./configure --prefix=/usr && make -j$njobs"
 fi
 
 # export CFLAGS="-O0 -ggdb"; export CXXFLAGS="$CFLAGS"; export LDFLAGS="$CFLAGS";
