@@ -87,14 +87,14 @@ elif [ -f "Makefile" ] && [ -f "Kbuild" ] && [ -f "Kconfig" ]; then
   # sudo dnf -y install ncurses-devel flex bison elfutils-libelf-devel dwarves ccache zstd bc rpm-build bpftool gcc perl-devel perl-generators python3-devel elfutils-devel the_silver_searcher openssl-devel openssl dracut linux-firmware binutils-devel gcc-plugin-devel glibc-static libcap-devel libcap-ng-devel libmnl-devel llvm nss-tools numactl-devel pesign python3-docutils libbpf-devel
   # sudo dnf -y install system-sb-certs
   if [ -e "/boot/dtb" ] || [ -e "/boot/dtbs" ]; then
-    cmd="if [ ! -f '.config' ]; then cp /boot/config-\$(uname -r) .; fi && make olddefconfig && make -j$njobs && make -j$njobs modules && sudo make modules_install && sudo make dtbs_install && sudo make install && cd /boot && ln -sf dtbs dtb"
+    cmd="if [ ! -f '.config' ]; then cp /boot/config-\$(uname -r) .; fi && make olddefconfig && make -j$njobs && make -j$njobs modules && sudo make modules_install && sudo make dtbs_install INSTALL_DTBS_PATH=/boot/dtb-\$(make -s kernelrelease) && sudo make install"
 #    to_link=$(for i in $(ls -t | grep dtb); do if [ -d "$i" ]; then echo $i; break; fi; done)
 #    sudo ln -sf $to_link dtb
 # make dist-srpm
 # build locally: make dist-rpm-baseonly, all the rpms: make dist-rpms
 # generate config: make dist-configs # just one cpu arch dist-configs-arch
   else
-    cmd="if [ ! -f '.config' ]; then cp /boot/config-\$(uname -r) .; fi && make olddefconfig && make -j$njobs && make -j$njobs bzImage && make -j$njobs modules"
+    cmd="if [ ! -f '.config' ]; then cp /boot/config-\$(uname -r) .; fi && make olddefconfig && make -j$njobs && make -j$njobs modules"
   fi
 elif [ -f "Makefile" ]; then
   cmd="make -j$njobs"
