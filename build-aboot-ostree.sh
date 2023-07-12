@@ -108,7 +108,6 @@ srpm_dir="/home/$USER/rpmbuild/SRPM"
 src_dir="/home/$USER/rpmbuild/SOURCES"
 sudo rm -rf $rpmdir
 sudo rm -rf /var/lib/mock/centos-stream+epel-9-$uname_m/result
-cd $src_dir
 mkdir -p $src_dir $rpmdir
 cd $src_dir/
 # in review, whole manifest https://gitlab.com/CentOS/automotive/sample-images/-/merge_requests/135
