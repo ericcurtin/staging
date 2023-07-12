@@ -104,7 +104,7 @@ sudo podman build -t conmock-fedora -f Mockfile-fedora &
 wait
 
 rpmdir="/home/$USER/rpmbuild/RPMS/"
-srpm_dir="/home/$USER/rpmbuild/SRPM"
+srpm_dir="/home/$USER/rpmbuild/SRPMS"
 src_dir="/home/$USER/rpmbuild/SOURCES"
 sudo rm -rf $rpmdir
 sudo rm -rf /var/lib/mock/centos-stream+epel-9-$uname_m/result
