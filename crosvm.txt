@@ -1,0 +1,63 @@
+  --shared-dir      colon-separated options for configuring a directory to be   
+                    shared with the VM. The first field is the directory to be  
+                    shared and the second field is the tag that the VM can use  
+                    to identify the device. The remaining fields are key=value  
+                    pairs that may appear in any order.                         
+                     Valid keys are:                                            
+                        type=(p9, fs) - Indicates whether the directory should  
+                           be shared via virtio-9p or virtio-fs (default: p9).  
+                        uidmap=UIDMAP - The uid map to use for the device's     
+                           jail in the format "inner outer                      
+                           count[,inner outer count]"                           
+                           (default: 0 <current euid> 1).                       
+                        gidmap=GIDMAP - The gid map to use for the device's     
+                           jail in the format "inner outer                      
+                           count[,inner outer count]"                           
+                           (default: 0 <current egid> 1).                       
+                        cache=(never, auto, always) - Indicates whether the VM  
+                           can cache the contents of the shared directory       
+                           (default: auto).  When set to "auto" and the type    
+                           is "fs", the VM will use close-to-open consistency   
+                           for file contents.                                   
+                        timeout=SECONDS - How long the VM should consider file  
+                           attributes and directory entries to be valid         
+                           (default: 5).  If the VM has exclusive access to the 
+                           directory, then this should be a large value.  If    
+                           the directory can be modified by other processes,    
+                           then this should be 0.                               
+                        writeback=BOOL - Enables writeback caching              
+                           (default: false).  This is only safe to do when the  
+                           VM has exclusive access to the files in a directory. 
+                           Additionally, the server should have read            
+                           permission for all files as the VM may issue read    
+                           requests even for files that are opened write-only.  
+                        dax=BOOL - Enables DAX support.  Enabling DAX can       
+                           improve performance for frequently accessed files    
+                           by mapping regions of the file directly into the     
+                           VM's memory. There is a cost of slightly increased   
+                           latency the first time the file is accessed.  Since  
+                           the mapping is shared directly from the host kernel's
+                           file cache, enabling DAX can improve performance even
+                            when the guest cache policy is "Never".  The default
+                            value for this option is "false".                   
+                        posix_acl=BOOL - Indicates whether the shared directory 
+                           supports POSIX ACLs.  This should only be enabled    
+                           when the underlying file system supports POSIX ACLs. 
+                           The default value for this option is "true".         
+                        uid=UID - uid of the device process in the user         
+                           namespace created by minijail. (default: 0)          
+                        gid=GID - gid of the device process in the user         
+                           namespace created by minijail. (default: 0)          
+                        Options uid and gid are useful when the crosvm process  
+                        has no CAP_SETGID/CAP_SETUID but an identity mapping of 
+                        the current user/group between the VM and the host is   
+                        required. Say the current user and the crosvm process   
+                        has uid 5000, a user can use "uid=5000" and             
+                        "uidmap=5000 5000 1" such that files owned by user      
+                        5000 still appear to be owned by user 5000 in the VM.   
+                        These 2 options are useful only when there is 1 user    
+                        in the VM accessing shared files. If multiple users     
+                        want to access the shared file, gid/uid options are     
+                        useless. It'd be better to create a new user namespace  
+                        and give CAP_SETUID/CAP_SETGID to the crosvm.
+                    
