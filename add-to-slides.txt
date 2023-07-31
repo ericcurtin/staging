@@ -1,0 +1,9 @@
+ostree provides:
+
+- Delta upgrades (you can think of it as a git repo for filesystems)
+- A/B updates (but without duplication of data)
+- Immutability
+- Chain of trust, file verification, secure boot down to the filesystem (in-progress)
+
+Slide mentioning GM
+
