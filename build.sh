@@ -74,6 +74,8 @@ elif [ -f "autogen.sh" ]; then
            --without-rhgb-compat-link"
   fi
 
+#  export CFLAGS="-fanalyzer"
+#  export CXXFLAGS="-fanalyzer"
   # inotify-tools didn't like autogen.sh --prefix=/usr
   cmd="if [ ! -f 'Makefile' ]; then ./autogen.sh && if [ -f 'configure' ]; then ./configure --prefix=/usr $extra; fi; fi && make -j$njobs V=1"
 elif [ -f "Cargo.lock" ]; then

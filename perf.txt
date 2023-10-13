@@ -1,0 +1,1010 @@
+vfat
+mount time: 0.015
+read time:  0.251
+erofs
+mount time: 0.012
+read time:  0.228
+ext4
+mount time: 0.015
+read time:  0.090
+
+vfat
+mount time: 0.011
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.230
+ext4
+mount time: 0.017
+read time:  0.090
+
+vfat
+mount time: 0.012
+read time:  0.258
+erofs
+mount time: 0.012
+read time:  0.223
+ext4
+mount time: 0.015
+read time:  0.090
+
+vfat
+mount time: 0.012
+read time:  0.252
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.013
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.223
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.237
+erofs
+mount time: 0.012
+read time:  0.222
+ext4
+mount time: 0.015
+read time:  0.091
+
+vfat
+mount time: 0.014
+read time:  0.272
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.228
+ext4
+mount time: 0.017
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.016
+read time:  0.090
+
+vfat
+mount time: 0.012
+read time:  0.236
+erofs
+mount time: 0.012
+read time:  0.223
+ext4
+mount time: 0.018
+read time:  0.100
+
+vfat
+mount time: 0.011
+read time:  0.271
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.254
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.237
+erofs
+mount time: 0.012
+read time:  0.225
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.012
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.225
+ext4
+mount time: 0.017
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.261
+erofs
+mount time: 0.012
+read time:  0.227
+ext4
+mount time: 0.015
+read time:  0.088
+
+vfat
+mount time: 0.011
+read time:  0.240
+erofs
+mount time: 0.012
+read time:  0.225
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.265
+erofs
+mount time: 0.021
+read time:  0.227
+ext4
+mount time: 0.017
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.258
+erofs
+mount time: 0.012
+read time:  0.225
+ext4
+mount time: 0.016
+read time:  0.090
+
+vfat
+mount time: 0.011
+read time:  0.247
+erofs
+mount time: 0.013
+read time:  0.225
+ext4
+mount time: 0.015
+read time:  0.090
+
+vfat
+mount time: 0.011
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.243
+erofs
+mount time: 0.012
+read time:  0.223
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.012
+read time:  0.238
+erofs
+mount time: 0.012
+read time:  0.228
+ext4
+mount time: 0.016
+read time:  0.091
+
+vfat
+mount time: 0.011
+read time:  0.242
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.242
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.016
+read time:  0.090
+
+vfat
+mount time: 0.011
+read time:  0.265
+erofs
+mount time: 0.012
+read time:  0.243
+ext4
+mount time: 0.016
+read time:  0.088
+
+vfat
+mount time: 0.011
+read time:  0.242
+erofs
+mount time: 0.012
+read time:  0.228
+ext4
+mount time: 0.015
+read time:  0.090
+
+vfat
+mount time: 0.012
+read time:  0.237
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.012
+read time:  0.290
+erofs
+mount time: 0.012
+read time:  0.228
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.316
+erofs
+mount time: 0.012
+read time:  0.233
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.225
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.222
+ext4
+mount time: 0.016
+read time:  0.088
+
+vfat
+mount time: 0.012
+read time:  0.238
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.017
+read time:  0.089
+
+vfat
+mount time: 0.012
+read time:  0.244
+erofs
+mount time: 0.012
+read time:  0.223
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.250
+erofs
+mount time: 0.012
+read time:  0.223
+ext4
+mount time: 0.015
+read time:  0.091
+
+vfat
+mount time: 0.011
+read time:  0.242
+erofs
+mount time: 0.012
+read time:  0.228
+ext4
+mount time: 0.016
+read time:  0.088
+
+vfat
+mount time: 0.011
+read time:  0.237
+erofs
+mount time: 0.012
+read time:  0.228
+ext4
+mount time: 0.016
+read time:  0.090
+
+vfat
+mount time: 0.011
+read time:  0.307
+erofs
+mount time: 0.012
+read time:  0.227
+ext4
+mount time: 0.016
+read time:  0.090
+
+vfat
+mount time: 0.011
+read time:  0.240
+erofs
+mount time: 0.012
+read time:  0.225
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.012
+read time:  0.252
+erofs
+mount time: 0.015
+read time:  0.226
+ext4
+mount time: 0.017
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.016
+read time:  0.090
+
+vfat
+mount time: 0.011
+read time:  0.237
+erofs
+mount time: 0.012
+read time:  0.227
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.012
+read time:  0.243
+erofs
+mount time: 0.012
+read time:  0.227
+ext4
+mount time: 0.016
+read time:  0.095
+
+vfat
+mount time: 0.011
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.229
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.238
+erofs
+mount time: 0.012
+read time:  0.222
+ext4
+mount time: 0.016
+read time:  0.090
+
+vfat
+mount time: 0.012
+read time:  0.306
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.015
+read time:  0.090
+
+vfat
+mount time: 0.012
+read time:  0.238
+erofs
+mount time: 0.012
+read time:  0.227
+ext4
+mount time: 0.017
+read time:  0.104
+
+vfat
+mount time: 0.011
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.016
+read time:  0.088
+
+vfat
+mount time: 0.015
+read time:  0.238
+erofs
+mount time: 0.012
+read time:  0.225
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.225
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.238
+erofs
+mount time: 0.012
+read time:  0.223
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.012
+read time:  0.262
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.016
+read time:  0.090
+
+vfat
+mount time: 0.011
+read time:  0.257
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.243
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.258
+erofs
+mount time: 0.012
+read time:  0.223
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.277
+erofs
+mount time: 0.012
+read time:  0.225
+ext4
+mount time: 0.015
+read time:  0.092
+
+vfat
+mount time: 0.011
+read time:  0.238
+erofs
+mount time: 0.012
+read time:  0.223
+ext4
+mount time: 0.015
+read time:  0.090
+
+vfat
+mount time: 0.017
+read time:  0.240
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.014
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.015
+read time:  0.090
+
+vfat
+mount time: 0.012
+read time:  0.237
+erofs
+mount time: 0.012
+read time:  0.225
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.012
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.015
+read time:  0.090
+
+vfat
+mount time: 0.012
+read time:  0.237
+erofs
+mount time: 0.012
+read time:  0.241
+ext4
+mount time: 0.015
+read time:  0.091
+
+vfat
+mount time: 0.018
+read time:  0.257
+erofs
+mount time: 0.012
+read time:  0.223
+ext4
+mount time: 0.015
+read time:  0.090
+
+vfat
+mount time: 0.011
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.016
+read time:  0.090
+
+vfat
+mount time: 0.012
+read time:  0.326
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.015
+read time:  0.090
+
+vfat
+mount time: 0.011
+read time:  0.240
+erofs
+mount time: 0.012
+read time:  0.223
+ext4
+mount time: 0.014
+read time:  0.090
+
+vfat
+mount time: 0.011
+read time:  0.241
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.014
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.016
+read time:  0.088
+
+vfat
+mount time: 0.011
+read time:  0.276
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.012
+read time:  0.241
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.016
+read time:  0.090
+
+vfat
+mount time: 0.011
+read time:  0.265
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.015
+read time:  0.088
+
+vfat
+mount time: 0.012
+read time:  0.241
+erofs
+mount time: 0.012
+read time:  0.225
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.012
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.017
+read time:  0.089
+
+vfat
+mount time: 0.012
+read time:  0.257
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.280
+erofs
+mount time: 0.012
+read time:  0.222
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.240
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.016
+read time:  0.090
+
+vfat
+mount time: 0.012
+read time:  0.238
+erofs
+mount time: 0.015
+read time:  0.236
+ext4
+mount time: 0.015
+read time:  0.090
+
+vfat
+mount time: 0.011
+read time:  0.315
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.263
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.012
+read time:  0.278
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.251
+ext4
+mount time: 0.015
+read time:  0.088
+
+vfat
+mount time: 0.012
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.223
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.238
+erofs
+mount time: 0.012
+read time:  0.227
+ext4
+mount time: 0.016
+read time:  0.088
+
+vfat
+mount time: 0.011
+read time:  0.235
+erofs
+mount time: 0.012
+read time:  0.242
+ext4
+mount time: 0.018
+read time:  0.090
+
+vfat
+mount time: 0.012
+read time:  0.239
+erofs
+mount time: 0.012
+read time:  0.234
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.012
+read time:  0.240
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.012
+read time:  0.238
+erofs
+mount time: 0.012
+read time:  0.227
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.241
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.015
+read time:  0.090
+
+vfat
+mount time: 0.011
+read time:  0.289
+erofs
+mount time: 0.012
+read time:  0.225
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.237
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.015
+read time:  0.091
+
+vfat
+mount time: 0.011
+read time:  0.263
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.015
+read time:  0.090
+
+vfat
+mount time: 0.011
+read time:  0.263
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.016
+read time:  0.090
+
+vfat
+mount time: 0.011
+read time:  0.238
+erofs
+mount time: 0.012
+read time:  0.225
+ext4
+mount time: 0.015
+read time:  0.090
+
+vfat
+mount time: 0.012
+read time:  0.237
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.012
+read time:  0.263
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.240
+erofs
+mount time: 0.012
+read time:  0.227
+ext4
+mount time: 0.015
+read time:  0.090
+
+vfat
+mount time: 0.011
+read time:  0.245
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.250
+erofs
+mount time: 0.012
+read time:  0.224
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.236
+erofs
+mount time: 0.012
+read time:  0.242
+ext4
+mount time: 0.015
+read time:  0.089
+
+vfat
+mount time: 0.011
+read time:  0.237
+erofs
+mount time: 0.012
+read time:  0.223
+ext4
+mount time: 0.016
+read time:  0.089
+
+vfat
+mount time: 0.012
+read time:  0.247
+erofs
+mount time: 0.012
+read time:  0.226
+ext4
+mount time: 0.015
+read time:  0.090
+
