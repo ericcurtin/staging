@@ -71,6 +71,9 @@ update() {
     sudo cpan-outdated -p | sudo cpanm
   elif [ "$update_cnt" -eq "5" ]; then
     sudo dbus-launch flatpak update -y --noninteractive
+  elif [ "$update_cnt" -eq "6" ]; then
+    cd ~/google-drive
+    grive
   fi
 
   echo $((this_update + 1)) > /etc/update-counter.txt
