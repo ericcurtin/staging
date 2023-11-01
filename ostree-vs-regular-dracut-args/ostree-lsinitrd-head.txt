@@ -1,0 +1,11 @@
+lsinitrd /usr/lib/modules/5.14.0-380.341.el9iv.aarch64/initramfs.img
+Image: /usr/lib/modules/5.14.0-380.341.el9iv.aarch64/initramfs.img: 18M
+========================================================================
+Version: dracut-057-44.git20230822.el9
+
+Arguments:  --reproducible -v --add 'ostree' --tmpdir '/tmp/dracut' -f --lz4 --add 'base dracut-systemd fs-lib kernel-modules kernel-modules-extra rootfs-block shutdown systemd systemd-initrd terminfo udev-rules usrmount' --omit 'bash i18n lunmask mdraid memstrack nss-softokn nvdimm qemu resume terminfo virtiofs dm' --filesystems 'ext4' --kver '5.14.0-380.341.el9iv.aarch64'
+
+dracut modules:
+systemd
+systemd-initrd
+kernel-modules

@@ -1,0 +1,10 @@
+Image: /boot/initramfs-5.14.0-380.341.el9iv.aarch64.img: 17M
+========================================================================
+Version: dracut-057-44.git20230822.el9
+
+Arguments:  --no-hostonly --kver '5.14.0-380.341.el9iv.aarch64' --force -v --show-modules --no-early-microcode --reproducible
+
+dracut modules:
+systemd
+systemd-initrd
+kernel-modules
