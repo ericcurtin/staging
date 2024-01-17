@@ -119,8 +119,6 @@ for i in {1..16}; do
   while ! timeout 1 ssh -p2222 root@127.0.0.1 "journalctl --output=short-monotonic -b" > storage-init-initoverlayfs-$i.txt; do sleep 1; done
   while ! timeout 1 ssh -p2222 root@127.0.0.1 "init 0"; do sleep 1; done
   sleep 4
-  pkill qemu
-  sleep 4
 #  convert_file initoverlayfs$i.txt &
 done
 done
