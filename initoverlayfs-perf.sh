@@ -103,12 +103,16 @@ for i in {1..16}; do
 done
 else
 for i in {1..16}; do
-  ssh ecurtin@192.168.1.82 "sudo sed -i \"s/# UUID=/UUID=/g\" /etc/fstab && sudo dracut -f -o initoverlayfs && sudo reboot"
-  sleep 90
+#  ssh ecurtin@192.168.1.82 "sudo sed -i \"s/# UUID=/UUID=/g\" /etc/fstab && sudo dracut -f -o initoverlayfs && sudo reboot"
+  echo "Run number $i"
+  cd ~/git/sample-images/osbuild-manifests
+  cp f39-qemu-developer-regular.x86_64.qcow2 demo.qcow2; ./runvm --nographics demo.qcow2
+  sleep 16
   while ! timeout 1 ssh ecurtin@192.168.1.82 "sudo journalctl --output=short-monotonic -b" > storage-init-initrd-$i.txt; do sleep 1; done
 #  convert_file legacy$i.txt &
-  ssh ecurtin@192.168.1.82 "sudo rm -rf /etc/initoverlayfs.conf && sudo cp /home/ecurtin/git/initoverlayfs/storage-init /usr/sbin/storage-init && sudo cp /home/ecurtin/git/initoverlayfs/bin/initoverlayfs-install /usr/bin/initoverlayfs-install && sudo dracut -f -o initoverlayfs && sudo initoverlayfs-install && sudo reboot"
-  sleep 90
+  cd ~/git/initoverlayfs
+  git-push.sh -p2222 root@127.0.0.1 && ssh -p2222 root@127.0.0.1 "cd ~/git/initoverlayfs/ && scripts/install.sh"
+  sleep 16
   while ! timeout 1 ssh ecurtin@192.168.1.82 "sudo journalctl --output=short-monotonic -b" > storage-init-initoverlayfs-$i.txt; do sleep 1; done
 #  convert_file initoverlayfs$i.txt &
 done
