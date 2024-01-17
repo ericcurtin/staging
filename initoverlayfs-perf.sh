@@ -102,7 +102,7 @@ for i in {1..16}; do
 #  convert_file initoverlayfs$i.txt &
 done
 else
-for j in f39; do
+for j in cs9 f39; do
 for i in {1..16}; do
 #  ssh ecurtin@192.168.1.82 "sudo sed -i \"s/# UUID=/UUID=/g\" /etc/fstab && sudo dracut -f -o initoverlayfs && sudo reboot"
   echo "Run number $i"
