@@ -16,5 +16,5 @@ RUN dnf install -y --allowerasing --nogpgcheck mock cpio qemu-kvm rpm-build auto
   gnutls-devel gperf hostname kmod-devel libacl-devel libfdisk-devel libgcrypt-devel \
   libidn2-devel libmicrohttpd-devel libseccomp-devel libxkbcommon-devel \
   libzstd-devel lz4 lz4-devel pam-devel perl tree valgrind-devel meson \
-  bash-completion tpm2-tss-devel
+  bash-completion tpm2-tss-devel attr
 
