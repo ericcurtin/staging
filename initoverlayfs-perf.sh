@@ -108,12 +108,14 @@ for i in {1..16}; do
   cd ~/git/sample-images/osbuild-manifests
   cp f39-qemu-developer-regular.x86_64.qcow2 demo.qcow2; ./runvm --nographics demo.qcow2
   sleep 16
-  while ! timeout 1 ssh ecurtin@192.168.1.82 "sudo journalctl --output=short-monotonic -b" > storage-init-initrd-$i.txt; do sleep 1; done
+  while ! timeout 1 ssh -p2222 root@127.0.0.1 "sudo journalctl --output=short-monotonic -b" > storage-init-initrd-$i.txt; do sleep 1; done
 #  convert_file legacy$i.txt &
   cd ~/git/initoverlayfs
-  git-push.sh -p2222 root@127.0.0.1 && ssh -p2222 root@127.0.0.1 "cd ~/git/initoverlayfs/ && scripts/install.sh"
+  git-push.sh -p2222 root@127.0.0.1
+  ssh -p2222 root@127.0.0.1 "cd ~/git/initoverlayfs/ && scripts/install.sh"
   sleep 16
-  while ! timeout 1 ssh ecurtin@192.168.1.82 "sudo journalctl --output=short-monotonic -b" > storage-init-initoverlayfs-$i.txt; do sleep 1; done
+  while ! timeout 1 ssh -p2222 root@127.0.0.1 "sudo journalctl --output=short-monotonic -b" > storage-init-initoverlayfs-$i.txt; do sleep 1; done
+  while ! timeout 1 ssh -p2222 root@127.0.0.1 "sudo init 0"; do sleep 1; done
 #  convert_file initoverlayfs$i.txt &
 done
 fi
