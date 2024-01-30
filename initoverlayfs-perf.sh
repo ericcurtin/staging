@@ -90,15 +90,20 @@ for i in {1..64}; do
 done
 fi
 
-if false; then
+cd ~/git/initoverlayfs
+git-push.sh ecurtin@192.168.1.82
+#ssh ecurtin@192.168.1.82 "cd ~/git/initoverlayfs/ && sudo scripts/install.sh"
+#exit 0
+
+if true; then
 for i in {1..16}; do
-  ssh ecurtin@192.168.1.82 "sudo sudo rm -rf /etc/initoverlayfs.conf && sudo cp /home/ecurtin/git/initoverlayfs/storage-init /usr/sbin/storage-init && sudo cp /home/ecurtin/git/initoverlayfs/bin/initoverlayfs-install /usr/bin/initoverlayfs-install && sudo dracut -f -o initoverlayfs && sudo initoverlayfs-install && sudo reboot"
-  sleep 100
-  while ! timeout 1 ssh ecurtin@192.168.1.82 "sudo journalctl --output=short-monotonic -b" > storage-init-lz4$i.txt; do sleep 1; done
+  ssh ecurtin@192.168.1.82 "sudo dracut -f -o initoverlayfs && sudo reboot"
+  sleep 64
+  while ! timeout 1 ssh ecurtin@192.168.1.82 "sudo journalctl --output=short-monotonic -b" > initrd-$i.txt; do sleep 1; done
 #  convert_file legacy$i.txt &
-  ssh ecurtin@192.168.1.82 "sudo rm -rf /etc/initoverlayfs.conf && sudo cp /home/ecurtin/git/initoverlayfs/storage-init /usr/sbin/storage-init && sudo cp /home/ecurtin/git/initoverlayfs/bin/initoverlayfs-install-no-compression /usr/bin/initoverlayfs-install && sudo dracut -f -o initoverlayfs && sudo initoverlayfs-install && sudo reboot"
-  sleep 100
-  while ! timeout 1 ssh ecurtin@192.168.1.82 "sudo journalctl --output=short-monotonic -b" > storage-init-nolz4$i.txt; do sleep 1; done
+  ssh ecurtin@192.168.1.82 "cd ~/git/initoverlayfs/ && sudo initoverlayfs-install && sudo reboot"
+  sleep 64
+  while ! timeout 1 ssh ecurtin@192.168.1.82 "sudo journalctl --output=short-monotonic -b" > initoverlayfs-$i.txt; do sleep 1; done
 #  convert_file initoverlayfs$i.txt &
 done
 else
