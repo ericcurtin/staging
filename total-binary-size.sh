@@ -1,8 +1,18 @@
 #!/bin/bash
 
-bin=$(command -v $1)
+bin=$(command -v $*)
 
-for i in $(ldd $bin); do
+abs_bins=""
+for i in $bin; do
+  abs_bins="$abs_bins$(ldd $bin)"
+done
+
+abs_bins=$(for word in $abs_bins; do echo $word; done | sort | uniq)
+
+# echo "$abs_bins 1" | xargs
+
+for i in $abs_bins; do
+#   echo "$i 1"
    if [ -e "$i" ]; then
      readlink_bin="$(readlink $i)"
      if [ ! -z "$readlink_bin" ]; then

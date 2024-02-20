@@ -54,7 +54,7 @@ build-ostree() {
   cp -r * $src_dir/libostree-$ostree_ver/
   cp -r *.spec $src_dir/
   cp ostree-readonly-sysroot-m* $src_dir/
-  cp 0001-prepa* $src_dir/
+#  cp 0001-prepa* $src_dir/
 #  cp -r .libs $src_dir/libostree-$ostree_ver/
   cp libostree-*.tar.xz $src_dir/libostree-$ostree_ver.tar.xz
 #  tar -cJf libostree-$ostree_ver.tar.xz libostree-$ostree_ver
