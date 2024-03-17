@@ -150,3 +150,7 @@ PS1="$PS1\n$blue\w$nc$ "
 
 TERM=xterm-256color
 
+if [ -e "$HOME/.cargo/env" ]; then
+  . "$HOME/.cargo/env"
+fi
+
