@@ -18,5 +18,7 @@ RUN dnf install -y --allowerasing --nogpgcheck mock cpio qemu-kvm rpm-build auto
   libzstd-devel lz4 lz4-devel pam-devel perl tree valgrind-devel meson \
   bash-completion tpm2-tss-devel attr dtc
 RUN dnf builddep -y https://gitlab.com/redhat/centos-stream/rpms/rpm-ostree/-/raw/c9s/rpm-ostree.spec
-RUN cargo install --root=target/cargo-vendor-filterer cargo-vendor-filterer --version ^0.5
+RUN dnf builddep --spec -y https://raw.githubusercontent.com/coreos/rpm-ostree/main/packaging/rpm-ostree.spec.in
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+RUN . ~/.cargo/env && cargo install cargo-vendor-filterer --version ^0.5
 
