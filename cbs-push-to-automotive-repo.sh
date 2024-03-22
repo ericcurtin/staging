@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 cbs-add-pkg() {
   cbs add-pkg --owner=$owner $tag_head-$1 $pkg_name
@@ -23,8 +23,6 @@ cbs-add-pkg "candidate"
 cbs-add-pkg "testing"
 cbs-add-pkg "release"
 
-set -x
-
 set +e
 
 cbs build $tag_head-el9s git+$gitlab_auto/$pkg_name.git#$commit
@@ -32,11 +30,10 @@ build_out=$(cbs build $tag_head-el9s git+$gitlab_auto/$pkg_name.git#$commit)
 
 set -e
 
-set +x
-
 echo $build_out
 build_out=$(echo "$build_out" | sed 's/\s\+/\n/g')
 version=$(get_metadata "version")
 release=$(get_metadata "release")
 cbs-move "candidate" "testing"
+cbs-move "testing" "release"
 
