@@ -4,9 +4,9 @@ set -ex
 
 un=$(id -un)
 
-cd ~/git/sample-images/osbuild-manifests/
+cd ~/git/sample-images/
 EPOCH=$(date +%s)
-../../staging/build-aboot-ostree.sh > ~/build-aboot-ostree$EPOCH.txt 2>&1
+../staging/build-aboot-ostree.sh > ~/build-aboot-ostree$EPOCH.txt 2>&1
 
 # type_img="qemu-minimal-ostree"
 # type_img="abootqemu-minimal-ostree"
@@ -14,7 +14,7 @@ EPOCH=$(date +%s)
 uname_m=$(uname -m)
 
 makes() {
-  cd $type_img
+  cd $type_img/osbuild-manifests
   sudo make $img $ostree_repo > ~/$img$EPOCH.txt 2>&1
   if [ -n "$img_repo" ]; then
     sudo make $img_repo DEFINES='extra_rpms=["git"] distro_version="9.9"' $ostree_repo
@@ -38,10 +38,10 @@ makes() {
 #  fi
 }
 
-#images=("abootqemu-minimal-ostree" "qemu-minimal-ostree")
-images=("qemu-developer-ostree")
+images=("ridesx4-minimal-ostree")
+# images=("qemu-minimal-ostree")
 
-#for type_img in abootqemu-minimal-ostree abootqemu-minimal-regular qemu-minimal-ostree qemu-minimal-regular; do
+# for type_img in abootqemu-minimal-ostree abootqemu-minimal-regular qemu-minimal-ostree qemu-minimal-regular; do
 for type_img in ${images[@]}; do
   mkdir -p $type_img
   for i in $(git ls-files | awk -F/ '{print $1}' | uniq); do
@@ -51,23 +51,26 @@ done
 
 wait
 
-#for type_img in abootqemu-minimal-ostree abootqemu-minimal-regular qemu-minimal-ostree qemu-minimal-regular; do
+pre_img_name="cs9"
+
+# for type_img in abootqemu-minimal-ostree abootqemu-minimal-regular qemu-minimal-ostree qemu-minimal-regular; do
 for type_img in ${images[@]}; do
-#for type_img in qdrive3-minimal-regular qdrive3-minimal-ostree abootqemu-minimal-ostree abootqemu-minimal-regular; do
-  img="cs9-$type_img.$uname_m.qcow2"
+# for type_img in qdrive3-minimal-regular qdrive3-minimal-ostree abootqemu-minimal-ostree abootqemu-minimal-regular; do
+# img="$pre_img_name-$type_img.$uname_m.qcow2"
+  img="$pre_img_name-$type_img.$uname_m.aboot.simg"
 
   if [[ "$type_img" == *-ostree ]]; then
     ostree_repo="OSTREE_REPO=$type_img-repo"
-    img_repo="cs9-$type_img.$uname_m.repo"
+    img_repo="$pre_img_name-$type_img.$uname_m.repo"
   fi
 
   makes &
-# sudo make cs9-abootqemu-minimal-ostree.aarch64.qcow2 > ~/abootqemu-ostree$EPOCH.txt 2>&1
+# sudo make $pre_img_name-abootqemu-minimal-ostree.aarch64.qcow2 > ~/abootqemu-ostree$EPOCH.txt 2>&1
 # sudo make $img DEFINES='extra_repos=[{"id":"extra","baseurl":"file:///home/ecurtin/rpmbuild/RPMS/"}]' > ~/$type_img$EPOCH.txt 2>&1
-#  /bin/bash -c "sudo make $img $ostree_repo > ~/$type_img$EPOCH.txt 2>&1 && sudo make $img_repo DEFINES='extra_rpms=[\"git\"] distro_version=\"9.1\"' OSTREE_REPO=ostree-repo" &
+# /bin/bash -c "sudo make $img $ostree_repo > ~/$type_img$EPOCH.txt 2>&1 && sudo make $img_repo DEFINES='extra_rpms=[\"git\"] distro_version=\"9.1\"' OSTREE_REPO=ostree-repo" &
 done
 
 wait
 
-sudo chown $un:$un */cs9-*.qcow2
+sudo chown $un:$un */$pre_img_name-*.qcow2
 
