@@ -119,7 +119,7 @@ void applyPowerSavingProfile() {
 int main() {
     char profile[20];
 
-    printf("System Tuning Tool - C Version\n");
+    printf("System Tuning Tool\n");
     printf("Enter profile (high-performance / power-saving): ");
     scanf("%19s", profile);
 
