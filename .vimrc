@@ -1,8 +1,11 @@
 set mouse=a
 "set background=light
 set background=dark
+syntax on
+set backspace=indent,eol,start
 set hlsearch
 set noswapfile
+set ruler
 map <F4> :qa!<CR>
 map <F3> /^-\\|^+<CR>
 map <F5> :call CurtineIncSw()<CR>
