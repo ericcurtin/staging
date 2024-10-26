@@ -79,7 +79,7 @@ elif [ -f "autogen.sh" ]; then
   # inotify-tools didn't like autogen.sh --prefix=/usr
   cmd="if [ ! -f 'Makefile' ]; then ./autogen.sh && if [ -f 'configure' ]; then ./configure --prefix=/usr $extra; fi; fi && make -j$njobs V=1"
 elif [ -f "Cargo.lock" ]; then
-  cmd="sudo cargo install --path ."
+  cmd="cargo install --path ."
 elif [ -f "Cargo.lock" ]; then
   cmd="sudo go install ."
 elif [ -f "Makefile" ] && [ -f "Kbuild" ] && [ -f "Kconfig" ]; then
