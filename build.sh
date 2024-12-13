@@ -57,9 +57,13 @@ elif [ -f "CMakeLists.txt" ]; then # sdl prefer this over autogen.sh
 fi
   fi
 
+  if [ -e "ggml" ]; then
+    extra="-DGGML_CURL=ON"
+  fi
+
   # -DCMAKE_BUILD_TYPE=Release
   # -DCMAKE_BUILD_TYPE=Debug this meses up the ln -s
-  cmd="mkdir -p build && cd build && cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_BUILD_TYPE=Release $extra .. && make -j$njobs VERBOSE=1 && sudo make install $extra2"
+  cmd="mkdir -p build && cd build && cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_BUILD_TYPE=Debug $extra .. && make -j$njobs VERBOSE=1"
 elif [ -f "autogen.sh" ]; then
   if grep -q plymouth README; then
     extra="--enable-tracing                                      \
