@@ -9,7 +9,7 @@ main() {
   fi
 
   podman build -t bootc -f Containerfile-bootc
-  bootc switch --transport containers-storage bootc
+  bootc switch --transport containers-storage localhost/bootc
 }
 
 main "$@"
