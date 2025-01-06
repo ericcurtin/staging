@@ -58,7 +58,19 @@ fi
   fi
 
   if [ -e "ggml" ]; then
-    extra="-DGGML_CURL=ON"
+    if false; then
+      extra="-DBUILD_SHARED_LIBS=ON \
+      -DGGML_KOMPUTE=ON"
+    else
+      extra="-DBUILD_SHARED_LIBS=ON \
+      -DGGML_BLAS=ON \
+      -DGGML_BLAS_VENDOR=Apple \
+      -DGGML_METAL=ON \
+      -DGGML_METAL_EMBED_LIBRARY=ON \
+      -DGGML_NATIVE=ON \
+      -DLLAMA_ALL_WARNINGS=OFF \
+      -DLLAMA_CURL=ON"
+    fi
   fi
 
   # -DCMAKE_BUILD_TYPE=Release
