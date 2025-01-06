@@ -1,11 +1,11 @@
 FROM quay.io/fedora/fedora-kinoite:41
 
 RUN dnf install -y alacritty black centos-packager clang cmake codespell \
-      distrobox dnf fedora-workstation-repositories gcc hip-devel hipblas \
+      distrobox dnf4 fedora-workstation-repositories gcc hip-devel hipblas \
       hipblas-devel hipcc-libomp-devel hyperfine keepassxc libcurl-devel make \
       nvtop python3-tqdm qemu-kvm the_silver_searcher vim
 
-RUN dnf config-manager --enabled google-chrome
+RUN dnf4 config-manager --enabled google-chrome
 
-RUN dnf install -y google-chrome-stable
+RUN dnf4 install -y google-chrome-stable
 
