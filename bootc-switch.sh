@@ -9,6 +9,8 @@ main() {
   fi
 
   podman build -t bootc -f Containerfile-bootc
+  bootc usr-overlay
+  chcon --reference /usr/bin/rpm-ostree /usr/bin/bootc
   bootc switch --transport containers-storage localhost/bootc
 }
 
