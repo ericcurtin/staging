@@ -11,7 +11,8 @@ main() {
   podman build -t bootc -f Containerfile-bootc
   bootc usr-overlay
   chcon --reference /usr/bin/rpm-ostree /usr/bin/bootc
-  bootc switch --transport containers-storage localhost/bootc
+  local id="$(podman images -q localhost/bootc)"
+  bootc switch --transport containers-storage "$id"
 }
 
 main "$@"
