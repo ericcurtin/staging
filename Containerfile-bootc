@@ -4,9 +4,3 @@ RUN dnf install -y alacritty black centos-packager clang cmake codespell \
       distrobox dnf4 fedora-workstation-repositories gcc hip-devel hipblas \
       hipblas-devel hipcc-libomp-devel hyperfine keepassxc libcurl-devel make \
       nvtop python3-tqdm qemu-kvm the_silver_searcher vim
-
-RUN dnf4 config-manager --set-enabled google-chrome
-
-RUN mkdir -p /opt/google/
-RUN dnf4 install -y google-chrome-stable
-
