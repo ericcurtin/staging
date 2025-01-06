@@ -7,5 +7,6 @@ RUN dnf install -y alacritty black centos-packager clang cmake codespell \
 
 RUN dnf4 config-manager --set-enabled google-chrome
 
+RUN mkdir -p /opt/google/
 RUN dnf4 install -y google-chrome-stable
 
