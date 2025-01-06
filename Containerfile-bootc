@@ -1,9 +1,14 @@
 FROM quay.io/fedora/fedora-kinoite:41
 
 RUN dnf install -y alacritty black bootc centos-packager clang cmake codespell \
-      distrobox dnf gcc hip-devel hipblas hipblas-devel hipcc-libomp-devel \
-      hyperfine keepassxc libcurl-devel make nvtop python3-tqdm qemu-kvm \
-      rocblas rocblas-devel rocm-clinfo rocm-comgr-devel rocm-hip \
-      rocm-hip-devel rocm-opencl rocm-rpm-macros rocm-rpm-macros-modules \
-      rocm-runtime-devel rocm-smi rocminfo the_silver_searcher vim
+      distrobox dnf fedora-workstation-repositories gcc hip-devel hipblas \
+      hipblas-devel hipcc-libomp-devel hyperfine keepassxc libcurl-devel make \
+      nvtop python3-tqdm qemu-kvm rocblas rocblas-devel rocm-clinfo \
+      rocm-comgr-devel rocm-hip rocm-hip-devel rocm-opencl rocm-rpm-macros \
+      rocm-rpm-macros-modules rocm-runtime-devel rocm-smi rocminfo \
+      the_silver_searcher vim
+
+RUN dnf config-manager --set-enabled google-chrome
+
+RUN dnf install -y google-chrome-stable
 
