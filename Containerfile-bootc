@@ -5,3 +5,5 @@ RUN dnf install -y alacritty black clang cmake codespell distrobox dnf4 \
       make nvtop podman python3-tqdm qemu-kvm the_silver_searcher vim
 RUN dnf install -y python3-flake8
 RUN dnf install -y bats
+RUN dnf install -y httpd-tools
+

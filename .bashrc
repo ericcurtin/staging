@@ -1,5 +1,11 @@
 # .bashrc
 
+path_add() {
+  if [ -e "$1" ]; then
+    export PATH="$PATH:$1"
+  fi
+}
+
 # Source global definitions
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
@@ -7,9 +13,8 @@ fi
 
 export PATH="$HOME/.cargo/bin:$HOME/go/bin:$HOME/git/staging:$HOME/git/staging-private:$HOME/git/dns:/var/lib/snapd/snap/bin:$HOME/.local/bin:$HOME/bin:$PATH:/usr/libexec"
 
-if [ -e "$HOME/git/automotive-image-builder/automotive-image-builder" ]; then
-  export PATH="$PATH:$HOME/git/automotive-image-builder"
-fi
+path_add "$HOME/git/automotive-image-builder/automotive-image-builder"
+path_add "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
 
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
