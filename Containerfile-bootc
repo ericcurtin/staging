@@ -6,4 +6,5 @@ RUN dnf install -y alacritty black clang cmake codespell distrobox dnf4 \
 RUN dnf install -y python3-flake8
 RUN dnf install -y bats
 RUN dnf install -y httpd-tools
+RUN dnf install -y docker
 
