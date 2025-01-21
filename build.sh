@@ -60,7 +60,7 @@ fi
   if [ -e "ggml" ]; then
     if false; then
       extra="-DBUILD_SHARED_LIBS=ON \
-      -DGGML_KOMPUTE=ON"
+      -DGGML_KOMPUTE=ON -DGGML_NATIVE=OFF"
     else
       extra="-DBUILD_SHARED_LIBS=ON \
       -DGGML_BLAS=ON \
