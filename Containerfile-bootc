@@ -3,6 +3,7 @@ FROM quay.io/fedora/fedora-kinoite:41
 RUN dnf install -y alacritty black clang cmake codespell distrobox dnf4 \
       fedora-workstation-repositories gcc hyperfine keepassxc libcurl-devel \
       make nvtop podman python3-tqdm qemu-kvm the_silver_searcher vim \
-      python3-flake8 bats httpd-tools docker
-RUN dnf remove -y nano
+      python3-flake8 bats httpd-tools docker && \
+      /bin/bash -c "curl -fsSL https://ollama.com/install.sh | sh" && \
+      dnf remove -y nano
 
