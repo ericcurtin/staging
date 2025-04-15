@@ -41,11 +41,11 @@ update() {
 
   local this_update=$(cat /etc/update-counter.txt)
   local update_cnt=$((this_update % 6))
-  if ! grep -q ostree= /proc/cmdline && [ "$update_cnt" -eq "0" ]; then
+  if exists dnf && ! grep -q ostree= /proc/cmdline && [ "$update_cnt" -eq "0" ]; then
     sudo dnf upgrade-minimal -y
-  elif ! grep -q ostree= /proc/cmdline && [ "$update_cnt" -eq "1" ]; then
+  elif exists dnf && ! grep -q ostree= /proc/cmdline && [ "$update_cnt" -eq "1" ]; then
     sudo dnf upgrade -y
-  elif ! grep -q ostree= /proc/cmdline && [ "$UNAME_M" = "x86_64" ] && \
+  elif exists dnf && ! grep -q ostree= /proc/cmdline && [ "$UNAME_M" = "x86_64" ] && \
     [ "$update_cnt" -eq "2" ]; then
     zoom_url="https://zoom.us/client/latest/zoom_x86_64.rpm"
     last_modified=$(curl -I -L "$zoom_url" 2>&1 | grep -i "^Last-Modified:")
