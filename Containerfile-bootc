@@ -1,4 +1,4 @@
-FROM quay.io/fedora/fedora-kinoite:41
+FROM quay.io/fedora/fedora-kinoite:42
 
 RUN curl -fsSLO https://ollama.com/install.sh && chmod a+x install.sh && \
       sed -i "s/set -eu/set -eux/g" install.sh && \
@@ -9,4 +9,6 @@ RUN dnf install -y alacritty black clang cmake codespell distrobox dnf4 \
       make nvtop podman python3-tqdm qemu-kvm the_silver_searcher vim \
       python3-flake8 bats httpd-tools docker
 RUN dnf remove -y nano
+RUN curl -fsSL -o /usr/bin/build_llama_and_whisper.sh https://raw.githubusercontent.com/containers/ramalama/main/container-images/scripts/build_llama_and_whisper.sh
+RUN chmod a+rx /usr/bin/build_llama_and_whisper.sh && build_llama_and_whisper.sh "rocm"
 
