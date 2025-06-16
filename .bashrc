@@ -130,6 +130,16 @@ cosa() {
    rc=$?; set +x; return $rc
 }
 
+PLATFORM=$(uname)
+
+if [ "$PLATFORM" == "Darwin" ]; then
+  google-chrome() {
+    open -a "Google Chrome" "$1"
+  }
+
+  alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'
+fi
+
 green='\[\033[0;32m\]'
 red='\[\033[0;31m\]'
 cyan='\[\033[1;36m\]'
@@ -151,6 +161,7 @@ es() {
 . git-status-prompt
 HOSTNAME_FQDN=$(hostname -f | head -c4)
 UNAME_M=$(uname -m)
+PLATFORM=$(uname)
 PS1="$lgreen\u@$HOSTNAME_FQDN $cyan$UNAME_M $lgreen\t \$(es)$nc"
 if type GitStatusPrompt > /dev/null 2>&1; then
   PS1="$PS1 \$(GitStatusPrompt)"
