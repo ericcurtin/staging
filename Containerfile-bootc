@@ -13,4 +13,5 @@ RUN dnf install -y alacritty black clang cmake codespell distrobox dnf4 \
 RUN dnf remove -y nano
 RUN curl -fsSL -o /usr/bin/build_llama_and_whisper.sh https://raw.githubusercontent.com/containers/ramalama/6d7effadc2f6cd8bf7b231af965e367e65153029/container-images/scripts/build_llama_and_whisper.sh
 RUN chmod a+rx /usr/bin/build_llama_and_whisper.sh && build_llama_and_whisper.sh "rocm"
+RUN bootc container lint
 
