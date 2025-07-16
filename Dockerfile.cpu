@@ -23,6 +23,7 @@ main() {
   fi
 
   echo >> /etc/environment
+  echo 'ulimit -c 0' >> ~/.bashrc
 }
 
 main "$@"
@@ -43,10 +44,6 @@ ENV UV_INDEX_STRATEGY="unsafe-best-match"
 ENV UV_LINK_MODE="copy"
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv pip install --upgrade pip
-
-ENV LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libtcmalloc_minimal.so.4:/opt/venv/lib/libiomp5.so:$LD_PRELOAD"
-
-RUN echo 'ulimit -c 0' >> ~/.bashrc
 
 ######################### BUILD IMAGE #########################
 FROM base AS vllm-openai
