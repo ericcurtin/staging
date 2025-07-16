@@ -52,7 +52,7 @@ main() {
   uv pip install -v -r requirements/cpu.txt --extra-index-url https://download.pytorch.org/whl/cpu
   VLLM_TARGET_DEVICE=cpu python3 setup.py install
   cd -
-  rm -rf vllm-$v_vn .cache
+  rm -rf vllm-$v_vn /root/.cache
 }
 
 main "$@"
