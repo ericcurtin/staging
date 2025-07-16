@@ -39,6 +39,11 @@ ENV VLLM_CPU_AVX512VNNI=0
 RUN <<EOF
 #!/bin/bash
 
+pip_install() {
+  local url="https://download.pytorch.org/whl/cpu"
+  uv pip install -v -r $1 --extra-index-url $url
+}
+
 main() {
   set -eux -o pipefail
 
@@ -49,7 +54,8 @@ main() {
   local vllm_url="https://github.com/vllm-project/vllm"
   curl -LsSf $vllm_url/releases/download/v$v_vn/vllm-$v_vn.tar.gz | tar xz
   cd vllm-$v_vn
-  uv pip install -v -r requirements/cpu.txt --extra-index-url https://download.pytorch.org/whl/cpu
+  pip_install requirements/cpu-build.txt
+  pip_install requirements/cpu.txt
   VLLM_TARGET_DEVICE=cpu python3 setup.py install
   cd -
   rm -rf vllm-$v_vn /root/.cache
