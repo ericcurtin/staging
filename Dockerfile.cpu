@@ -15,12 +15,7 @@ main() {
   rm -rf /var/lib/apt/lists/*
 
   local arch=$(uname -m)
-  echo -n "LD_PRELOAD=/usr/lib/$arch-linux-gnu/libtcmalloc_minimal.so.4" >> /etc/environment
-  if [ "$arch" = "x86_64" ]; then
-    echo -n ":/opt/venv/lib/libiomp5.so" >> /etc/environment
-  fi
-
-  echo >> /etc/environment
+  echo "LD_PRELOAD=/usr/lib/$arch-linux-gnu/libtcmalloc_minimal.so.4" >> /etc/environment
   echo 'ulimit -c 0' >> ~/.bashrc
 }
 
@@ -29,13 +24,11 @@ EOF
 
 ENV PATH="/root/.local/bin:$PATH"
 ENV VIRTUAL_ENV="/opt/venv"
-ENV UV_PYTHON_INSTALL_DIR=/opt/uv/python
+ENV UV_PYTHON_INSTALL_DIR="/opt/uv/python"
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 ENV UV_HTTP_TIMEOUT=500
 
-ENV PIP_EXTRA_INDEX_URL="https://download.pytorch.org/whl/cpu"
-ENV UV_EXTRA_INDEX_URL=${PIP_EXTRA_INDEX_URL}
 ENV UV_INDEX_STRATEGY="unsafe-best-match"
 ENV UV_LINK_MODE="copy"
 
@@ -56,9 +49,8 @@ main() {
   local vllm_url="https://github.com/vllm-project/vllm"
   curl -LsSf $vllm_url/releases/download/v$v_vn/vllm-$v_vn.tar.gz | tar xz
   cd vllm-$v_vn
-  uv pip install -r requirements/cpu-build.txt
-  VLLM_TARGET_DEVICE=cpu python3 setup.py bdist_wheel
-  uv pip install dist/*.whl
+  uv pip install -v -r requirements/cpu.txt --extra-index-url https://download.pytorch.org/whl/cpu
+  VLLM_TARGET_DEVICE=cpu python3 setup.py install
   cd -
   rm -rf vllm-$v_vn .cache
 }
