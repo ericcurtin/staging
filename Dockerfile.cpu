@@ -2,8 +2,6 @@ FROM ubuntu:24.04 AS base
 
 WORKDIR /workspace/
 
-ENV LD_PRELOAD=""
-# Install minimal dependencies and uv
 RUN <<EOF
 #!/bin/bash
 
