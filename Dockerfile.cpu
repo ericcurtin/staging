@@ -23,7 +23,8 @@ install_deps() {
   curl -LsSf https://astral.sh/uv/0.7.21/install.sh | bash
   rm -rf /var/lib/apt/lists/*
 
-  echo "LD_PRELOAD=/usr/lib/$arch-linux-gnu/libtcmalloc_minimal.so.4" >> /etc/environment
+  local ld_preload_file="/usr/lib/$arch-linux-gnu/libtcmalloc_minimal.so.4"
+  echo "LD_PRELOAD=$ld_preload_file" >> /etc/environment
   echo 'ulimit -c 0' >> ~/.bashrc
 }
 
