@@ -66,7 +66,8 @@ main() {
 
   pip_install requirements/cpu-build.txt
   pip_install requirements/cpu.txt
-  VLLM_TARGET_DEVICE=cpu python3 setup.py install
+
+  MAX_JOBS=2 VLLM_TARGET_DEVICE=cpu python3 setup.py install
   cd -
   rm -rf vllm-$v_vn /root/.cache
 }
