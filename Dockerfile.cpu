@@ -16,7 +16,6 @@ RUN <<EOF
 #!/bin/bash
 
 install_deps() {
-  set -eux -o pipefail
   apt-get update -y
   apt-get install -y --no-install-recommends git curl wget ca-certificates \
     gcc g++ libtcmalloc-minimal4 libnuma-dev ffmpeg libsm6 libxext6 libgl1 jq \
