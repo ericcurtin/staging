@@ -49,10 +49,10 @@ preload_and_ulimit() {
   local ld_preload_file="libtcmalloc_minimal.so.4"
   local ld_preload_file_1="/usr/lib/$arch-linux-gnu/$ld_preload_file"
   local ld_preload_file_2="/usr/lib64/$ld_preload_file"
-  if [ -e "$ld_preload_file1" ]; then
-    ld_preload_file="$ld_preload_file1"
-  elif [ -e "$ld_preload_file2" ]; then
-    ld_preload_file="$ld_preload_file2"
+  if [ -e "$ld_preload_file_1" ]; then
+    ld_preload_file="$ld_preload_file_1"
+  elif [ -e "$ld_preload_file_2" ]; then
+    ld_preload_file="$ld_preload_file_2"
   fi
 
   if [ -e "$ld_preload_file" ]; then
