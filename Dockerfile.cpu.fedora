@@ -55,7 +55,7 @@ preload_and_ulimit() {
     ld_preload_file="$ld_preload_file2"
   fi
 
-  if elif [ -e "$ld_preload_file" ]; then
+  if [ -e "$ld_preload_file" ]; then
     echo "LD_PRELOAD=$ld_preload_file" >> /etc/environment
   fi
 
