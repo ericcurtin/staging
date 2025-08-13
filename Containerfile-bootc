@@ -10,5 +10,7 @@ RUN mv /opt{,.bak}
 RUN mkdir /opt
 RUN dnf install -y --enablerepo="google-chrome" google-chrome-stable
 RUN mv /opt{.bak,}
+RUN sed -i "s#/usr/bin/dockerd#/usr/bin/dockerd --ip-forward-no-drop#g" \
+    /usr/lib/systemd/system/docker.service
 RUN bootc container lint
 
