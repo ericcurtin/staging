@@ -1,15 +1,14 @@
 FROM quay.io/fedora/fedora-kinoite:42
 
-RUN curl -fsSLO https://ollama.com/install.sh && chmod a+x install.sh && \
-      sed -i "s/set -eu/set -eux/g" install.sh && \
-      sed -i "s# in /usr/local/bin# in#g" install.sh && \
-      ./install.sh
 RUN curl -fsSL https://get.docker.com | bash
 RUN dnf install -y alacritty black clang cmake codespell distrobox dnf4 \
       fedora-workstation-repositories gcc hyperfine keepassxc libcurl-devel \
       make nvtop python3-tqdm qemu-kvm the_silver_searcher vim python3-flake8 \
-      bats httpd-tools ninja meson python3-jinja2 SDL2-devel crun-krun podman \ 
-      docker-model-plugin
+      bats httpd-tools ninja meson python3-jinja2 SDL2-devel crun-krun podman ollama
 RUN dnf remove -y nano
+RUN mv /opt{,.bak}
+RUN mkdir /opt
+RUN dnf install -y --enablerepo="google-chrome" google-chrome-stable
+RUN mv /opt{.bak,}
 RUN bootc container lint
 

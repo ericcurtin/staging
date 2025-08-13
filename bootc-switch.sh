@@ -8,7 +8,8 @@ main() {
     return 1
   fi
 
-  podman build -t bootc -f Containerfile-bootc
+  # --no-cache, --network host fixes bug
+  podman build --network host -t bootc -f Containerfile-bootc
   bootc usr-overlay || true
   chcon --reference /usr/bin/rpm-ostree /usr/bin/bootc
   local id="$(podman images -q localhost/bootc)"
