@@ -9,8 +9,7 @@ download_and_extract() {
     local retries=2
 
     while [ $retries -gt 0 ]; do
-        curl --fail --show-error --location --progress-bar -C - -o "$tmpfile" \
-            --http1.1 "$url"
+        curl --fail --show-error --location -C - -o "$tmpfile" --http1.1 "$url"
         retries=$((retries-1))
     done
 
