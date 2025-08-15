@@ -2,6 +2,21 @@
 # This script installs Ollama on Linux.
 # It detects the current operating system architecture and installs the appropriate version of Ollama.
 
+# Function to download and extract a tarball with retries & resume support
+download_and_extract() {
+    local url="$1"
+    local tmpfile="$TEMP_DIR/ollama_download.tgz"
+    local retries=2
+
+    while [ $max_retries -gt 0 ]; do
+        curl --fail --show-error --location --progress-bar --retry "$retries" \
+          -C - -o "$tmpfile" "$url" && break
+    done
+
+    $SUDO tar -xzf "$tmpfile" -C "$OLLAMA_INSTALL_DIR"
+    rm -rf "$tmpfile"
+}
+
 set -eu
 
 red="$( (/usr/bin/tput bold || :; /usr/bin/tput setaf 1 || :) 2>&-)"
@@ -79,9 +94,7 @@ status "Installing ollama to $OLLAMA_INSTALL_DIR"
 $SUDO install -o0 -g0 -m755 -d $BINDIR
 $SUDO install -o0 -g0 -m755 -d "$OLLAMA_INSTALL_DIR/lib/ollama"
 status "Downloading Linux ${ARCH} bundle"
-curl --fail --show-error --location --progress-bar \
-    "https://ollama.com/download/ollama-linux-${ARCH}.tgz${VER_PARAM}" | \
-    $SUDO tar -xzf - -C "$OLLAMA_INSTALL_DIR"
+download_and_extract "https://ollama.com/download/ollama-linux-${ARCH}.tgz${VER_PARAM}" "$OLLAMA_INSTALL_DIR" "$SUDO"
 
 if [ "$OLLAMA_INSTALL_DIR/bin/ollama" != "$BINDIR/ollama" ] ; then
     status "Making ollama accessible in the PATH in $BINDIR"
@@ -92,14 +105,10 @@ fi
 if [ -f /etc/nv_tegra_release ] ; then
     if grep R36 /etc/nv_tegra_release > /dev/null ; then
         status "Downloading JetPack 6 components"
-        curl --fail --show-error --location --progress-bar \
-            "https://ollama.com/download/ollama-linux-${ARCH}-jetpack6.tgz${VER_PARAM}" | \
-            $SUDO tar -xzf - -C "$OLLAMA_INSTALL_DIR"
+        download_and_extract "https://ollama.com/download/ollama-linux-${ARCH}-jetpack6.tgz${VER_PARAM}" "$OLLAMA_INSTALL_DIR" "$SUDO"
     elif grep R35 /etc/nv_tegra_release > /dev/null ; then
         status "Downloading JetPack 5 components"
-        curl --fail --show-error --location --progress-bar \
-            "https://ollama.com/download/ollama-linux-${ARCH}-jetpack5.tgz${VER_PARAM}" | \
-            $SUDO tar -xzf - -C "$OLLAMA_INSTALL_DIR"
+        download_and_extract "https://ollama.com/download/ollama-linux-${ARCH}-jetpack5.tgz${VER_PARAM}" "$OLLAMA_INSTALL_DIR" "$SUDO"
     else
         warning "Unsupported JetPack version detected.  GPU may not be supported"
     fi
@@ -223,9 +232,7 @@ fi
 
 if check_gpu lspci amdgpu || check_gpu lshw amdgpu; then
     status "Downloading Linux ROCm ${ARCH} bundle"
-    curl --fail --show-error --location --progress-bar \
-        "https://ollama.com/download/ollama-linux-${ARCH}-rocm.tgz${VER_PARAM}" | \
-        $SUDO tar -xzf - -C "$OLLAMA_INSTALL_DIR"
+    download_and_extract "https://ollama.com/download/ollama-linux-${ARCH}-rocm.tgz${VER_PARAM}" "$OLLAMA_INSTALL_DIR" "$SUDO"
 
     install_success
     status "AMD GPU ready."

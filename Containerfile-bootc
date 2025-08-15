@@ -11,7 +11,6 @@ RUN mv /opt{,.bak}
 RUN mkdir /opt
 RUN dnf install -y --enablerepo="google-chrome" google-chrome-stable
 RUN mv /opt{.bak,}
-RUN bootc container lint
 
 # docker
 RUN curl -fsSL https://get.docker.com | bash
@@ -20,11 +19,7 @@ RUN sed -i "s#/usr/bin/dockerd#/usr/bin/dockerd --ip-forward-no-drop#g" \
 
 # ollama
 # RUN dnf install -y ollama
-RUN curl -fsSLO https://ollama.com/install.sh
-RUN chmod a+x install.sh 
-RUN sed -i "s/set -eu/set -eux/g" install.sh 
-RUN sed -i "s# in /usr/local/bin# in#g" install.sh 
-RUN sed -i 's/--location/--location --retry 2 --continue-at - /g' install.sh
+COPY install.sh install.sh
 RUN ./install.sh
 
 # llama.cpp
@@ -39,4 +34,6 @@ RUN cd llama.cpp && \
       -DCMAKE_HIP_COMPILER_ROCM_ROOT=/usr -DGGML_HIP=ON && \
     cmake --build build --config Release -j"$(nproc)" && \
     cmake --install build
+
+RUN bootc container lint
 
