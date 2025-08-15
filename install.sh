@@ -2,6 +2,10 @@
 # This script installs Ollama on Linux.
 # It detects the current operating system architecture and installs the appropriate version of Ollama.
 
+curl_with_opts() {
+    curl --fail --show-error --location -C - -o "$tmpfile" --http1.1 "$url"
+}
+
 # Function to download and extract a tarball with retries & resume support
 download_and_extract() {
     local url="$1"
@@ -9,7 +13,7 @@ download_and_extract() {
     local retries=2
 
     while [ $retries -gt 0 ]; do
-        curl --fail --show-error --location -C - -o "$tmpfile" --http1.1 "$url" && break
+        curl_with_opts && break
         retries=$((retries-1))
     done
 
