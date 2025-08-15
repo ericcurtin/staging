@@ -1,16 +1,42 @@
 FROM quay.io/fedora/fedora-kinoite:42
 
-RUN curl -fsSL https://get.docker.com | bash
 RUN dnf install -y alacritty black clang cmake codespell distrobox dnf4 \
       fedora-workstation-repositories gcc hyperfine keepassxc libcurl-devel \
       make nvtop python3-tqdm qemu-kvm the_silver_searcher vim python3-flake8 \
-      bats httpd-tools ninja meson python3-jinja2 SDL2-devel crun-krun podman ollama
+      bats httpd-tools ninja meson python3-jinja2 SDL2-devel crun-krun podman
 RUN dnf remove -y nano
+
+# chrome
 RUN mv /opt{,.bak}
 RUN mkdir /opt
 RUN dnf install -y --enablerepo="google-chrome" google-chrome-stable
 RUN mv /opt{.bak,}
-RUN sed -i "s#/usr/bin/dockerd#/usr/bin/dockerd --ip-forward-no-drop#g" \
-    /usr/lib/systemd/system/docker.service
 RUN bootc container lint
+
+# docker
+RUN curl -fsSL https://get.docker.com | bash
+RUN sed -i "s#/usr/bin/dockerd#/usr/bin/dockerd --ip-forward-no-drop#g" \
+      /usr/lib/systemd/system/docker.service 
+
+# ollama
+# RUN dnf install -y ollama
+RUN curl -fsSLO https://ollama.com/install.sh
+RUN chmod a+x install.sh 
+RUN sed -i "s/set -eu/set -eux/g" install.sh 
+RUN sed -i "s# in /usr/local/bin# in#g" install.sh 
+RUN sed -i 's/--location/--location --retry 2 --continue-at - /g' install.sh
+RUN ./install.sh
+
+# llama.cpp
+RUN dnf install -y rocm-core-devel hipblas-devel rocblas-devel rocm-hip-devel
+RUN git init llama.cpp
+RUN cd llama.cpp && \
+    git remote add origin https://github.com/ggml-org/llama.cpp && \
+    git fetch --depth 1 origin 3ea913f1ce9567289aedd866a569dbab8fb8e419 && \
+    git reset --hard 3ea913f1ce9567289aedd866a569dbab8fb8e419 && \
+    git submodule update --init --recursive && \
+    cmake -B build -DGGML_CCACHE=OFF -DCMAKE_INSTALL_PREFIX=/usr \
+      -DCMAKE_HIP_COMPILER_ROCM_ROOT=/usr -DGGML_HIP=ON && \
+    cmake --build build --config Release -j"$(nproc)" && \
+    cmake --install build
 
