@@ -66,7 +66,7 @@ if [ -n "$NEEDS" ]; then
     exit 1
 fi
 
-for BINDIR in /usr/local/bin /usr/bin /bin; do
+for BINDIR in /usr/bin /bin; do
     echo $PATH | grep -q $BINDIR && break || continue
 done
 OLLAMA_INSTALL_DIR=$(dirname ${BINDIR})
