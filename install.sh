@@ -17,7 +17,7 @@ download_and_extract() {
     rm -rf "$tmpfile"
 }
 
-set -eu
+set -eux
 
 red="$( (/usr/bin/tput bold || :; /usr/bin/tput setaf 1 || :) 2>&-)"
 plain="$( (/usr/bin/tput sgr0 || :) 2>&-)"
