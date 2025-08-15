@@ -8,7 +8,7 @@ download_and_extract() {
     local tmpfile="$TEMP_DIR/ollama_download.tgz"
 
     curl --fail --show-error --location --progress-bar -C - -o "$tmpfile" \
-      --retry 2 --retry-all-errors "$url"
+      --retry 2 --retry-all-errors --http1.1 "$url"
     $SUDO tar -xzf "$tmpfile" -C "$OLLAMA_INSTALL_DIR"
     rm -rf "$tmpfile"
 }
