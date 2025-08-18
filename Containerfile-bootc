@@ -7,10 +7,8 @@ RUN dnf install -y alacritty black clang cmake codespell distrobox dnf4 \
 RUN dnf remove -y nano
 
 # chrome
-RUN mv /opt{,.bak}
-RUN mkdir /opt
+RUN rm -rf /opt && mkdir /opt
 RUN dnf install -y --enablerepo="google-chrome" google-chrome-stable
-RUN mv /opt{.bak,}
 
 # docker
 RUN curl -fsSL https://get.docker.com | bash
@@ -24,8 +22,8 @@ RUN ./install.sh
 
 # llama.cpp
 RUN dnf install -y rocm-core-devel hipblas-devel rocblas-devel rocm-hip-devel
-RUN git init llama.cpp
-RUN cd llama.cpp && \
+RUN git init llama.cpp && \
+    cd llama.cpp && \
     git remote add origin https://github.com/ggml-org/llama.cpp && \
     git fetch --depth 1 origin 3ea913f1ce9567289aedd866a569dbab8fb8e419 && \
     git reset --hard 3ea913f1ce9567289aedd866a569dbab8fb8e419 && \
