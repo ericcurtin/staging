@@ -22,16 +22,9 @@ RUN ./install.sh
 
 # llama.cpp
 RUN dnf install -y rocm-core-devel hipblas-devel rocblas-devel rocm-hip-devel
-RUN git init llama.cpp && \
-    cd llama.cpp && \
-    git remote add origin https://github.com/ggml-org/llama.cpp && \
-    git fetch --depth 1 origin 3ea913f1ce9567289aedd866a569dbab8fb8e419 && \
-    git reset --hard 3ea913f1ce9567289aedd866a569dbab8fb8e419 && \
-    git submodule update --init --recursive && \
-    cmake -B build -DGGML_CCACHE=OFF -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_HIP_COMPILER_ROCM_ROOT=/usr -DGGML_HIP=ON && \
-    cmake --build build --config Release -j"$(nproc)" && \
-    cmake --install build
+
+COPY build-llamacpp.sh build-llamacpp.sh
+RUN ./build-llamacpp.sh
 
 RUN bootc container lint
 
