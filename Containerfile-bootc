@@ -3,7 +3,8 @@ FROM quay.io/fedora/fedora-kinoite:42
 RUN dnf install -y alacritty black clang cmake codespell distrobox dnf4 \
       fedora-workstation-repositories gcc hyperfine keepassxc libcurl-devel \
       make nvtop python3-tqdm qemu-kvm the_silver_searcher vim python3-flake8 \
-      bats httpd-tools ninja meson python3-jinja2 SDL2-devel crun-krun podman
+      bats httpd-tools ninja meson python3-jinja2 SDL2-devel crun-krun podman \
+      wine
 RUN dnf remove -y nano
 
 # chrome
