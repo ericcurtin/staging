@@ -35,7 +35,7 @@ main() {
   # sudo podman save "$id" | podman load > /dev/null 2>&1 &
   sudo bootc switch --transport containers-storage "$id"
   wait
-  podman tag "$id" "$image_name"
+  # podman tag "$id" "$image_name"
 }
 
 main "$@"
