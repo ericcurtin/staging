@@ -1,19 +1,41 @@
 #!/bin/bash
 
+ls_images() {
+  local sudo=$1
+  $sudo podman image ls -a
+}
+
+rm_images() {
+  local sudo=$1
+  xargs -r "$sudo" podman rmi -f > /dev/null 2>&1
+}
+
+filter_for_none() {
+  grep '<none>' | awk '{print $3}'
+}
+
 main() {
   set -exu -o pipefail
 
-  if [ "$EUID" -ne 0 ]; then
-    echo "Please run as root"
+  if [ "$EUID" -eq 0 ]; then
+    echo "Please run as rootless"
     return 1
   fi
 
   # --no-cache, --network host fixes bug
-  podman build -t bootc -f Containerfile-bootc
-  bootc usr-overlay || true
-  chcon --reference /usr/bin/rpm-ostree /usr/bin/bootc
-  local id="$(podman images -q localhost/bootc)"
-  bootc switch --transport containers-storage "$id"
+  ls_images "sudo" | filter_for_none | rm_images "sudo" &
+  ls_images | filter_for_none | rm_images &
+
+  sudo podman build -t bootc -f Containerfile-bootc
+  sudo bootc usr-overlay || true
+  sudo chcon --reference /usr/bin/rpm-ostree /usr/bin/bootc
+  local image_name="localhost/bootc"
+  local id
+  id="$(sudo podman images -q $image_name)"
+  # sudo podman save "$id" | podman load > /dev/null 2>&1 &
+  sudo bootc switch --transport containers-storage "$id"
+  wait
+  podman tag "$id" "$image_name"
 }
 
 main "$@"
