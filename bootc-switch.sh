@@ -14,6 +14,10 @@ filter_for_none() {
   grep '<none>' | awk '{print $3}'
 }
 
+podman_load() {
+  podman -c podman-machine-default-root load
+}
+
 main() {
   set -exu -o pipefail
 
@@ -24,7 +28,7 @@ main() {
 
   # --no-cache, --network host fixes bug
   ls_images "sudo" | filter_for_none | rm_images "sudo" &
-  ls_images | filter_for_none | rm_images &
+  ls_images "" | filter_for_none | rm_images "" &
 
   sudo podman build -t bootc -f Containerfile-bootc
   sudo bootc usr-overlay || true
@@ -32,6 +36,7 @@ main() {
   local image_name="localhost/bootc"
   local id
   id="$(sudo podman images -q $image_name)"
+  # sudo podman save localhost/bootc | podman_load > /dev/null 2>&1 &
   # sudo podman save "$id" | podman load > /dev/null 2>&1 &
   sudo bootc switch --transport containers-storage "$id"
   wait
