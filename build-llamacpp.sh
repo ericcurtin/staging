@@ -11,8 +11,14 @@ main() {
   git fetch --depth 1 origin $commit
   git reset --hard $commit
   git submodule update --init --recursive
-  cmake -B build -DGGML_CCACHE=OFF -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_HIP_COMPILER_ROCM_ROOT=/usr -DGGML_HIP=ON -DGGML_VULKAN=ON
+  if [ $(uname -m) == "aarch64" ]; then
+    cmake -B build -DGGML_CCACHE=OFF -DCMAKE_INSTALL_PREFIX=/usr \
+      -DGGML_VULKAN=ON
+  else
+    cmake -B build -DGGML_CCACHE=OFF -DCMAKE_INSTALL_PREFIX=/usr \
+      -DCMAKE_HIP_COMPILER_ROCM_ROOT=/usr -DGGML_HIP=ON -DGGML_VULKAN=ON
+  fi
+
   cmake --build build --config Release -j"$(nproc)"
   cmake --install build
 }
