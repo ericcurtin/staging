@@ -1,15 +1,7 @@
 FROM quay.io/fedora/fedora-kinoite:42
 
-RUN dnf install -y alacritty black clang cmake codespell distrobox dnf4 \
-      fedora-workstation-repositories gcc hyperfine keepassxc libcurl-devel \
-      make nvtop python3-tqdm qemu-kvm the_silver_searcher vim python3-flake8 \
-      bats httpd-tools ninja meson python3-jinja2 SDL2-devel crun-krun podman \
-      wine shellcheck git-clang-format
-RUN dnf remove -y nano
-
-# chrome
-RUN rm -rf /opt && mkdir /opt
-RUN dnf install -y --enablerepo="google-chrome" google-chrome-stable
+COPY dnf-install.sh dnf-install.sh
+RUN ./dnf-install.sh
 
 # docker
 RUN curl -fsSL https://get.docker.com | bash
@@ -21,15 +13,8 @@ RUN sed -i "s#/usr/bin/dockerd#/usr/bin/dockerd --ip-forward-no-drop#g" \
 COPY install.sh install.sh
 RUN ./install.sh
 
-# llama.cpp
-RUN dnf install -y rocm-core-devel hipblas-devel rocblas-devel rocm-hip-devel \
-      vulkan-headers vulkan-loader-devel glslang glslc spirv-tools
-
 COPY build-llamacpp.sh build-llamacpp.sh
 RUN ./build-llamacpp.sh
-
-RUN dnf -y copr enable gmaglione/podman-bootc
-RUN dnf -y install podman-bootc
 
 RUN bootc container lint
 

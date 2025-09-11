@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# podman machine init --disk-size 256 --memory 16384 --now --rootful --username $USER
+# podman machine init --disk-size 512 --memory 32768 --now --rootful --username $USER
 podman machine start > /dev/null 2>&1
-exec podman machine ssh
+exec podman machine ssh --username $USER
 
