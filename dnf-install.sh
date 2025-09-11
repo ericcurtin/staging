@@ -5,8 +5,7 @@ main() {
 
   rm -rf /opt
   mkdir /opt
-  dnf install -y --enablerepo="google-chrome" alacritty black clang cmake \
-    codespell distrobox dnf4 google-chrome-stable \
+  dnf install -y alacritty black clang cmake codespell distrobox dnf4 \
     fedora-workstation-repositories gcc hyperfine keepassxc libcurl-devel \
     make nvtop python3-tqdm qemu-kvm the_silver_searcher vim python3-flake8 \
     bats httpd-tools ninja meson python3-jinja2 SDL2-devel crun-krun podman \
@@ -15,7 +14,7 @@ main() {
     spirv-tools
 
   if [ $(uname -m) != "aarch64" ]; then
-    dnf install -y wine
+    dnf install -y --enablerepo="google-chrome" wine google-chrome-stable
   fi
 
   dnf remove -y nano
