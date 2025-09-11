@@ -26,7 +26,7 @@ install_deps() {
     rm -rf /var/lib/apt/lists/*
   fi
 
-  curl -LsSf https://astral.sh/uv/0.7.21/install.sh | bash
+  curl -LsSf https://astral.sh/uv/0.8.17/install.sh | bash
 }
 
 add_to_environment() {
