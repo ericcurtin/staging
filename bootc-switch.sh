@@ -27,10 +27,9 @@ main() {
   fi
 
   # --no-cache, --network host fixes bug
+  sudo podman build -t bootc -f Containerfile-bootc
   ls_images "sudo" | filter_for_none | rm_images "sudo" &
   ls_images "" | filter_for_none | rm_images "" &
-
-  sudo podman build -t bootc -f Containerfile-bootc
   sudo bootc usr-overlay || true
   sudo chcon --reference /usr/bin/rpm-ostree /usr/bin/bootc
   local image_name="localhost/bootc"

@@ -17,7 +17,7 @@ COPY build-llamacpp.sh build-llamacpp.sh
 RUN ./build-llamacpp.sh
 
 COPY lib.sh lib.sh
-COPY build-vllm.sh build-llamacpp.sh
+COPY build-vllm.sh build-vllm.sh
 RUN ./build-vllm.sh
 
 RUN bootc container lint
