@@ -39,7 +39,7 @@ add_to_environment() {
 }
 
 preload_and_ulimit() {
-  if [ "$containerfile" = "ramalama" ]; then
+  if [ "$containerfile" = "generic" ]; then
     local ld_preload_file="libtcmalloc_minimal.so.4"
     local ld_preload_file_1="/usr/lib/$uname_m-linux-gnu/$ld_preload_file"
     local ld_preload_file_2="/usr/lib64/$ld_preload_file"
@@ -61,7 +61,7 @@ preload_and_ulimit() {
 
 pip_install() {
   local url="https://download.pytorch.org/whl"
-  if [ "$containerfile" = "ramalama" ]; then
+  if [ "$containerfile" = "generic" ]; then
     url="$url/cpu"
   elif [ "$containerfile" = "cuda" ]; then
     url="$url/cu$(echo "$CUDA_VERSION" | cut -d. -f1,2 | tr -d '.')"
@@ -71,7 +71,7 @@ pip_install() {
 }
 
 pip_install_all() {
-  if [ "$containerfile" = "ramalama" ]; then
+  if [ "$containerfile" = "generic" ]; then
     pip_install requirements/cpu-build.txt
     pip_install requirements/cpu.txt
   elif [ "$containerfile" = "cuda" ]; then
@@ -81,7 +81,7 @@ pip_install_all() {
 }
 
 set_vllm_env_vars() {
-  if [ "$containerfile" = "ramalama" ]; then
+  if [ "$containerfile" = "generic" ]; then
     export VLLM_TARGET_DEVICE="cpu"
     if [ "$uname_m" == "x86_64" ]; then
       export VLLM_CPU_DISABLE_AVX512="0"
@@ -102,8 +102,8 @@ main() {
   source lib.sh
 
   local containerfile=$1
-  if [ "$containerfile" != "ramalama" ] && [ "$containerfile" != "cuda" ]; then
-    echo "First argument must be 'ramalama' or 'cuda'. Got: '$containerfile'"
+  if [ "$containerfile" != "generic" ] && [ "$containerfile" != "cuda" ]; then
+    echo "First argument must be 'generic' or 'cuda'. Got: '$containerfile'"
     return 1
   fi
 
