@@ -26,6 +26,7 @@ install_deps() {
     rm -rf /var/lib/apt/lists/*
   fi
 
+  rm /root # bootc change
   curl -LsSf https://astral.sh/uv/0.8.17/install.sh | bash
 }
 
