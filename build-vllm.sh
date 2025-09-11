@@ -99,7 +99,7 @@ main() {
   set -eux -o pipefail
 
   # shellcheck disable=SC1091
-  source container-images/scripts/lib.sh
+  source lib.sh
 
   local containerfile=$1
   if [ "$containerfile" != "ramalama" ] && [ "$containerfile" != "cuda" ]; then
