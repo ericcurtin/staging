@@ -27,7 +27,12 @@ main() {
   fi
 
   # --no-cache, --network host fixes bug
-  sudo podman build -t bootc -f Containerfile-bootc
+  if [ "$1" == "podman-machine" ]; then
+    sudo podman build -t bootc -f Containerfile-bootc-podman-machine
+  else
+    sudo podman build -t bootc -f Containerfile-bootc
+  fi
+
   ls_images "sudo" | filter_for_none | rm_images "sudo" &
   ls_images "" | filter_for_none | rm_images "" &
   sudo bootc usr-overlay || true

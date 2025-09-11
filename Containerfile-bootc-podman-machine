@@ -1,0 +1,20 @@
+FROM quay.io/fedora/fedora-iot:42
+
+COPY dnf-install.sh dnf-install.sh
+RUN ./dnf-install.sh
+
+# docker
+RUN curl -fsSL https://get.docker.com | bash
+RUN sed -i "s#/usr/bin/dockerd#/usr/bin/dockerd --ip-forward-no-drop#g" \
+      /usr/lib/systemd/system/docker.service 
+
+# ollama
+# RUN dnf install -y ollama
+COPY install.sh install.sh
+RUN ./install.sh
+
+COPY build-llamacpp.sh build-llamacpp.sh
+RUN ./build-llamacpp.sh
+
+RUN bootc container lint
+
