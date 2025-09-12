@@ -1,4 +1,4 @@
-FROM quay.io/fedora/fedora-iot:42
+FROM quay.io/podman/machine-os:5.6
 
 COPY dnf-install.sh dnf-install.sh
 RUN ./dnf-install.sh

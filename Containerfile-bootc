@@ -16,5 +16,7 @@ RUN ./install.sh
 COPY build-llamacpp.sh build-llamacpp.sh
 RUN ./build-llamacpp.sh
 
+RUN systemctl enable sshd
+
 RUN bootc container lint
 
