@@ -27,7 +27,7 @@ main() {
   fi
 
   # --no-cache, --network host fixes bug
-  if [ "$1" == "podman-machine" ]; then
+  if sudo bootc status | grep -q machine-os; then
     sudo podman build -t bootc -f Containerfile-bootc-podman-machine
   else
     sudo podman build -t bootc -f Containerfile-bootc

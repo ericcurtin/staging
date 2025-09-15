@@ -118,7 +118,7 @@ main() {
   uv pip install --upgrade pip
 
   local vllm_url="https://github.com/vllm-project/vllm"
-  local commit="1da94e673c257373280026f75ceb4effac80e892"
+  local commit="fcfd1eb9c556e295eb5708eb0f5e6ae775807775"
   git_clone_specific_commit "$vllm_url" "$commit"
   set_vllm_env_vars
   pip_install_all
