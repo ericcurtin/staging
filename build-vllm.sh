@@ -68,6 +68,8 @@ pip_install() {
     url="$url/cu$(echo "$CUDA_VERSION" | cut -d. -f1,2 | tr -d '.')"
   fi
 
+  export UV_HTTP_TIMEOUT="500"
+  export UV_INDEX_STRATEGY="unsafe-best-match"
   uv pip install -v -r "$1" --extra-index-url "$url"
 }
 
@@ -118,7 +120,7 @@ main() {
   uv pip install --upgrade pip
 
   local vllm_url="https://github.com/vllm-project/vllm"
-  local commit="fcfd1eb9c556e295eb5708eb0f5e6ae775807775"
+  local commit="26b999c71ab28ae9708329003007979530638f79"
   git_clone_specific_commit "$vllm_url" "$commit"
   set_vllm_env_vars
   pip_install_all
