@@ -16,8 +16,6 @@ RUN ./install.sh
 COPY build-llamacpp.sh build-llamacpp.sh
 RUN ./build-llamacpp.sh
 
-RUN dnf upgrade -y container-selinux podman crun
-
 COPY lib.sh lib.sh
 COPY build-vllm.sh build-vllm.sh
 RUN ./build-vllm.sh generic

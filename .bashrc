@@ -134,7 +134,7 @@ PLATFORM=$(uname)
 
 if [ "$PLATFORM" == "Darwin" ]; then
   google-chrome() {
-    open -a "Google Chrome" "$1"
+    open -a Google\ Chrome --args --disable-web-security --user-data-dir="" "$1"
   }
 
   alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'

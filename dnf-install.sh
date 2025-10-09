@@ -18,6 +18,8 @@ main() {
       rocm-core-devel hipblas-devel rocblas-devel rocm-hip-devel
   fi
 
+  # selinux fix
+  dnf upgrade -y container-selinux podman crun
   dnf remove -y nano
 }
 
