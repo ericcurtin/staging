@@ -30,9 +30,9 @@ main() {
 
   # --no-cache, --network host fixes bug
   if sudo bootc status | grep -q machine-os; then
-    sudo $conman build -t bootc -f Containerfile-bootc-$conman-machine
+    sudo $conman build -t bootc -f Containerfile-bootc-$conman-machine .
   else
-    sudo $conman build -t bootc -f Containerfile-bootc
+    sudo $conman build -t bootc -f Containerfile-bootc .
   fi
 
   ls_images "sudo" | filter_for_none | rm_images "sudo" &
