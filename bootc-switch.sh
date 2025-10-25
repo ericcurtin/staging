@@ -44,6 +44,10 @@ main() {
   sudo bootc usr-overlay || true
   sudo chcon --reference /usr/bin/rpm-ostree /usr/bin/bootc
   local image_name="localhost/bootc"
+  if [ $conman = "docker" ]; then
+    image_name="bootc"
+  fi
+
   local id
   id="$($sudo_cmd $conman images -q $image_name)"
   # sudo $conman save localhost/bootc | $conman_load > /dev/null 2>&1 &
