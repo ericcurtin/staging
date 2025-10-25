@@ -12,6 +12,7 @@ if [ -f /etc/bashrc ]; then
 fi
 
 export PATH="$HOME/.cargo/bin:$HOME/go/bin:$HOME/git/staging:$HOME/git/staging-private:$HOME/git/dns:/var/lib/snapd/snap/bin:$HOME/.local/bin:$HOME/bin:$PATH:/usr/libexec"
+export BUILDKIT_PROGRESS="plain"
 
 path_add "$HOME/git/automotive-image-builder/automotive-image-builder"
 path_add "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
