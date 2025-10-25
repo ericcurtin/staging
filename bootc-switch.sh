@@ -27,12 +27,16 @@ main() {
   fi
 
   local conman="docker"
+  local sudo_cmd="sudo"
+  if [ $conman = "docker" ]; then
+    sudo_cmd=""
+  fi
 
   # --no-cache, --network host fixes bug
   if sudo bootc status | grep -q machine-os; then
-    sudo $conman build -t bootc -f Containerfile-bootc-$conman-machine .
+    $sudo_cmd $conman build -t bootc -f Containerfile-bootc-$conman-machine .
   else
-    sudo $conman build -t bootc -f Containerfile-bootc .
+    $sudo_cmd $conman build -t bootc -f Containerfile-bootc .
   fi
 
   ls_images "sudo" | filter_for_none | rm_images "sudo" &
@@ -41,7 +45,7 @@ main() {
   sudo chcon --reference /usr/bin/rpm-ostree /usr/bin/bootc
   local image_name="localhost/bootc"
   local id
-  id="$(sudo $conman images -q $image_name)"
+  id="$($sudo_cmd $conman images -q $image_name)"
   # sudo $conman save localhost/bootc | $conman_load > /dev/null 2>&1 &
   # sudo $conman save "$id" | $conman load > /dev/null 2>&1 &
   sudo bootc switch --transport containers-storage "$id"
