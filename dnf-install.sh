@@ -11,7 +11,7 @@ main() {
     make nvtop python3-tqdm qemu-kvm the_silver_searcher vim python3-flake8 \
     bats httpd-tools ninja meson python3-jinja2 SDL2-devel crun-krun podman \
     shellcheck git-clang-format vulkan-loader-devel glslang glslc spirv-tools \
-    dnf5-plugins golang
+    dnf5-plugins golang cargo
 
   if [ $(uname -m) != "aarch64" ]; then
     dnf install -y --enablerepo="google-chrome" wine google-chrome-stable \
