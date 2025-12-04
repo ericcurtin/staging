@@ -18,8 +18,8 @@ main() {
       rocm-core-devel hipblas-devel rocblas-devel rocm-hip-devel
   fi
 
-  # selinux fix
-  dnf upgrade -y container-selinux podman crun
+  # want latest bootc in particular
+  dnf upgrade -y bootc
   dnf remove -y nano
 }
 
