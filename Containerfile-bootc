@@ -1,24 +1,7 @@
-FROM quay.io/fedora/fedora-kinoite:42
+FROM ghcr.io/ublue-os/aurora-dx:43
 
 COPY dnf-install.sh dnf-install.sh
 RUN ./dnf-install.sh
-
-# docker
-RUN curl -fsSL https://get.docker.com | bash
-RUN sed -i "s#/usr/bin/dockerd#/usr/bin/dockerd --ip-forward-no-drop#g" \
-      /usr/lib/systemd/system/docker.service 
-
-# ollama
-# RUN dnf install -y ollama
-COPY install.sh install.sh
-RUN ./install.sh
-
-COPY build-llamacpp.sh build-llamacpp.sh
-RUN ./build-llamacpp.sh
-
-COPY lib.sh lib.sh
-COPY build-vllm.sh build-vllm.sh
-RUN ./build-vllm.sh generic
 
 RUN bootc container lint
 
