@@ -9,7 +9,7 @@ RUN sed -i "s#/usr/bin/dockerd#/usr/bin/dockerd --ip-forward-no-drop#g" \
       /usr/lib/systemd/system/docker.service 
 
 # ollama
-RUN curl -fsSL https://ollama.com/install.sh | bash
+# RUN curl -fsSL https://ollama.com/install.sh | bash
 
 COPY build-llamacpp.sh build-llamacpp.sh
 RUN ./build-llamacpp.sh
