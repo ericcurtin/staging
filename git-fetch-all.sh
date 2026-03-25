@@ -2,5 +2,5 @@
 
 set -e
 
-git fetch --all -t -j32
+git fetch --all -t -j4 --force
 
