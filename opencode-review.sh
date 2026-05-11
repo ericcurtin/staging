@@ -12,7 +12,7 @@ fi
 
 prompt="$(cat "$PROMPT_FILE")"
 
-exec opencode.sh run \
+exec opencode run \
   --dangerously-skip-permissions \
   "$prompt"
 
